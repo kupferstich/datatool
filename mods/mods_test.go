@@ -1,6 +1,7 @@
 package mods
 
 import (
+	"encoding/xml"
 	"fmt"
 	"testing"
 )
@@ -57,7 +58,7 @@ var dataMods = `
 
 func TestUnmarshal(t *testing.T) {
 	var v Mets
-	err := Unmarshal([]byte(data), &v)
+	err := xml.Unmarshal([]byte(data), &v)
 	if err != nil {
 		t.Error(err)
 	}
