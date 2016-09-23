@@ -10,7 +10,7 @@ type Picture struct {
 	Areas      []Area `xml:"areas" yaml:"Areas"`
 	Captured   int    `xml:"captured" yaml:"Captured"` //Year, when picture was digitalized
 	Place      string `xml:"place" yaml:"Place"`       //Place where the picture was issued
-	YearIssued int    `xml:"yearIssued" yaml:"YearIssued"`
+	YearIssued string `xml:"yearIssued" yaml:"YearIssued"`
 }
 
 type Area struct {

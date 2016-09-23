@@ -17,7 +17,7 @@ type Mets struct {
 type Mods struct {
 	XMLName              xml.Name              `xml:"mods"`
 	Names                []Name                `xml:"name"`
-	RecordIdentifier     string                `xml:"recordInfo>recordIidentifier"`
+	RecordIdentifier     string                `xml:"recordInfo>recordIdentifier"`
 	Identifiers          []Identifier          `xml:"identifier"`
 	PhysicalDescriptions []PhysicalDescription `xml:"physicalDescription"`
 	PhysicalLocaltion    string                `xml:"location>physicalLocation"`

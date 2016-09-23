@@ -35,6 +35,10 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ListHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "%#v\n%v", sourceData, Conf)
-	sourceData.List()
+	//fmt.Fprintf(w, "%#v\n%v\n\n", sourceData, Conf)
+	pics, _ := sourceData.List()
+	//fmt.Fprintf(w, "%#v", sourceData)
+	for _, p := range *pics {
+		fmt.Fprintf(w, "<p>%s<br>%s<br>%s</p>", p.ID, p.Topic, p.Title)
+	}
 }

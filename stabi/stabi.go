@@ -42,7 +42,8 @@ func (d *Data) List() (*[]data.Picture, error) {
 		if err := xml.NewDecoder(file).Decode(&mets); err != nil {
 			return err
 		}
-		fmt.Println(mets.Mods.TitleInfos)
+		pic := NewDataPicture(&mets)
+		d.Pictures = append(d.Pictures, *pic)
 		return nil
 	})
 	return &d.Pictures, nil
