@@ -6,6 +6,9 @@
 # Folders
 _obj
 _test
+semantic
+static/semantic
+node_modules
 
 # Architecture specific extensions/prefixes
 *.[568vq]
@@ -22,3 +25,5 @@ _testmain.go
 *.exe
 *.test
 *.prof
+
+conf.yaml

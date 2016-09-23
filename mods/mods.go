@@ -10,7 +10,7 @@ import "encoding/xml"
 type Mets struct {
 	XMLName xml.Name `xml:"mets"`
 	MetsHDR string   `xml:"metsHdr"`
-	Mods    []Mods   `xml:"dmdSec>mdWrap>xmlData>mods"`
+	Mods    Mods     `xml:"dmdSec>mdWrap>xmlData>mods"`
 }
 
 // Mods provides all the relevant data of the XML file
