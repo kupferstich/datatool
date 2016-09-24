@@ -1,0 +1,23 @@
+{{ template "tmpl_header.html" }}
+
+<body>
+    <table class="ui right aligned table">
+      <thead>
+        <th class="left aligned">ID</th>
+        <th>Title</th>
+        <th>Topic</th>
+        <th>Protein</th>
+      </thead>
+      <tbody>
+        {{range $pic := .}}
+        <tr>
+          <td>{{$pic.ID}}</td>
+          <td class="left aligned">{{$pic.Title}}</td>
+          <td class="left aligned">{{$pic.Topic}}</td>
+          <td>{{$pic.YearIssued}}</td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+</body>
+</html>

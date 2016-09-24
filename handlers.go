@@ -1,13 +1,14 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 )
 
-var homeTemplate = template.Must(template.ParseFiles("./static/index.html"))
+var homeTemplate = template.Must(template.ParseFiles(
+	"./static/index.html",
+	"./static/tmpl_header.html"))
 
 func init() {
 
@@ -35,10 +36,11 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ListHandler(w http.ResponseWriter, r *http.Request) {
-	//fmt.Fprintf(w, "%#v\n%v\n\n", sourceData, Conf)
+	tmpl := template.Must(template.ParseFiles(
+		"./static/tmpl_list.html",
+		"./static/tmpl_header.html",
+	))
 	pics, _ := sourceData.List()
-	//fmt.Fprintf(w, "%#v", sourceData)
-	for _, p := range *pics {
-		fmt.Fprintf(w, "<p>%s<br>%s<br>%s</p>", p.ID, p.Topic, p.Title)
-	}
+	tmpl.Execute(w, pics)
+
 }
