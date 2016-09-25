@@ -12,6 +12,12 @@ func NewDataPicture(m *mods.Mets) *data.Picture {
 	pic.Title = getTitleInfo(m.Mods.TitleInfos, "")
 	pic.Topic = getTitleInfo(m.Mods.TitleInfos, "alternative")
 	pic.YearIssued = m.Mods.OriginInfo.DateIssued
+	for _, name := range m.Mods.Names {
+		var p data.Person
+		p.Type = name.Type
+		p.FullName = name.DisplayForm
+		pic.Persons = append(pic.Persons, p)
+	}
 	return &pic
 }
 

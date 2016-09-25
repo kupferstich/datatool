@@ -25,6 +25,7 @@ func NewData(p string) *Data {
 }
 
 func (d *Data) List() (*[]data.Picture, error) {
+	d.Pictures = nil
 	filepath.Walk(d.Folder, func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() {
 			return nil

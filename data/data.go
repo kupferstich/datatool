@@ -3,14 +3,15 @@
 package data
 
 type Picture struct {
-	ID         string `xml:"id,attr" yaml:"ID"`
-	Title      string `xml:"title" yaml:"Title"`
-	Topic      string `xml:"topic" yaml:"Topic"`
-	Text       string `xml:"text" yaml:"Text"`
-	Areas      []Area `xml:"areas" yaml:"Areas"`
-	Captured   int    `xml:"captured" yaml:"Captured"` //Year, when picture was digitalized
-	Place      string `xml:"place" yaml:"Place"`       //Place where the picture was issued
-	YearIssued string `xml:"yearIssued" yaml:"YearIssued"`
+	ID         string   `xml:"id,attr" yaml:"ID"`
+	Title      string   `xml:"title" yaml:"Title"`
+	Topic      string   `xml:"topic" yaml:"Topic"`
+	Text       string   `xml:"text" yaml:"Text"`
+	Areas      []Area   `xml:"areas" yaml:"Areas"`
+	Captured   int      `xml:"captured" yaml:"Captured"` //Year, when picture was digitalized
+	Place      string   `xml:"place" yaml:"Place"`       //Place where the picture was issued
+	YearIssued string   `xml:"yearIssued" yaml:"YearIssued"`
+	Persons    []Person `xml:"persons" yaml:"Persons"`
 }
 
 type Area struct {

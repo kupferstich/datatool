@@ -1,9 +1,10 @@
 {{ template "tmpl_header.html" }}
 
 <body>
-    <table class="ui right aligned table">
-      <thead>
+    <table class="ui left aligned table">
+      <thead class="ui fixed top sticky">
         <th class="left aligned">ID</th>
+        <th>Persons</th>
         <th>Title</th>
         <th>Topic</th>
         <th>Protein</th>
@@ -12,6 +13,7 @@
         {{range $pic := .}}
         <tr>
           <td>{{$pic.ID}}</td>
+          <td>{{range $pers := $pic.Persons}}{{$pers.FullName}}<br>{{end}}</td>
           <td class="left aligned">{{$pic.Title}}</td>
           <td class="left aligned">{{$pic.Topic}}</td>
           <td>{{$pic.YearIssued}}</td>
@@ -19,5 +21,14 @@
         {{end}}
       </tbody>
     </table>
+ <script>
+  $(document)
+    .ready(function() {
+    $('.ui.sticky')
+  .sticky()
+;
+    })
+  ;
+  </script>
 </body>
 </html>
