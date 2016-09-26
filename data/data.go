@@ -3,32 +3,32 @@
 package data
 
 type Picture struct {
-	ID         string   `xml:"id,attr" yaml:"ID"`
-	Title      string   `xml:"title" yaml:"Title"`
-	Topic      string   `xml:"topic" yaml:"Topic"`
-	Text       string   `xml:"text" yaml:"Text"`
-	Areas      []Area   `xml:"areas" yaml:"Areas"`
-	Captured   int      `xml:"captured" yaml:"Captured"` //Year, when picture was digitalized
-	Place      string   `xml:"place" yaml:"Place"`       //Place where the picture was issued
-	YearIssued string   `xml:"yearIssued" yaml:"YearIssued"`
-	Persons    []Person `xml:"persons" yaml:"Persons"`
+	ID         string   `xml:"id,attr" json:"ID"`
+	Title      string   `xml:"title" json:"Title"`
+	Topic      string   `xml:"topic" json:"Topic"`
+	Text       string   `xml:"text" json:"Text"`
+	Areas      []Area   `xml:"areas" json:"Areas"`
+	Captured   int      `xml:"captured" json:"Captured"` //Year, when picture was digitalized
+	Place      string   `xml:"place" json:"Place"`       //Place where the picture was issued
+	YearIssued string   `xml:"yearIssued" json:"YearIssued"`
+	Persons    []Person `xml:"persons" json:"Persons"`
 }
 
 type Area struct {
-	ID      string   `xml:"id,attr" yaml:"areaID"`
-	Shape   string   `xml:"shape" yaml:"Shape"`
-	Coords  string   `xml:"coords" yaml:"Coords"`
-	Persons []Person `xml:"persons" yaml:"Persons"`
-	Text    string   `xml:"text" yaml:"Text"`
+	ID      string   `xml:"id,attr" json:"areaID"`
+	Shape   string   `xml:"shape" json:"Shape"`
+	Coords  string   `xml:"coords" json:"Coords"`
+	Persons []Person `xml:"persons" json:"Persons"`
+	Text    string   `xml:"text" json:"Text"`
 }
 
 type Person struct {
-	ID   string `xml:"id,attr" yaml:"personID"`
-	Type string `xml:"type,attr" yaml:"Type"`
-	//NameFamily  string `xml:"name>family" yaml:"FamilyName"`
-	//NameGiven   string `xml:"name>given" yaml:"GivenName"`
-	FullName string `xml:"fullName" yaml:"FullName"`
-	GND      int    `xml:"gnd" yaml:"GND"`
+	ID   string `xml:"id,attr" json:"personID"`
+	Type string `xml:"type,attr" json:"Type"`
+	//NameFamily  string `xml:"name>family" json:"FamilyName"`
+	//NameGiven   string `xml:"name>given" json:"GivenName"`
+	FullName string `xml:"fullName" json:"FullName"`
+	GND      int    `xml:"gnd" json:"GND"`
 }
 
 //Lister interface is used to get a list of all pictures inside a folder

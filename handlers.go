@@ -1,9 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
+	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 var homeTemplate = template.Must(template.ParseFiles(
@@ -35,6 +39,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	homeTemplate.Execute(w, p)
 }
 
+//ListHandler is for listing all availiable pictures
 func ListHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles(
 		"./static/tmpl_list.html",
@@ -42,5 +47,32 @@ func ListHandler(w http.ResponseWriter, r *http.Request) {
 	))
 	pics, _ := sourceData.List()
 	tmpl.Execute(w, pics)
+
+}
+
+func FormHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	fmt.Println(id)
+	/*tmpl := template.Must(template.ParseFiles(
+		"./static/tmpl_header.html",
+	))
+	tmpl.Execute(w, id)*/
+	staticFile, _ := ioutil.ReadFile("./static/tmpl_form.html")
+	w.Write(staticFile)
+
+}
+
+// PicHandler sends the data of a picture in JSON format
+func PicHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	fmt.Println(id)
+	/*tmpl := template.Must(template.ParseFiles(
+		"./static/tmpl_header.html",
+	))
+	tmpl.Execute(w, id)*/
+	staticFile, _ := ioutil.ReadFile("./static/tmpl_form.html")
+	w.Write(staticFile)
 
 }

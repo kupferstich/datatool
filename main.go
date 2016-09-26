@@ -26,6 +26,8 @@ func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/", HomeHandler)
 	router.HandleFunc("/list/", ListHandler).Methods("GET")
+	router.HandleFunc("/form/{id}", FormHandler).Methods("GET")
+	router.HandleFunc("/pic/{id}", PicHandler).Methods("GET")
 	router.PathPrefix(`/files/`).
 		Handler(http.StripPrefix("/files/", http.FileServer(http.Dir(Conf.FilesFolder))))
 

@@ -33,19 +33,28 @@ func (d *Data) List() (*[]data.Picture, error) {
 		if !strings.EqualFold(filepath.Ext(path), ".xml") {
 			return nil
 		}
-		file, err := os.Open(path)
-		defer file.Close()
+		pic, err := GetPicture(path)
 		if err != nil {
 			log.Println(err)
 			return err
 		}
-		var mets mods.Mets
-		if err := xml.NewDecoder(file).Decode(&mets); err != nil {
-			return err
-		}
-		pic := NewDataPicture(&mets)
 		d.Pictures = append(d.Pictures, *pic)
 		return nil
 	})
 	return &d.Pictures, nil
+}
+
+func GetPicture(fpath string) (*data.Picture, error) {
+	file, err := os.Open(fpath)
+	defer file.Close()
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	var mets mods.Mets
+	if err := xml.NewDecoder(file).Decode(&mets); err != nil {
+		return nil, err
+	}
+	pic := NewDataPicture(&mets)
+	return pic, nil
 }
