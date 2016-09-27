@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"io/ioutil"
@@ -8,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/kupferstich/datatool/data"
 )
 
 var homeTemplate = template.Must(template.ParseFiles(
@@ -68,11 +70,41 @@ func PicHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 	fmt.Println(id)
-	/*tmpl := template.Must(template.ParseFiles(
-		"./static/tmpl_header.html",
-	))
-	tmpl.Execute(w, id)*/
-	staticFile, _ := ioutil.ReadFile("./static/tmpl_form.html")
-	w.Write(staticFile)
+	pic, err := loadPicture(id)
 
+	if err != nil {
+		log.Println(err)
+	}
+	b, err := json.Marshal(*pic)
+	if err != nil {
+		log.Println(err)
+	}
+	w.Write(b)
+}
+
+// PicHandler sends the data of a picture in JSON format
+func PicSaveHandler(w http.ResponseWriter, r *http.Request) {
+	rbody, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println(err)
+	}
+	var pic data.Picture
+	err = json.Unmarshal(rbody, &pic)
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Printf("%#v", pic)
+	/*vars := mux.Vars(r)
+	id := vars["id"]
+	fmt.Println(id)
+	pic, err := loadPicture(id)
+
+	if err != nil {
+		log.Println(err)
+	}
+	b, err := json.Marshal(*pic)
+	if err != nil {
+		log.Println(err)
+	}
+	w.Write(b)*/
 }

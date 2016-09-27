@@ -1,5 +1,6 @@
 //Package stabi contains all the implementations for the pictures of
 //Staats- und Universitaets Bibliothek Hamburg
+//It links the XML representation to the data structures.
 package stabi
 
 import (

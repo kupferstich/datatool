@@ -11,16 +11,35 @@
   <script src="/files/library/jquery.min.js"></script>
   <script src="/files/semantic/semantic.min.js"></script>
   <script src="/files/library/vue.js"></script>
-  <script src="/files/library/vue-router.js"></script>
+  <script src="/files/library/vue-resource.min.js"></script>
   
   <link rel="stylesheet" type="text/css" href="/files/semantic/semantic.css">
   <link rel="stylesheet" type="text/css" href="/files/custom.css">
 
 </head>
 <body>
-<div id="app">
-    {{ test }}
-    {{ url }}
+<div id="app" class="ui container">
+   <h1>Edit - {{pic.Title}}</h1>
+   
+   <form class="ui form" v-for="el in form">
+       <div class="field">
+           <label>{{el[0]}}</label>
+           <input type="text" v-model="pic[el[1]]">
+       </div>
+   </form>
+    <table class="ui input">
+       
+        <tr>
+           <td>Persons:</td><td> 
+               <table>
+                   <tr v-for="person in pic.Persons"><td>{{person.FullName}}</td></tr>
+               </table>
+           </td>
+       </tr>
+   </table>
+   <button v-on:click="saveData" class="ui primary button">
+  Save
+</button>
 </div>
 <script src="/files/form.js"></script>
 </body>
