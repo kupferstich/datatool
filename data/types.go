@@ -2,6 +2,7 @@ package data
 
 type Picture struct {
 	ID         string   `xml:"id,attr" json:"ID" schema:"id"`
+	File       string   `xml:"file" json:"File" schema:"file"`
 	Title      string   `xml:"title" json:"Title" schema:"title"`
 	Topic      string   `xml:"topic" json:"Topic" schema:"topic"`
 	Text       string   `xml:"text" json:"Text" schema:"text"`

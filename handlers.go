@@ -10,6 +10,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/kupferstich/datatool/data"
+	"github.com/kupferstich/datatool/stabi"
 )
 
 var homeTemplate = template.Must(template.ParseFiles(
@@ -70,7 +71,7 @@ func PicHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 	fmt.Println(id)
-	pic, err := loadPicture(id)
+	pic, err := stabi.LoadPicture(id, Conf.DataFolder)
 
 	if err != nil {
 		log.Println(err)

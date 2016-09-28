@@ -2,10 +2,8 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"net/http"
-	"path"
 
 	"github.com/gorilla/mux"
 	"github.com/kupferstich/datatool/data"
@@ -14,6 +12,11 @@ import (
 
 // ConfFile is the path to the configuration file
 var ConfFile = flag.String("conf", "conf.yaml", "Path to the conf (yaml) file")
+
+// Init is used for initial works.
+// "GetSource" generates all data into the data folder from the xml data
+// Pictures will be transformed to jpg and copied.
+var Init = flag.String("init", "", "Initial actions\n\tGetSource\tcreates a list from the xml data and copies pictures")
 
 var sourceData data.Lister
 
@@ -24,6 +27,19 @@ func init() {
 }
 
 func main() {
+	if *Init == "GetSource" {
+		d := stabi.NewData(Conf.SourceFolder)
+		_, err := d.List()
+		if err != nil {
+			log.Println(err)
+		}
+		err = d.Save(Conf.DataFolder)
+		if err != nil {
+			log.Println(err)
+		}
+		log.Println("List is created...")
+		return
+	}
 	router := mux.NewRouter()
 	router.HandleFunc("/", HomeHandler)
 	router.HandleFunc("/list/", ListHandler).Methods("GET")
@@ -38,42 +54,4 @@ func main() {
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
-}
-
-//loadPicture gets the data of a picture with a given id.
-//If there is no data availiable inside the DataFolder the
-//Data is loaded from the sourceFolder.
-//The logik for the filepath is:
-//DataFolder/[id]/data.json
-func loadPicture(id string) (*data.Picture, error) {
-	var pic data.Picture
-	pic.ID = id
-	err := data.LoadType(&pic, Conf.DataFolder)
-	if err == data.ErrFileNotFound {
-
-		// If there is no data saved, the meta data is used
-		spath := path.Join(
-			Conf.SourceFolder,
-			id,
-			fmt.Sprintf("%s.xml", id),
-		)
-		fmt.Println(spath)
-		pic, err := stabi.GetPicture(spath)
-		if err != nil {
-			log.Println(err)
-			return nil, err
-		}
-		return pic, nil
-	}
-	/*file, err := os.Open(fpath)
-	defer file.Close()
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
-	if err := xml.NewDecoder(file).Decode(&pic); err != nil {
-		return nil, err
-	}*/
-
-	return &pic, err
 }
