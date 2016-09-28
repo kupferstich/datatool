@@ -1,12 +1,10 @@
 package main
 
 import (
-	"encoding/xml"
 	"flag"
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"path"
 
 	"github.com/gorilla/mux"
@@ -48,12 +46,10 @@ func main() {
 //The logik for the filepath is:
 //DataFolder/[id]/data.json
 func loadPicture(id string) (*data.Picture, error) {
-	fpath := path.Join(
-		Conf.DataFolder,
-		id,
-		"data.json",
-	)
-	if _, err := os.Stat(fpath); os.IsNotExist(err) {
+	var pic data.Picture
+	pic.ID = id
+	err := data.LoadType(&pic, Conf.DataFolder)
+	if err == data.ErrFileNotFound {
 
 		// If there is no data saved, the meta data is used
 		spath := path.Join(
@@ -69,15 +65,15 @@ func loadPicture(id string) (*data.Picture, error) {
 		}
 		return pic, nil
 	}
-	file, err := os.Open(fpath)
+	/*file, err := os.Open(fpath)
 	defer file.Close()
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
-	var pic data.Picture
 	if err := xml.NewDecoder(file).Decode(&pic); err != nil {
 		return nil, err
-	}
-	return &pic, nil
+	}*/
+
+	return &pic, err
 }

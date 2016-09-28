@@ -2,63 +2,62 @@
 // to encode/decode JSON or XML format
 package data
 
-type Picture struct {
-	ID         string   `xml:"id,attr" json:"ID" schema:"id"`
-	Title      string   `xml:"title" json:"Title" schema:"title"`
-	Topic      string   `xml:"topic" json:"Topic" schema:"topic"`
-	Text       string   `xml:"text" json:"Text" schema:"text"`
-	Areas      []Area   `xml:"areas" json:"Areas" schema:"areas"`
-	Captured   int      `xml:"captured" json:"Captured" schema:"captured"` //Year, when picture was digitalized
-	Place      string   `xml:"place" json:"Place" schema:"place"`          //Place where the picture was issued
-	YearIssued string   `xml:"yearIssued" json:"YearIssued" schema:"yearIssued"`
-	Persons    []Person `xml:"persons" json:"Persons" schema:"persons"`
-	Links      []Link   `xml:"links" json:"Links" schema:"links"`
-}
+import (
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io/ioutil"
+	"os"
+	"path/filepath"
+)
 
-type Area struct {
-	ID      string   `xml:"id,attr" json:"areaID" schema:"areaID"`
-	Shape   string   `xml:"shape" json:"Shape" schema:"shape"`
-	Coords  string   `xml:"coords" json:"Coords" schema:"coords"`
-	Persons []Person `xml:"persons" json:"Persons" schema:"persons"`
-	Text    string   `xml:"text" json:"Text" schema:"text"`
-	Links   []Link   `xml:"links" json:"Links" schema:"links"`
-}
-
-type Person struct {
-	ID         string `xml:"id,attr" json:"personID" schema:"personID"`
-	Type       string `xml:"type,attr" json:"Type" schema:"type"`
-	NameFamily string `xml:"name>family" json:"FamilyName"`
-	NameGiven  string `xml:"name>given" json:"GivenName"`
-	FullName   string `xml:"fullName" json:"FullName" schema:"fullName"`
-	GND        int    `xml:"gnd" json:"GND" schema:"GND"`
-	Links      []Link `xml:"links" json:"Links" schema:"links"`
-}
-
-type Link struct {
-	URL   string `xml:"url" json:"Url" schema:"url"`
-	Text  string `xml:"text" json:"Text" schema:"text"`
-	Title string `xml:"title" json:"Title" schema:"title"`
-}
+// ErrFileNotFound is used when try to load a file and that file does not exist
+var ErrFileNotFound = errors.New("File not found.")
 
 //Lister interface is used to get a list of all pictures inside a folder
 type Lister interface {
 	List() (*[]Picture, error)
 }
 
-/*
-//Loader loads the data of a picture the input can be a path or an id.
-type Loader interface {
-	Load(string) *Picture
+type Identifier interface {
+	Identify() string
 }
 
-//Saver saves the data of a picture
-type Saver interface {
-	Save(string) bool
+func LoadType(i Identifier, root string) error {
+	fpath := MakePath(i, root)
+	if _, err := os.Stat(fpath); os.IsNotExist(err) {
+		return ErrFileNotFound
+	}
+	b, err := ioutil.ReadFile(fpath)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(b, i)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-//Sourcer is the abstraction for the different source implementations
-type Sourcer interface {
-	Lister
-	Loader
-	Saver
-}*/
+func SaveType(i Identifier, root string) error {
+	b, err := json.MarshalIndent(i, "", "  ")
+	if err != nil {
+		return err
+	}
+	fpath := MakePath(i, root)
+	os.MkdirAll(filepath.Dir(fpath), 0777)
+	err = ioutil.WriteFile(fpath, b, 0777)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func MakePath(i Identifier, root string) string {
+	ident := i.Identify()
+	return filepath.Join(
+		root,
+		ident,
+		fmt.Sprintf("%s.json", ident),
+	)
+}

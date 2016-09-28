@@ -82,7 +82,7 @@ func PicHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 
-// PicHandler sends the data of a picture in JSON format
+// PicSaveHandler sends the data of a picture in JSON format
 func PicSaveHandler(w http.ResponseWriter, r *http.Request) {
 	rbody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
@@ -93,18 +93,8 @@ func PicSaveHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
-	fmt.Printf("%#v", pic)
-	/*vars := mux.Vars(r)
-	id := vars["id"]
-	fmt.Println(id)
-	pic, err := loadPicture(id)
-
+	err = data.SaveType(&pic, Conf.DataFolder)
 	if err != nil {
 		log.Println(err)
 	}
-	b, err := json.Marshal(*pic)
-	if err != nil {
-		log.Println(err)
-	}
-	w.Write(b)*/
 }
