@@ -8,6 +8,7 @@ _obj
 _test
 semantic
 static/semantic
+static/files/library
 node_modules
 
 # Architecture specific extensions/prefixes
