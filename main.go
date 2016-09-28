@@ -16,7 +16,9 @@ var ConfFile = flag.String("conf", "conf.yaml", "Path to the conf (yaml) file")
 // Init is used for initial works.
 // "GetSource" generates all data into the data folder from the xml data
 // Pictures will be transformed to jpg and copied.
-var Init = flag.String("init", "", "Initial actions\n\tGetSource\tcreates a list from the xml data and copies pictures")
+var Init = flag.String("init", "", `Initial actions
+		CreateList	creates a list from the xml data
+		ImportTiff	imports the tiff pics as jpg`)
 
 var sourceData data.Lister
 
@@ -27,17 +29,24 @@ func init() {
 }
 
 func main() {
-	if *Init == "GetSource" {
+	if *Init != "" {
 		d := stabi.NewData(Conf.SourceFolder)
 		_, err := d.List()
 		if err != nil {
 			log.Println(err)
 		}
-		err = d.Save(Conf.DataFolder)
-		if err != nil {
-			log.Println(err)
+		if *Init == "CreateList" {
+			err = d.Save(Conf.DataFolder)
+			if err != nil {
+				log.Println(err)
+			}
+			log.Println("List is created...")
+		} else if *Init == "ImportTiff" {
+			err = d.SaveTiffAsJpg(Conf.DataFolder)
+			if err != nil {
+				log.Println(err)
+			}
 		}
-		log.Println("List is created...")
 		return
 	}
 	router := mux.NewRouter()

@@ -5,11 +5,9 @@ package stabi
 
 import (
 	"encoding/xml"
-	"fmt"
 	"log"
 	"os"
 	"os/exec"
-	"path"
 	"path/filepath"
 	"strings"
 
@@ -55,45 +53,27 @@ func (d *Data) Save(root string) error {
 		if err != nil {
 			return err
 		}
+	}
+	return nil
+}
+
+//SaveTiffAsJpg takes the tiff pictures and saves them inside the data folder as
+//jpg
+func (d *Data) SaveTiffAsJpg(root string) error {
+	for _, p := range d.Pictures {
 		dst := data.MakePath(&p, root)
 		dst = filepath.Join(
 			filepath.Dir(dst),
 			"00000001.jpg",
 		)
-		fmt.Println("Create:", dst)
+		log.Println("Create:", dst)
 		cmd := exec.Command("magick", p.File, dst)
-		err = cmd.Run()
+		err := cmd.Run()
 		if err != nil {
 			log.Println(err)
 		}
 	}
 	return nil
-}
-
-//LoadPicture gets the data of a picture with a given id.
-//If there is no data availiable inside the DataFolder the
-//Data is loaded from the sourceFolder.
-//The logik for the filepath is:
-//DataFolder/[id]/data.json
-func LoadPicture(id string, root string) (*data.Picture, error) {
-	var pic data.Picture
-	pic.ID = id
-	err := data.LoadType(&pic, root)
-	if err == data.ErrFileNotFound {
-		// If there is no data saved, the meta data is used
-		spath := path.Join(
-			root,
-			id,
-			fmt.Sprintf("%s.xml", id),
-		)
-		pic, err := GetPicture(spath)
-		if err != nil {
-			log.Println(err)
-			return nil, err
-		}
-		return pic, nil
-	}
-	return &pic, err
 }
 
 // GetPicture maps the data of the mods xml to the data.Picture and returns a

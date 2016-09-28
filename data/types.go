@@ -19,6 +19,11 @@ func (p *Picture) Identify() string {
 	return p.ID
 }
 
+//TypeName implements the Identifier inteface for loading and saving
+func (p *Picture) TypeName() string {
+	return "picture"
+}
+
 type Area struct {
 	ID      string   `xml:"id,attr" json:"areaID" schema:"areaID"`
 	Shape   string   `xml:"shape" json:"Shape" schema:"shape"`
