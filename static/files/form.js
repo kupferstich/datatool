@@ -39,6 +39,14 @@ methods: {
             dataType: "json",
         });
     }
+},
+filters: {
+  marked: function(value){
+    if (value === undefined){
+      value = "";
+    }
+    return marked(value);
+  }
 }
 })
 /*

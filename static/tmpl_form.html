@@ -8,10 +8,11 @@
 
   <!-- Site Properties -->
   <title>Histblogger-Editor</title>
-  <script src="/files/library/jquery.min.js"></script>
+ <script src="/files/library/jquery.min.js"></script>
   <script src="/files/semantic/semantic.min.js"></script>
+    <script src="/files/library/marked.min.js"></script>
   <script src="/files/library/vue.js"></script>
-  <script src="/files/library/vue-resource.min.js"></script>
+  
   
   <link rel="stylesheet" type="text/css" href="/files/semantic/semantic.css">
   <link rel="stylesheet" type="text/css" href="/files/custom.css">
@@ -20,12 +21,17 @@
 <body>
 <div id="app" class="ui container">
    <h1>Edit - {{pic.Title}}</h1>
-   
-   <form class="ui form" v-for="el in form">
-       <div class="field">
+   <div class="ui grid">
+       <div class="eight wide column">
+   <form class="ui form">
+       <div class="field" v-for="el in form">
            <label>{{el[0]}}</label>
            <input type="text" v-model="pic[el[1]]">
        </div>
+       <div class="field">
+    <label>Text</label>
+    <textarea v-model="pic.Text"></textarea>
+  </div>
    </form>
     <table class="ui input">
        
@@ -40,6 +46,15 @@
    <button v-on:click="saveData" class="ui primary button">
   Save
 </button>
+       </div>
+       <div class="eight wide column">
+           <div v-for="el in form">
+               <b>{{el[0]}}</b><br>
+               {{pic[el[1]]}}
+           </div>
+           <div v-html="pic.Text | marked"></div>
+       </div>
+   </div>
 </div>
 <script src="/files/form.js"></script>
 </body>
