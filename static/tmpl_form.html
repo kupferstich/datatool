@@ -34,23 +34,24 @@
        </div>
        <div class="field">
            <label>Persons</label>
-         
-                <div class="fields" v-for="p in pic.Persons">
-            <div class="field">
-            <label>Full Name:</label>
-            <input type="text" v-model="p.FullName">
-            </div>
-            <div class="field">
-            <label>GND:</label>
-            <input type="text" v-model="p.GND">
-            </div>
-            <div v-on:click="removePerson($index)" class="ui icon button">
-                <i  class="remove circle icon"></i>
-            </div>
-           </div> 
-<div v-on:click="addPerson" class="ui icon button">           
-  <i class="add circle icon"></i>
-</div>
+           <table class="ui striped table">
+               <tr v-for="p in pic.Persons">
+                   <td>{{p.FullName}}</td>
+                   <td>{{p.GND}}</td>
+                   <td><span v-on:click="removePerson($index)" class="ui icon button">
+                        <i  class="remove circle icon"></i>
+                    </span>
+                   </td>
+               </tr>
+               <tr>
+                   
+                  <td><div v-on:click="addPerson" class="ui icon button">           
+  <i class="add circle icon"></i> add person
+</div></td>
+                   <td></td>
+                   <td></td></tr>
+           </table>
+              
        </div>
        <div class="field">
     <label>Text</label>
