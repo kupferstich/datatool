@@ -22,7 +22,7 @@
 <div id="app" class="ui container">
    <h1>Edit - {{pic.Title}}</h1>
    <div class="ui grid">
-       <div class="eight wide column">
+       <div class="seven wide column">
    <form class="ui form">
        <div class="field">
            <label>ID:</label>
@@ -75,7 +75,8 @@
   Save
 </button>
        </div>
-       <div class="eight wide column">
+       <div class="nine wide column">
+           <img src="/img/{{pid}}-800-800">
            <div v-for="el in form">
                <b>{{el[0]}}</b><br>
                {{pic[el[1]]}}

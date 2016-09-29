@@ -12,11 +12,11 @@ var Conf Options
 
 // Options is the structure of the config file
 type Options struct {
-	ServerPort   string `yaml:"ServerPort"`
-	FilesFolder  string `yaml:"FilesFolder"`
-	SourceFolder string `yaml:"SourceFolder"`
-	DataFolder   string `yaml:"DataFolder"`
-	HugoFolder   string `yaml:"HugoFolder"`
+	ServerPort         string `yaml:"ServerPort"`
+	FilesFolder        string `yaml:"FilesFolder"`
+	SourceFolder       string `yaml:"SourceFolder"`
+	DataFolderPictures string `yaml:"DataFolderPictures"`
+	HugoFolder         string `yaml:"HugoFolder"`
 }
 
 type dependencies struct{}

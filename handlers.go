@@ -4,13 +4,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
+	"image/jpeg"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/kupferstich/datatool/data"
 	"github.com/kupferstich/datatool/stabi"
+	"github.com/nfnt/resize"
 )
 
 var homeTemplate = template.Must(template.ParseFiles(
@@ -48,7 +53,7 @@ func ListHandler(w http.ResponseWriter, r *http.Request) {
 		"./static/tmpl_list.html",
 		"./static/tmpl_header.html",
 	))
-	collection := stabi.NewData(Conf.DataFolder)
+	collection := stabi.NewData(Conf.DataFolderPictures)
 	collection.LoadPictures()
 	tmpl.Execute(w, collection.Pictures)
 
@@ -74,7 +79,7 @@ func PicHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(id)
 	var pic data.Picture
 	pic.ID = id
-	err := data.LoadType(&pic, Conf.DataFolder)
+	err := data.LoadType(&pic, Conf.DataFolderPictures)
 
 	if err != nil {
 		log.Println(err)
@@ -97,8 +102,38 @@ func PicSaveHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
-	err = data.SaveType(&pic, Conf.DataFolder)
+	err = data.SaveType(&pic, Conf.DataFolderPictures)
 	if err != nil {
 		log.Println(err)
 	}
+}
+
+func ImgHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	maxWidth, err := strconv.Atoi(vars["maxWidth"])
+	if err != nil {
+		log.Println(err)
+	}
+	maxHeight, err := strconv.Atoi(vars["maxHeight"])
+	if err != nil {
+		log.Println(err)
+	}
+	picturePath := filepath.Join(
+		Conf.DataFolderPictures,
+		id,
+		"00000001.jpg",
+	)
+	file, err := os.Open(picturePath)
+	defer file.Close()
+	if err != nil {
+		log.Println(err)
+	}
+	img, err := jpeg.Decode(file)
+	if err != nil {
+		log.Println(err)
+	}
+	t := resize.Thumbnail(uint(maxWidth), uint(maxHeight), img, resize.NearestNeighbor)
+	jpeg.Encode(w, t, nil)
+
 }

@@ -39,13 +39,13 @@ func main() {
 			log.Println(err)
 		}
 		if *Init == "CreateList" {
-			err = d.Save(Conf.DataFolder)
+			err = d.Save(Conf.DataFolderPictures)
 			if err != nil {
 				log.Println(err)
 			}
 			log.Println("List is created...")
 		} else if *Init == "ImportTiff" {
-			err = d.SaveTiffAsJpg(Conf.DataFolder)
+			err = d.SaveTiffAsJpg(Conf.DataFolderPictures)
 			if err != nil {
 				log.Println(err)
 			}
@@ -58,6 +58,7 @@ func main() {
 	router.HandleFunc("/form/{id}", FormHandler).Methods("GET")
 	router.HandleFunc("/pic/{id}", PicHandler).Methods("GET")
 	router.HandleFunc("/pic/{id}", PicSaveHandler).Methods("POST")
+	router.HandleFunc("/img/{id}-{maxWidth}-{maxHeight}", ImgHandler).Methods("GET")
 	router.PathPrefix(`/files/`).
 		Handler(http.StripPrefix("/files/", http.FileServer(http.Dir(Conf.FilesFolder))))
 
