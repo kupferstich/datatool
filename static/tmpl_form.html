@@ -82,9 +82,13 @@
                {{pic[el[1]]}}
            </div>
            <div v-html="pic.Text | marked"></div>
+<textarea class="canvas-area" data-image-url="{{picSrc}}"></textarea>
+
+
        </div>
    </div>
 </div>
 <script src="/files/form.js"></script>
+<script language="javascript" src="/files/library/jquery.canvasAreaDraw.min.js"></script>
 </body>
 </html>

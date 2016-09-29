@@ -23,6 +23,7 @@ Innerhalb des Ordners `static/files/library` müssen folgende JavaScript Quellen
 * Jquery: jquery.min.js
 * Markdown: marked.min.js  
 * Vue: vue.js
+* https://github.com/fahrenheit-marketing/jquery-canvas-area-draw 
 
 ### Semantic UI
 
