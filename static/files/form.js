@@ -1,8 +1,8 @@
 app = new Vue({
   el: '#app',
   data: {
-    test: 'Hello Vue.js!',
     pid: window.location.href.split("/").pop(),
+    picSrc: "/img/"+window.location.href.split("/").pop()+"-800-800",
     pic: {
         ID:null,
         Title:null
