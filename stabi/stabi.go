@@ -1,6 +1,6 @@
-//Package stabi contains all the implementations for the pictures of
-//Staats- und Universitaets Bibliothek Hamburg
-//It links the XML representation to the data structures.
+// Package stabi contains all the implementations for the pictures of
+// Staats- und Universitaets Bibliothek Hamburg
+// It links the XML representation to the data structures.
 package stabi
 
 import (
@@ -16,16 +16,17 @@ import (
 )
 
 type Data struct {
-	Folder   string
-	Pictures []data.Picture
+	Folder      string
+	DataFileExt string
+	Pictures    []data.Picture
 }
 
-//NewData creates a pointer to a Data element with a given path
+// NewData creates a pointer to a Data element with a given path
 func NewData(p string) *Data {
 	return &Data{Folder: p}
 }
 
-//List creates a list of pictures with the original data given by the stabi
+// List creates a list of pictures with the original data given by the stabi
 func (d *Data) List() (*[]data.Picture, error) {
 	d.Pictures = nil
 	filepath.Walk(d.Folder, func(path string, info os.FileInfo, err error) error {
@@ -46,7 +47,7 @@ func (d *Data) List() (*[]data.Picture, error) {
 	return &d.Pictures, nil
 }
 
-//Save stores the list into the root folder
+// Save stores the list into the root folder
 func (d *Data) Save(root string) error {
 	for _, p := range d.Pictures {
 		err := data.SaveType(&p, root)
@@ -57,8 +58,33 @@ func (d *Data) Save(root string) error {
 	return nil
 }
 
-//SaveTiffAsJpg takes the tiff pictures and saves them inside the data folder as
-//jpg
+// LoadPictures loads the pictures from data folder. For loading the pictures
+// the data.LoadType function is used.
+func (d *Data) LoadPictures() {
+	d.Pictures = nil
+	filepath.Walk(d.Folder, func(path string, info os.FileInfo, err error) error {
+		if !info.IsDir() {
+			return nil
+		}
+
+		var pic data.Picture
+		pic.ID = filepath.Base(info.Name())
+		err = data.LoadType(&pic, d.Folder)
+		// Skip entry if data can not be loaded
+		if err == data.ErrFileNotFound {
+			return nil
+		}
+		if err != nil {
+			log.Println(err)
+			//return err
+		}
+		d.Pictures = append(d.Pictures, pic)
+		return nil
+	})
+}
+
+// SaveTiffAsJpg takes the tiff pictures and saves them inside the data folder as
+// jpg
 func (d *Data) SaveTiffAsJpg(root string) error {
 	for _, p := range d.Pictures {
 		dst := data.MakePath(&p, root)

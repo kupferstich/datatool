@@ -14,20 +14,20 @@ import (
 // ErrFileNotFound is used when try to load a file and that file does not exist
 var ErrFileNotFound = errors.New("File not found.")
 
-//Lister interface is used to get a list of all pictures inside a folder
+// Lister interface is used to get a list of all pictures inside a folder
 type Lister interface {
 	List() (*[]Picture, error)
 }
 
-//Identifier is used to get the ID of a type. That ID is used to generate the
-//filepath for saving the data.
+// Identifier is used to get the ID of a type. That ID is used to generate the
+// filepath for saving the data.
 type Identifier interface {
 	Identify() string
 	TypeName() string
 }
 
-//LoadType loads the data from the data folder for a given type
-//That type needs to implement the identifier interface.
+// LoadType loads the data from the data folder for a given type
+// That type needs to implement the identifier interface.
 func LoadType(i Identifier, root string) error {
 	fpath := MakePath(i, root)
 	if _, err := os.Stat(fpath); os.IsNotExist(err) {
@@ -44,8 +44,8 @@ func LoadType(i Identifier, root string) error {
 	return nil
 }
 
-//SaveType stores the data from a type into the data folder. The type needs
-//to implement the Identifier interface.
+// SaveType stores the data from a type into the data folder. The type needs
+// to implement the Identifier interface.
 func SaveType(i Identifier, root string) error {
 	b, err := json.MarshalIndent(i, "", "  ")
 	if err != nil {
@@ -60,7 +60,7 @@ func SaveType(i Identifier, root string) error {
 	return nil
 }
 
-//MakePath generates the path to a identifier, when a root folder is given.
+// MakePath generates the path to a identifier, when a root folder is given.
 func MakePath(i Identifier, root string) string {
 	return filepath.Join(
 		root,

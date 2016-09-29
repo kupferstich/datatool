@@ -10,6 +10,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/kupferstich/datatool/data"
+	"github.com/kupferstich/datatool/stabi"
 )
 
 var homeTemplate = template.Must(template.ParseFiles(
@@ -47,8 +48,9 @@ func ListHandler(w http.ResponseWriter, r *http.Request) {
 		"./static/tmpl_list.html",
 		"./static/tmpl_header.html",
 	))
-	pics, _ := sourceData.List()
-	tmpl.Execute(w, pics)
+	collection := stabi.NewData(Conf.DataFolder)
+	collection.LoadPictures()
+	tmpl.Execute(w, collection.Pictures)
 
 }
 

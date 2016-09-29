@@ -22,10 +22,13 @@ var Init = flag.String("init", "", `Initial actions
 
 var sourceData data.Lister
 
+//var collection data.Lister
+
 func init() {
 	flag.Parse()
 	loadConf()
 	sourceData = stabi.NewData(Conf.SourceFolder)
+	//collection = stabi.NewData(Conf.DataFolder)
 }
 
 func main() {

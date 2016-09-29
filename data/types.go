@@ -14,12 +14,12 @@ type Picture struct {
 	Links      []Link   `xml:"links" json:"Links" schema:"links"`
 }
 
-//Identify implements the Identifier interface for loading and saving
+// Identify implements the Identifier interface for loading and saving
 func (p *Picture) Identify() string {
 	return p.ID
 }
 
-//TypeName implements the Identifier inteface for loading and saving
+// TypeName implements the Identifier inteface for loading and saving
 func (p *Picture) TypeName() string {
 	return "picture"
 }
