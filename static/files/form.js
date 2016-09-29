@@ -8,7 +8,6 @@ app = new Vue({
         Title:null
     },
     form: [ //Label, JSON Key
-        ["Picture ID","ID"],
         ["Title","Title"],
         ["Topic","Topic"],
         ["Captured","Captured"],
@@ -38,6 +37,12 @@ methods: {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
         });
+    },
+    addPerson:function(){
+      this.pic.Persons.push({FullName:"",GND:""});
+    },
+    removePerson:function(index){
+      this.pic.Persons.splice(index,1)
     }
 },
 filters: {

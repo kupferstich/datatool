@@ -24,9 +24,33 @@
    <div class="ui grid">
        <div class="eight wide column">
    <form class="ui form">
+       <div class="field">
+           <label>ID:</label>
+           <input type="text" v-model="pic.ID">
+       </div>
        <div class="field" v-for="el in form">
-           <label>{{el[0]}}</label>
+           <label>{{el[0]}}:</label>
            <input type="text" v-model="pic[el[1]]">
+       </div>
+       <div class="field">
+           <label>Persons</label>
+         
+                <div class="fields" v-for="p in pic.Persons">
+            <div class="field">
+            <label>Full Name:</label>
+            <input type="text" v-model="p.FullName">
+            </div>
+            <div class="field">
+            <label>GND:</label>
+            <input type="text" v-model="p.GND">
+            </div>
+            <div v-on:click="removePerson($index)" class="ui icon button">
+                <i  class="remove circle icon"></i>
+            </div>
+           </div> 
+<div v-on:click="addPerson" class="ui icon button">           
+  <i class="add circle icon"></i>
+</div>
        </div>
        <div class="field">
     <label>Text</label>
@@ -43,6 +67,9 @@
            </td>
        </tr>
    </table>
+   
+ 
+
    <button v-on:click="saveData" class="ui primary button">
   Save
 </button>
