@@ -12,6 +12,7 @@
   <script src="/files/semantic/semantic.min.js"></script>
     <script src="/files/library/marked.min.js"></script>
   <script src="/files/library/vue.js"></script>
+  <script src="/files/library/fabricjs.min.js"></script>
   
   
   <link rel="stylesheet" type="text/css" href="/files/semantic/semantic.css">
@@ -76,7 +77,7 @@
 </button>
        </div>
        <div class="nine wide column">
-           <img src="{{picSrc}}">
+           <img v-bind:src="picSrc">
            <div v-for="el in form">
                <b>{{el[0]}}</b><br>
                {{pic[el[1]]}}
@@ -88,6 +89,7 @@
        </div>
    </div>
 </div>
+
 <script src="/files/form.js"></script>
 <script language="javascript" src="/files/library/jquery.canvasAreaDraw.min.js"></script>
 </body>
