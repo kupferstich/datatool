@@ -99,3 +99,32 @@ var demo = new Vue({
 })
 
 */
+// create a wrapper around native canvas element (with id="c")
+var canvas = new fabric.Canvas('picture');
+// create a rectangle object
+var rect = new fabric.Rect({
+  left: 100,
+  top: 100,
+  fill: 'red',
+  width: 200,
+  height: 200,
+  opacity: 0.55
+});
+fabric.Image.fromURL(app.picSrc, function(oImg) {
+  oImg.set('selectable', false);
+  canvas.add(oImg,rect);
+});
+
+
+
+// "add" rectangle onto canvas
+canvas.add(rect);
+
+
+  $(document)
+    .ready(function() {
+        $('.ui.accordion')
+        .accordion()
+;
+    })
+  ;

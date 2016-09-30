@@ -5,37 +5,47 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-
+  <link rel="stylesheet" type="text/css" href="/files/semantic/semantic.css">
+  <link rel="stylesheet" type="text/css" href="/files/custom.css">
   <!-- Site Properties -->
   <title>Histblogger-Editor</title>
  <script src="/files/library/jquery.min.js"></script>
-  <script src="/files/semantic/semantic.min.js"></script>
     <script src="/files/library/marked.min.js"></script>
   <script src="/files/library/vue.js"></script>
   <script src="/files/library/fabricjs.min.js"></script>
+    <script src="/files/semantic/semantic.min.js"></script>
   
   
-  <link rel="stylesheet" type="text/css" href="/files/semantic/semantic.css">
-  <link rel="stylesheet" type="text/css" href="/files/custom.css">
-
 </head>
 <body>
 <div id="app" class="ui container">
    <h1>Edit - {{pic.Title}}</h1>
    <div class="ui grid">
-       <div class="seven wide column">
+       <div class="six wide column">
    <form class="ui form">
        <div class="field">
-           <label>ID:</label>
-           <input type="text" v-model="pic.ID">
+           <b>ID:</b> {{pic.ID}}
        </div>
-       <div class="field" v-for="el in form">
-           <label>{{el[0]}}:</label>
-           <input type="text" v-model="pic[el[1]]">
-       </div>
-       <div class="field">
-           <label>Persons</label>
-           <table class="ui striped table">
+
+
+         <!-- Accordion Definition -->
+        <div class="ui styled accordion">
+            
+            <div class="title"><i class="icon dropdown"></i>Data</div>
+            <div class="content">
+          
+                <div class="field" v-for="el in form">
+                <label>{{el[0]}}:</label>
+                <input type="text" v-model="pic[el[1]]">
+                </div>
+            
+            </div>
+        
+
+            <div class="title"><i class="icon dropdown"></i>Persons</div>
+            <div class="content">
+            <div class="field">
+            <table class="ui striped table">
                <tr v-for="p in pic.Persons">
                    <td>{{p.FullName}}</td>
                    <td>{{p.GND}}</td>
@@ -47,50 +57,47 @@
                <tr>
                    
                   <td><div v-on:click="addPerson" class="ui icon button">           
-  <i class="add circle icon"></i> add person
-</div></td>
+                <i class="add circle icon"></i> add person
+                </div></td>
                    <td></td>
                    <td></td></tr>
-           </table>
-              
-       </div>
-       <div class="field">
-    <label>Text</label>
-    <textarea v-model="pic.Text"></textarea>
-  </div>
+                </table>        
+            </div>
+            </div>
+
+            <div class="title"><i class="icon dropdown"></i>Text</div>
+            <div class="content">
+            <div class="field">
+                <label>Text</label>
+                <textarea v-model="pic.Text"></textarea>
+            </div>
+            </div>
+        </div>
    </form>
-    <table class="ui input">
-       
-        <tr>
-           <td>Persons:</td><td> 
-               <table>
-                   <tr v-for="person in pic.Persons"><td>{{person.FullName}}</td></tr>
-               </table>
-           </td>
-       </tr>
-   </table>
-   
- 
+
+
 
    <button v-on:click="saveData" class="ui primary button">
   Save
 </button>
        </div>
        <div class="nine wide column">
-           <img v-bind:src="picSrc">
-           <div v-for="el in form">
+            <div v-for="el in form">
                <b>{{el[0]}}</b><br>
                {{pic[el[1]]}}
            </div>
            <div v-html="pic.Text | marked"></div>
-<textarea class="canvas-area" data-image-url="{{picSrc}}"></textarea>
-
+           <canvas id="picture" width="800" height="800">
+           </canvas>
+           <!--<img v-bind:src="picSrc">-->
+           
+          
 
        </div>
    </div>
 </div>
 
 <script src="/files/form.js"></script>
-<script language="javascript" src="/files/library/jquery.canvasAreaDraw.min.js"></script>
+
 </body>
 </html>
