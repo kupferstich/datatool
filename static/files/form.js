@@ -40,13 +40,14 @@ methods: {
             }
         })
     },
-    saveData:function() {
+    saveData:function(cb) {
         $.ajax({
             type: "POST",
             url: "/pic/"+this.pid,
             data: JSON.stringify(this.pic),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
+            success: cb
         });
     },
     addPerson:function(){
@@ -55,24 +56,57 @@ methods: {
     removePerson:function(index){
       this.pic.Persons.splice(index,1)
     },
+    addArea:function(){
+     
+      var area = {
+      "areaID": "New area",
+      "rect": {
+        "type": "rect",
+        "left": 100,
+        "top": 100,
+        "width": 100,
+        "height": 50,
+        "fill": "orange",
+        "opacity": 0.5,
+        "scaleX": 1,
+        "scaleY": 1,
+        "hasRotatingPoint": false
+      },
+      "Shape": "rect",
+      "Coords": "",
+      "Persons": null,
+      "Text": "",
+      "Links": null
+    }
+      var i = this.fabricElements.length
+      this.pic.Areas[i] = area
+      this.fabricElements[i] = new fabric.Rect(this.pic.Areas[i].rect);
+      this.pic.Areas[i].rect = this.fabricElements[i];
+      canvas.add(this.pic.Areas[i].rect);
+      this.saveData(
+        function(){this.getData();}
+      );
+    },
     loadAreas:function(){
       for (i in this.pic.Areas){
         
         this.fabricElements[i] = new fabric.Rect(this.pic.Areas[i].rect);
-        var label = new fabric.Text(this.pic.Areas[i].areaID, {
-          left: this.pic.Areas[i].rect.left,
-          top: this.pic.Areas[i].rect.top,
-          fontSize: 20
-        });
-        
+       
         this.pic.Areas[i].rect = this.fabricElements[i];
         
         //var group = new fabric.Group([this.pic.Areas[i].rect,label]);
         canvas.add(this.pic.Areas[i].rect);
-        canvas.add(label);
+        //canvas.add(label);
         //canvas.add(group);
       }
       
+    },
+    removeArea:function(index){
+      canvas.remove(this.pic.Areas[index].rect)
+      this.pic.Areas.splice(index,1)
+      /*this.saveData(
+        function(){this.getData();}
+      );*/
     }
 },
 filters: {

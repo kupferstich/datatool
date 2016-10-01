@@ -98,8 +98,15 @@
                         <div class="field">
                             <textarea v-model="area.Text"></textarea>
                         </div>
+                        <div class="field">
+                            <span v-on:click="removeArea($index)" class="ui icon button">
+                            <i  class="remove circle icon"></i>Remove area
+                            </span></div>
                         </div>
                     </div>
+                </div>
+                <div v-on:click="addArea" class="ui icon button">           
+                <i class="add circle icon"></i> add area
                 </div>
             </div>
 
