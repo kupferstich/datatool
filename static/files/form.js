@@ -19,6 +19,16 @@ app = new Vue({
         ["Captured","Captured"],
         ["Place","Place"],
         ["YearIssued","YearIssued"]
+    ],
+    colors: [
+      "black",
+      "blue",
+      "brown",
+      "darkcyan",
+      "gold",
+      "green",
+      "olive",
+      "white"
     ]
   },
   computed: {

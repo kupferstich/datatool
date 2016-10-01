@@ -78,7 +78,9 @@
                 <div class="accordion">
                     
                     <div  v-for="area in pic.Areas">
-                        <div class="title"><i class="icon dropdown"></i>{{area.areaID}}</div>
+                        <div class="title" style="background-color: {{area.rect.fill}};filter:opacity(50%);">
+                            <i class="icon dropdown"></i>
+                            <span>{{area.areaID}}</span></div>
                         <div class="content">
                         <div class="fields">
                         <div class="field">
@@ -88,10 +90,7 @@
                             <div class="field">
                                 <label>Color:</label>
                                 <select v-model="area.rect.fill">
-                            <option value="red">red</option>
-                            <option value="green">green</option>
-                            <option value="orange">orange</option>
-                            <option value="blue">blue</option>
+                            <option v-for="c in colors" value="{{c}}">{{c}}</option>
                             </select>
                             </div>
                         </div>
