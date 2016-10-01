@@ -29,13 +29,15 @@ app = new Vue({
     
 },
 methods: {
-    getData: function() {
+    getData: function(cb) {
         $.ajax({
             context: this,
             url: "/pic/"+this.pid,
             success: function (result) {
                 this.$set("pic", JSON.parse(result));
                 this.loadAreas();
+                canvas.renderAll();
+                cb;
 
             }
         })
@@ -47,7 +49,9 @@ methods: {
             data: JSON.stringify(this.pic),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: cb
+            success: function(){
+              cb;
+            }
         });
     },
     addPerson:function(){
@@ -79,12 +83,15 @@ methods: {
       "Links": null
     }
       var i = this.fabricElements.length
+      if (this.pic.Areas == null) {
+        this.pic.Areas = [];
+      }
       this.pic.Areas[i] = area
       this.fabricElements[i] = new fabric.Rect(this.pic.Areas[i].rect);
       this.pic.Areas[i].rect = this.fabricElements[i];
       canvas.add(this.pic.Areas[i].rect);
       this.saveData(
-        function(){this.getData();}
+        window.location.href=window.location.href
       );
     },
     loadAreas:function(){
@@ -104,9 +111,9 @@ methods: {
     removeArea:function(index){
       canvas.remove(this.pic.Areas[index].rect)
       this.pic.Areas.splice(index,1)
-      /*this.saveData(
-        function(){this.getData();}
-      );*/
+      this.saveData(
+        window.location.href=window.location.href
+      );
     }
 },
 filters: {
