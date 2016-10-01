@@ -68,10 +68,41 @@
             <div class="title"><i class="icon dropdown"></i>Text</div>
             <div class="content">
             <div class="field">
-                <label>Text</label>
+                
                 <textarea v-model="pic.Text"></textarea>
             </div>
             </div>
+
+             <div class="title"><i class="icon dropdown"></i>Areas</div>
+            <div class="content">
+                <div class="accordion">
+                    
+                    <div  v-for="area in pic.Areas">
+                        <div class="title"><i class="icon dropdown"></i>{{area.areaID}}</div>
+                        <div class="content">
+                        <div class="fields">
+                        <div class="field">
+                            <label>Name:</label>
+                            <input type="text" v-model="area.areaID">
+                            </div>
+                            <div class="field">
+                                <label>Color:</label>
+                                <select v-model="area.rect.fill">
+                            <option value="red">red</option>
+                            <option value="green">green</option>
+                            <option value="orange">orange</option>
+                            <option value="blue">blue</option>
+                            </select>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <textarea v-model="area.Text"></textarea>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
    </form>
 

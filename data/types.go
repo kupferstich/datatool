@@ -24,15 +24,6 @@ func (p *Picture) TypeName() string {
 	return "picture"
 }
 
-type Area struct {
-	ID      string   `xml:"id,attr" json:"areaID" schema:"areaID"`
-	Shape   string   `xml:"shape" json:"Shape" schema:"shape"`
-	Coords  string   `xml:"coords" json:"Coords" schema:"coords"`
-	Persons []Person `xml:"persons" json:"Persons" schema:"persons"`
-	Text    string   `xml:"text" json:"Text" schema:"text"`
-	Links   []Link   `xml:"links" json:"Links" schema:"links"`
-}
-
 type Person struct {
 	ID         string `xml:"id,attr" json:"personID" schema:"personID"`
 	Type       string `xml:"type,attr" json:"Type" schema:"type"`
@@ -41,6 +32,31 @@ type Person struct {
 	FullName   string `xml:"fullName" json:"FullName" schema:"fullName"`
 	GND        int    `xml:"gnd" json:"GND" schema:"GND"`
 	Links      []Link `xml:"links" json:"Links" schema:"links"`
+}
+
+type Area struct {
+	ID      string   `xml:"id,attr" json:"areaID" schema:"areaID"`
+	Rect    Fabric   `xml:"rect" json:"rect" schema:"rect"`
+	Shape   string   `xml:"shape" json:"Shape" schema:"shape"`
+	Coords  string   `xml:"coords" json:"Coords" schema:"coords"`
+	Persons []Person `xml:"persons" json:"Persons" schema:"persons"`
+	Text    string   `xml:"text" json:"Text" schema:"text"`
+	Links   []Link   `xml:"links" json:"Links" schema:"links"`
+}
+
+type Fabric struct {
+	Type             string  `xml:"type" json:"type"`
+	Left             float32 `xml:"left" json:"left" schema:"left"`
+	Top              float32 `xml:"top" json:"top" schema:"top"`
+	Width            int     `xml:"width" json:"width" schema:"width"`
+	Height           int     `xml:"height" json:"height" schema:"height"`
+	Fill             string  `xml:"fill" json:"fill"`
+	Opacity          float32 `xml:"opacity" json:"opacity"`
+	ScaleX           float32 `xml:"scaleX" json:"scaleX" schema:"scaleX"`
+	ScaleY           float32 `xml:"scaleY" json:"scaleY" schema:"scaleY"`
+	HasRotatingPoint bool    `xml:"hasRotatingPoint" json:"hasRotatingPoint"`
+	CanvasWidth      int     `xml:"canvasWidth" json:"canvasWidth" schema:"canvasWidth"`
+	CavasHeight      int     `xml:"canvasHeight" json:"canvasHeight" schema:"canvasHeight"`
 }
 
 type Link struct {

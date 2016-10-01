@@ -1,11 +1,17 @@
+
+// create a wrapper around native canvas element (with id="c")
+var canvas = new fabric.Canvas('picture');
+
 app = new Vue({
   el: '#app',
   data: {
+    fabricElements: [],
     pid: window.location.href.split("/").pop(),
-    picSrc: "/img/"+window.location.href.split("/").pop()+"-800-800",
+    picSrc: "/img/"+window.location.href.split("/").pop()+"-700-700",
     pic: {
         ID:null,
-        Title:null
+        Title:null,
+        Areas:[{areaID:"",rect:{fill:""},Text:""}]
     },
     form: [ //Label, JSON Key
         ["Title","Title"],
@@ -14,6 +20,9 @@ app = new Vue({
         ["Place","Place"],
         ["YearIssued","YearIssued"]
     ]
+  },
+  computed: {
+    
   },
   ready: function() {
     this.getData()
@@ -25,7 +34,9 @@ methods: {
             context: this,
             url: "/pic/"+this.pid,
             success: function (result) {
-                this.$set("pic", JSON.parse(result)) 
+                this.$set("pic", JSON.parse(result));
+                this.loadAreas();
+
             }
         })
     },
@@ -43,6 +54,25 @@ methods: {
     },
     removePerson:function(index){
       this.pic.Persons.splice(index,1)
+    },
+    loadAreas:function(){
+      for (i in this.pic.Areas){
+        
+        this.fabricElements[i] = new fabric.Rect(this.pic.Areas[i].rect);
+        var label = new fabric.Text(this.pic.Areas[i].areaID, {
+          left: this.pic.Areas[i].rect.left,
+          top: this.pic.Areas[i].rect.top,
+          fontSize: 20
+        });
+        
+        this.pic.Areas[i].rect = this.fabricElements[i];
+        
+        //var group = new fabric.Group([this.pic.Areas[i].rect,label]);
+        canvas.add(this.pic.Areas[i].rect);
+        canvas.add(label);
+        //canvas.add(group);
+      }
+      
     }
 },
 filters: {
@@ -54,72 +84,13 @@ filters: {
   }
 }
 })
-/*
-var apiURL = 'https://api.github.com/repos/vuejs/vue/commits?per_page=3&sha='
 
-var demo = new Vue({
 
-  el: '#demo',
-
-  data: {
-    branches: ['master', 'dev'],
-    currentBranch: 'master',
-    commits: null
-  },
-
-  created: function () {
-    this.fetchData()
-  },
-
-  watch: {
-    currentBranch: 'fetchData'
-  },
-
-  filters: {
-    truncate: function (v) {
-      var newline = v.indexOf('\n')
-      return newline > 0 ? v.slice(0, newline) : v
-    },
-    formatDate: function (v) {
-      return v.replace(/T|Z/g, ' ')
-    }
-  },
-
-  methods: {
-    fetchData: function () {
-      var xhr = new XMLHttpRequest()
-      var self = this
-      xhr.open('GET', apiURL + self.currentBranch)
-      xhr.onload = function () {
-        self.commits = JSON.parse(xhr.responseText)
-      }
-      xhr.send()
-    }
-  }
-})
-
-*/
-// create a wrapper around native canvas element (with id="c")
-var canvas = new fabric.Canvas('picture');
-// create a rectangle object
-var rect = new fabric.Rect({
-  left: 100,
-  top: 100,
-  fill: 'red',
-  width: 200,
-  height: 200,
-  opacity: 0.55
-});
 fabric.Image.fromURL(app.picSrc, function(oImg) {
-  oImg.set('selectable', false);
-  canvas.add(oImg,rect);
-});
-
-
-
-// "add" rectangle onto canvas
-canvas.add(rect);
-
+      oImg.set('selectable', false);
+      canvas.add(oImg);
+      canvas.sendToBack(oImg);
+      });
 
   $(document)
     .ready(function() {
