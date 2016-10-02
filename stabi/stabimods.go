@@ -20,7 +20,7 @@ func NewDataPicture(m *mods.Mets, pdb data.PersonDBer) *data.Picture {
 		p.FullName = name.DisplayForm
 		p.NameFamily = getNamePart(name.NameParts, "family")
 		p.NameGiven = getNamePart(name.NameParts, "given")
-
+		p.Pictures = append(p.Pictures, pic.ID)
 		err := pdb.SavePerson(&p)
 		if err != nil {
 			log.Println(err)

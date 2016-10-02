@@ -6,7 +6,7 @@
     <table class="ui left aligned table">
       <thead class="ui sticky">
         <th class="left aligned">ID</th>
-        <th>Persons</th>
+     
         <th>Title</th>
         <th>Topic</th>
         <th>Protein</th>
@@ -15,7 +15,7 @@
         {{range $pic := .}}
         <tr>
           <td><a href="/pic/{{$pic.ID}}">{{$pic.ID}}</a></td>
-          <td>{{range $pers := $pic.Persons}}{{$pers.FullName}}<br>{{end}}</td>
+          
           <td class="left aligned"><a href="/form/{{$pic.ID}}">{{$pic.Title}}</a></td>
           <td class="left aligned">{{$pic.Topic}}</td>
           <td>{{$pic.YearIssued}}</td>

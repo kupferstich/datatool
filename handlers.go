@@ -55,6 +55,7 @@ func ListHandler(w http.ResponseWriter, r *http.Request) {
 	))
 	collection := stabi.NewData(Conf.DataFolderPictures, personDB)
 	collection.LoadPictures()
+	//fmt.Printf("%v", collection.Pictures)
 	tmpl.Execute(w, collection.Pictures)
 
 }

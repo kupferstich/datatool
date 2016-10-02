@@ -18,6 +18,7 @@ type Options struct {
 	DataFolderPictures string `yaml:"DataFolderPictures"`
 	DataFolderPersons  string `yaml:"DataFolderPersons"`
 	HugoFolder         string `yaml:"HugoFolder"`
+	DDBApiKey          string `yaml:"DDBApiKey"`
 }
 
 type dependencies struct{}
