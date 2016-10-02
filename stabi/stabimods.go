@@ -21,6 +21,8 @@ func NewDataPicture(m *mods.Mets, pdb data.PersonDBer) *data.Picture {
 		p.NameFamily = getNamePart(name.NameParts, "family")
 		p.NameGiven = getNamePart(name.NameParts, "given")
 
+		//pdb.AddPerson(&p)
+		//fmt.Printf("%#v\n", p)
 		err := pdb.SavePerson(&p)
 		if err != nil {
 			log.Println(err)

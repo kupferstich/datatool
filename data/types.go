@@ -28,13 +28,14 @@ func (p *Picture) TypeName() string {
 
 // Person represents the entities of a person
 type Person struct {
-	ID         int    `xml:"id,attr" json:"personID" schema:"personID"`
-	Type       string `xml:"type,attr" json:"Type" schema:"type"`
-	NameFamily string `xml:"name>family" json:"FamilyName"`
-	NameGiven  string `xml:"name>given" json:"GivenName"`
-	FullName   string `xml:"fullName" json:"FullName" schema:"fullName"`
-	GND        int    `xml:"gnd" json:"GND" schema:"GND"`
-	Links      []Link `xml:"links" json:"Links" schema:"links"`
+	ID         int      `xml:"id,attr" json:"personID" schema:"personID"`
+	Type       string   `xml:"type,attr" json:"Type" schema:"type"`
+	NameFamily string   `xml:"name>family" json:"FamilyName"`
+	NameGiven  string   `xml:"name>given" json:"GivenName"`
+	FullName   string   `xml:"fullName" json:"FullName" schema:"fullName"`
+	GND        int      `xml:"gnd" json:"GND" schema:"GND"`
+	Pictures   []string `xml:"pictures" json:"Pictures" schema:"pictures"`
+	Links      []Link   `xml:"links" json:"Links" schema:"links"`
 }
 
 // Identify implements the Identifier interface for loading and saving

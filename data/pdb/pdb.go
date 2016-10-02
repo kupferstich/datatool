@@ -30,13 +30,13 @@ type PersonDB struct {
 }
 
 func New(root string) *PersonDB {
-	pdb := PersonDB{Root: root}
+	pdb := PersonDB{Root: root, NextID: 1}
 	pdb.Persons = make(map[int]data.Person)
 	return &pdb
 }
 
 func Load(root string) (*PersonDB, error) {
-	pdb := PersonDB{Root: root}
+	pdb := New(root)
 	err := filepath.Walk(root, func(fpath string, info os.FileInfo, ierr error) error {
 		if info.IsDir() {
 			return nil
@@ -61,7 +61,7 @@ func Load(root string) (*PersonDB, error) {
 		pdb.Persons[p.ID] = *p
 		return nil
 	})
-	return &pdb, err
+	return pdb, err
 }
 
 // AddPerson adda data.Person to the pdb instance. If the person has no ID a new ID
@@ -71,9 +71,14 @@ func (pdb *PersonDB) AddPerson(p *data.Person) {
 	if ok {
 		p.ID = id
 	}
+
 	if p.ID == 0 {
 		p.ID = pdb.NextID
 		pdb.NextID++
+
+	}
+	if p.ID > pdb.NextID {
+		pdb.NextID = p.ID + 1
 	}
 	pdb.Persons[p.ID] = *p
 }
