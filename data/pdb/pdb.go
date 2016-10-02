@@ -68,18 +68,26 @@ func Load(root string) (*PersonDB, error) {
 // AddPerson adda data.Person to the pdb instance. If the person has no ID a new ID
 // is created and set to the person.
 func (pdb *PersonDB) AddPerson(p *data.Person) {
+	// Try to find the person by name
 	id, ok := pdb.FindPerson(p)
-	if ok {
+	if ok && p.ID == 0 {
+		// If allready in db set the id to the person.
 		p.ID = id
 	}
-
 	if p.ID == 0 {
+		// New ID if until here no id is found.
 		p.ID = pdb.NextID
 		pdb.NextID++
-
 	}
 	if p.ID > pdb.NextID {
+		// Set the nextID if there are IDs
 		pdb.NextID = p.ID + 1
+	}
+	pp, ok := pdb.Persons[p.ID]
+	if ok {
+		// If there is that person in the db set the Pictures.
+		p.Pictures = append(p.Pictures, pp.Pictures...)
+		p.Pictures = removeDuplicates(p.Pictures)
 	}
 	pdb.Persons[p.ID] = *p
 }
@@ -115,4 +123,22 @@ func (pdb *PersonDB) FindPerson(p *data.Person) (int, bool) {
 		}
 	}
 	return 0, false
+}
+
+func removeDuplicates(elements []string) []string {
+	// Use map to record duplicates as we find them.
+	encountered := map[string]bool{}
+	result := []string{}
+	for v := range elements {
+		if encountered[elements[v]] == true {
+			// Do not add duplicate.
+		} else {
+			// Record this element as an encountered element.
+			encountered[elements[v]] = true
+			// Append to result slice.
+			result = append(result, elements[v])
+		}
+	}
+	// Return the new slice.
+	return result
 }
