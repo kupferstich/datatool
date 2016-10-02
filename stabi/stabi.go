@@ -19,11 +19,15 @@ type Data struct {
 	Folder      string
 	DataFileExt string
 	Pictures    []data.Picture
+	PersonDB    data.PersonDBer
 }
 
 // NewData creates a pointer to a Data element with a given path
-func NewData(p string) *Data {
-	return &Data{Folder: p}
+func NewData(p string, pdb data.PersonDBer) *Data {
+	return &Data{
+		Folder:   p,
+		PersonDB: pdb,
+	}
 }
 
 // List creates a list of pictures with the original data given by the stabi
@@ -36,7 +40,7 @@ func (d *Data) List() (*[]data.Picture, error) {
 		if !strings.EqualFold(filepath.Ext(path), ".xml") {
 			return nil
 		}
-		pic, err := GetPicture(path)
+		pic, err := GetPicture(path, d.PersonDB)
 		if err != nil {
 			log.Println(err)
 			return err
@@ -104,7 +108,7 @@ func (d *Data) SaveTiffAsJpg(root string) error {
 
 // GetPicture maps the data of the mods xml to the data.Picture and returns a
 // pointer to the created pic
-func GetPicture(fpath string) (*data.Picture, error) {
+func GetPicture(fpath string, pdb data.PersonDBer) (*data.Picture, error) {
 	file, err := os.Open(fpath)
 	defer file.Close()
 	if err != nil {
@@ -115,7 +119,7 @@ func GetPicture(fpath string) (*data.Picture, error) {
 	if err := xml.NewDecoder(file).Decode(&mets); err != nil {
 		return nil, err
 	}
-	pic := NewDataPicture(&mets)
+	pic := NewDataPicture(&mets, pdb)
 	fp := filepath.Dir(fpath)
 	pic.File = filepath.Join(fp, "00000001.tif")
 	return pic, nil

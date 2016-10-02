@@ -1,17 +1,19 @@
 package data
 
+import "fmt"
+
 type Picture struct {
-	ID         string   `xml:"id,attr" json:"ID" schema:"id"`
-	File       string   `xml:"file" json:"File" schema:"file"`
-	Title      string   `xml:"title" json:"Title" schema:"title"`
-	Topic      string   `xml:"topic" json:"Topic" schema:"topic"`
-	Text       string   `xml:"text" json:"Text" schema:"text"`
-	Areas      []Area   `xml:"areas" json:"Areas" schema:"areas"`
-	Captured   int      `xml:"captured" json:"Captured" schema:"captured"` //Year, when picture was digitalized
-	Place      string   `xml:"place" json:"Place" schema:"place"`          //Place where the picture was issued
-	YearIssued string   `xml:"yearIssued" json:"YearIssued" schema:"yearIssued"`
-	Persons    []Person `xml:"persons" json:"Persons" schema:"persons"`
-	Links      []Link   `xml:"links" json:"Links" schema:"links"`
+	ID         string `xml:"id,attr" json:"ID" schema:"id"`
+	File       string `xml:"file" json:"File" schema:"file"`
+	Title      string `xml:"title" json:"Title" schema:"title"`
+	Topic      string `xml:"topic" json:"Topic" schema:"topic"`
+	Text       string `xml:"text" json:"Text" schema:"text"`
+	Areas      []Area `xml:"areas" json:"Areas" schema:"areas"`
+	Captured   int    `xml:"captured" json:"Captured" schema:"captured"` //Year, when picture was digitalized
+	Place      string `xml:"place" json:"Place" schema:"place"`          //Place where the picture was issued
+	YearIssued string `xml:"yearIssued" json:"YearIssued" schema:"yearIssued"`
+	Persons    []int  `xml:"persons" json:"Persons" schema:"persons"`
+	Links      []Link `xml:"links" json:"Links" schema:"links"`
 }
 
 // Identify implements the Identifier interface for loading and saving
@@ -24,14 +26,25 @@ func (p *Picture) TypeName() string {
 	return "picture"
 }
 
+// Person represents the entities of a person
 type Person struct {
-	ID         string `xml:"id,attr" json:"personID" schema:"personID"`
+	ID         int    `xml:"id,attr" json:"personID" schema:"personID"`
 	Type       string `xml:"type,attr" json:"Type" schema:"type"`
 	NameFamily string `xml:"name>family" json:"FamilyName"`
 	NameGiven  string `xml:"name>given" json:"GivenName"`
 	FullName   string `xml:"fullName" json:"FullName" schema:"fullName"`
 	GND        int    `xml:"gnd" json:"GND" schema:"GND"`
 	Links      []Link `xml:"links" json:"Links" schema:"links"`
+}
+
+// Identify implements the Identifier interface for loading and saving
+func (p *Person) Identify() string {
+	return fmt.Sprintf("%s%s_%04d", p.NameFamily, p.NameGiven, p.ID)
+}
+
+// TypeName implements the Identifier inteface for loading and saving
+func (p *Person) TypeName() string {
+	return "personData"
 }
 
 type Area struct {

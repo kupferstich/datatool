@@ -26,6 +26,12 @@ type Identifier interface {
 	TypeName() string
 }
 
+// PersonDBer is the interface for a simple PersonDB
+type PersonDBer interface {
+	GetPerson(int) (*Person, bool)
+	SavePerson(p *Person) error
+}
+
 // LoadType loads the data from the data folder for a given type
 // That type needs to implement the identifier interface.
 func LoadType(i Identifier, root string) error {

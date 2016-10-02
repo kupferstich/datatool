@@ -53,7 +53,7 @@ func ListHandler(w http.ResponseWriter, r *http.Request) {
 		"./static/tmpl_list.html",
 		"./static/tmpl_header.html",
 	))
-	collection := stabi.NewData(Conf.DataFolderPictures)
+	collection := stabi.NewData(Conf.DataFolderPictures, personDB)
 	collection.LoadPictures()
 	tmpl.Execute(w, collection.Pictures)
 

@@ -7,6 +7,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/kupferstich/datatool/data"
+	"github.com/kupferstich/datatool/data/pdb"
 	"github.com/kupferstich/datatool/stabi"
 )
 
@@ -22,18 +23,25 @@ var Init = flag.String("init", "", `Initial actions
 
 var sourceData data.Lister
 
+var personDB data.PersonDBer
+
 //var collection data.Lister
 
 func init() {
 	flag.Parse()
 	loadConf()
-	sourceData = stabi.NewData(Conf.SourceFolder)
+	var err error
+	personDB, err = pdb.Load(Conf.DataFolderPersons)
+	if err != nil {
+		log.Println(err)
+	}
+	//sourceData = stabi.NewData(Conf.SourceFolder, personDB)
 	//collection = stabi.NewData(Conf.DataFolder)
 }
 
 func main() {
 	if *Init != "" {
-		d := stabi.NewData(Conf.SourceFolder)
+		d := stabi.NewData(Conf.SourceFolder, personDB)
 		_, err := d.List()
 		if err != nil {
 			log.Println(err)
