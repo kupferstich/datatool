@@ -96,6 +96,13 @@ func (pdb *PersonDB) AddPerson(p *data.Person) {
 // If there is no such ID inside the pdb the function return nil, false
 func (pdb *PersonDB) GetPerson(id int) (*data.Person, bool) {
 	p, ok := pdb.Persons[id]
+	// If a MasterID is set, there is a master entry. This should be returned.
+	if p.MasterID > 0 {
+		m, mok := pdb.Persons[p.MasterID]
+		if mok {
+			return &m, mok
+		}
+	}
 	return &p, ok
 }
 
@@ -118,7 +125,9 @@ func (pdb *PersonDB) FindPerson(p *data.Person) (int, bool) {
 		return 0, false
 	}
 	for _, pp := range pdb.Persons {
-		if pp.FullName == p.FullName {
+		// Not only the name is important. Because of a possible master entry the
+		// id has to have no master ID set.
+		if pp.FullName == p.FullName && pp.MasterID == 0 {
 			return pp.ID, true
 		}
 	}

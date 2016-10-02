@@ -29,6 +29,7 @@ func (p *Picture) TypeName() string {
 // Person represents the entities of a person
 type Person struct {
 	ID         int      `xml:"id,attr" json:"personID" schema:"personID"`
+	MasterID   int      `xml:"master,attr" json:"masterID" schema:"masterID"`
 	Type       string   `xml:"type,attr" json:"Type" schema:"type"`
 	NameFamily string   `xml:"name>family" json:"FamilyName"`
 	NameGiven  string   `xml:"name>given" json:"GivenName"`
