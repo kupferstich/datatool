@@ -24,9 +24,15 @@ var ErrGotNilPointer = errors.New("Got a nil pointer as input.")
 
 // PersonDB is the struct for storing all the persons.
 type PersonDB struct {
-	Root    string         `json:"rootFolder"`
-	NextID  int            `json:"nextID"`
-	Persons []*data.Person `json:"Persons"`
+	Root    string              `json:"rootFolder"`
+	NextID  int                 `json:"nextID"`
+	Persons map[int]data.Person `json:"Persons"`
+}
+
+func New(root string) *PersonDB {
+	pdb := PersonDB{Root: root}
+	pdb.Persons = make(map[int]data.Person)
+	return &pdb
 }
 
 func Load(root string) (*PersonDB, error) {
@@ -52,21 +58,31 @@ func Load(root string) (*PersonDB, error) {
 		if p.ID >= pdb.NextID {
 			pdb.NextID = p.ID + 1
 		}
-		pdb.Persons = append(pdb.Persons, p)
+		pdb.Persons[p.ID] = *p
 		return nil
 	})
 	return &pdb, err
 }
 
+// AddPerson adda data.Person to the pdb instance. If the person has no ID a new ID
+// is created and set to the person.
+func (pdb *PersonDB) AddPerson(p *data.Person) {
+	id, ok := pdb.FindPerson(p)
+	if ok {
+		p.ID = id
+	}
+	if p.ID == 0 {
+		p.ID = pdb.NextID
+		pdb.NextID++
+	}
+	pdb.Persons[p.ID] = *p
+}
+
 // GetPerson by Person.ID. Second parameter returns true if an entry is found.
 // If there is no such ID inside the pdb the function return nil, false
 func (pdb *PersonDB) GetPerson(id int) (*data.Person, bool) {
-	for _, p := range pdb.Persons {
-		if id == p.ID {
-			return p, true
-		}
-	}
-	return nil, false
+	p, ok := pdb.Persons[id]
+	return &p, ok
 }
 
 // SavePerson takes a Person and saves the data inside the struct. That method should
@@ -76,15 +92,7 @@ func (pdb *PersonDB) SavePerson(p *data.Person) error {
 	if p == nil {
 		return ErrGotNilPointer
 	}
-	id, ok := pdb.FindPerson(p)
-	if ok {
-		p.ID = id
-	}
-	if p.ID == 0 {
-		p.ID = pdb.NextID
-		pdb.NextID++
-		pdb.Persons = append(pdb.Persons, p)
-	}
+	pdb.AddPerson(p)
 	return data.SaveType(p, pdb.Root)
 }
 
