@@ -24,9 +24,10 @@ var ErrGotNilPointer = errors.New("Got a nil pointer as input.")
 
 // PersonDB is the struct for storing all the persons.
 type PersonDB struct {
-	Root    string              `json:"rootFolder"`
-	NextID  int                 `json:"nextID"`
-	Persons map[int]data.Person `json:"Persons"`
+	Root        string              `json:"rootFolder"`
+	PictureRoot string              `json:"pictureRootFolder"`
+	NextID      int                 `json:"nextID"`
+	Persons     map[int]data.Person `json:"Persons"`
 }
 
 func New(root string) *PersonDB {

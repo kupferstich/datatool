@@ -28,7 +28,8 @@ type Identifier interface {
 
 // PersonDBer is the interface for a simple PersonDB
 type PersonDBer interface {
-	AddPerson(p *Person)
+	AddPerson(*Person)
+	FindPerson(*Person) (int, bool)
 	GetPerson(int) (*Person, bool)
 	SavePerson(p *Person) error
 }
