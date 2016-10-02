@@ -73,6 +73,18 @@ func FormHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// PicAllHandler is for listing all availiable pictures
+func PicAllHandler(w http.ResponseWriter, r *http.Request) {
+
+	collection := stabi.NewData(Conf.DataFolderPictures, personDB)
+	collection.LoadPictures()
+	b, err := json.Marshal(collection.Pictures)
+	if err != nil {
+		log.Println(err)
+	}
+	w.Write(b)
+}
+
 // PicHandler sends the data of a picture in JSON format
 func PicHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)

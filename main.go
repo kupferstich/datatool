@@ -64,6 +64,7 @@ func main() {
 	router.HandleFunc("/", HomeHandler)
 	router.HandleFunc("/list/", ListHandler).Methods("GET")
 	router.HandleFunc("/form/{id}", FormHandler).Methods("GET")
+	router.HandleFunc("/pic/all", PicAllHandler).Methods("GET")
 	router.HandleFunc("/pic/{id}", PicHandler).Methods("GET")
 	router.HandleFunc("/pic/{id}", PicSaveHandler).Methods("POST")
 	router.HandleFunc("/img/{id}-{maxWidth}-{maxHeight}", ImgHandler).Methods("GET")
