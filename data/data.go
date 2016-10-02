@@ -31,6 +31,7 @@ type PersonDBer interface {
 	AddPerson(*Person)
 	FindPerson(*Person) (int, bool)
 	GetPerson(int) (*Person, bool)
+	GetAll() map[int]Person
 	SavePerson(p *Person) error
 }
 

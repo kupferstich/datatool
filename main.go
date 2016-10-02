@@ -67,6 +67,9 @@ func main() {
 	router.HandleFunc("/pic/all", PicAllHandler).Methods("GET")
 	router.HandleFunc("/pic/{id}", PicHandler).Methods("GET")
 	router.HandleFunc("/pic/{id}", PicSaveHandler).Methods("POST")
+	router.HandleFunc("/person/all", PersonAllHandler).Methods("GET")
+	router.HandleFunc("/person/{id}", PersonHandler).Methods("GET")
+	//router.HandleFunc("/person/{id}", PersonSaveHandler).Methods("POST")
 	router.HandleFunc("/img/{id}-{maxWidth}-{maxHeight}", ImgHandler).Methods("GET")
 	router.PathPrefix(`/files/`).
 		Handler(http.StripPrefix("/files/", http.FileServer(http.Dir(Conf.FilesFolder))))

@@ -106,6 +106,11 @@ func (pdb *PersonDB) GetPerson(id int) (*data.Person, bool) {
 	return &p, ok
 }
 
+// GetAll returns all the persons inside the DB as map
+func (pdb *PersonDB) GetAll() map[int]data.Person {
+	return pdb.Persons
+}
+
 // SavePerson takes a Person and saves the data inside the struct. That method should
 // always be used to save Person data to ensure that the person always get an ID.
 // If the input person has no ID the NextID is set to the person and counter +1.

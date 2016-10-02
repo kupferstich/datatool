@@ -121,6 +121,28 @@ func PicSaveHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func PersonAllHandler(w http.ResponseWriter, r *http.Request) {
+	b, err := json.Marshal(personDB.GetAll())
+	if err != nil {
+		log.Println(err)
+	}
+	w.Write(b)
+}
+
+func PersonHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		log.Println(err)
+	}
+	p, _ := personDB.GetPerson(id)
+	b, err := json.Marshal(p)
+	if err != nil {
+		log.Println(err)
+	}
+	w.Write(b)
+}
+
 func ImgHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
