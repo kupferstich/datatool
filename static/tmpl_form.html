@@ -26,6 +26,13 @@
        <div class="field">
            <b>ID:</b> {{pic.ID}}
        </div>
+       <div class="field">
+           <b>Status:</b> 
+           <select v-model="pic.Status">
+            <option v-for="s in status" value="{{s}}">{{s}}</option>
+            </select>
+       </div>
+
 
 
          <!-- Accordion Definition -->

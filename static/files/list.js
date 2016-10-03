@@ -66,7 +66,7 @@ app = new Vue({
   el: '#app',
   data: {
     searchQuery: '',
-    gridColumns: ['ID','Title','Topic','YearIssued','Persons'],
+    gridColumns: ['ID','Title','Topic','YearIssued','Status'],
     gridData: [pic],
     pics: [pic],
     persons: {}
@@ -90,7 +90,7 @@ methods: {
                 url: "/person/all",
                 success: function (result) {
                     this.$set("persons", JSON.parse(result));
-                    this.setPersonsNames();
+                    //this.setPersonsNames();
             }
         })
             }
@@ -98,11 +98,12 @@ methods: {
         
     },
     setPersonsNames: function(){
+        self = this;
         this.gridData.forEach(
             function(pic,index){
                 pic.Persons.forEach(
                     function(person,pindex){
-                        this.gridData[index].Persons[pindex] = this.persons[person]
+                        self.gridData[index].PersonsName[pindex] = self.persons[person]
                     }
                 )
             }

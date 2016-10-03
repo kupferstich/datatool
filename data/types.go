@@ -14,6 +14,7 @@ type Picture struct {
 	YearIssued string `xml:"yearIssued" json:"YearIssued" schema:"yearIssued"`
 	Persons    []int  `xml:"persons" json:"Persons" schema:"persons"`
 	Links      []Link `xml:"links" json:"Links" schema:"links"`
+	Status     string `xml:"status" json:"Status" schema:"status"`
 }
 
 // Identify implements the Identifier interface for loading and saving

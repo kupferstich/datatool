@@ -11,7 +11,7 @@ app = new Vue({
     pic: {
         ID:null,
         Title:null,
-        Areas:[{areaID:"",rect:{fill:""},Text:""}]
+        Areas:[{areaID:"",rect:{fill:""},Text:"",Status:""}]
     },
     form: [ //Label, JSON Key
         ["Title","Title"],
@@ -20,6 +20,7 @@ app = new Vue({
         ["Place","Place"],
         ["YearIssued","YearIssued"]
     ],
+    status : ["neu","in Bearbeitung","fertig"],
     colors: [
       "black",
       "blue",
