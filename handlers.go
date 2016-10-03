@@ -49,28 +49,13 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 //ListHandler is for listing all availiable pictures
 func ListHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles(
-		"./static/tmpl_list.html",
-		"./static/tmpl_header.html",
-	))
-	collection := stabi.NewData(Conf.DataFolderPictures, personDB)
-	collection.LoadPictures()
-	//fmt.Printf("%v", collection.Pictures)
-	tmpl.Execute(w, collection.Pictures)
-
+	staticFile, _ := ioutil.ReadFile("./static/tmpl_list.html")
+	w.Write(staticFile)
 }
 
 func FormHandler(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	id := vars["id"]
-	fmt.Println(id)
-	/*tmpl := template.Must(template.ParseFiles(
-		"./static/tmpl_header.html",
-	))
-	tmpl.Execute(w, id)*/
 	staticFile, _ := ioutil.ReadFile("./static/tmpl_form.html")
 	w.Write(staticFile)
-
 }
 
 // PicAllHandler is for listing all availiable pictures
