@@ -1,0 +1,23 @@
+<div id="app" class="ui container">
+   <h1>Edit - {{person.FullName}}</h1>
+    <div class="ui grid">
+       <div class="six wide column">
+        <form class="ui form">
+        <div class="field">
+           <b>ID:</b> {{person.personID}}
+        </div>
+         <div class="field">
+            <label>Master:</label>
+            <select v-model="person.masterID">
+            <option v-for="p in persons | orderBy 'FullName'" value="{{p.personID}}">{{p.FullName}}({{p.personID}})</option>
+            </select>
+        </div>
+        <div class="field" v-for="el in form">
+        <label>{{el[0]}}:</label>
+        <input type="text" v-model="person[el[1]]">
+        </div>
+        </form>
+       </div>
+    </div>
+</div>
+<script src="/files/edit_person.js"></script>
