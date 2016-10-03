@@ -6,17 +6,36 @@
         <div class="field">
            <b>ID:</b> {{person.personID}}
         </div>
+
          <div class="field">
             <label>Master:</label>
-            <select v-model="person.masterID">
+            <select v-model.number="person.masterID">
             <option v-for="p in persons | orderBy 'FullName'" value="{{p.personID}}">{{p.FullName}}({{p.personID}})</option>
             </select>
         </div>
-        <div class="field" v-for="el in form">
-        <label>{{el[0]}}:</label>
-        <input type="text" v-model="person[el[1]]">
+
+        <div class="field">
+            <label>Family Name</label>
+            <input v-model="person.FamilyName">
         </div>
+
+        <div class="field">
+            <label>Given Name</label>
+            <input v-model="person.GivenName">
+        </div>
+
+        <div class="field">
+            <label>GND</label>
+            <input v-model.number="person.GND" type="number">
+        </div>
+
+        
         </form>
+        <br>
+        <div v-on:click="saveData" class="ui primary button">           
+             Save
+        </div>
+
        </div>
     </div>
 </div>

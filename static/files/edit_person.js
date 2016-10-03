@@ -5,17 +5,12 @@ app = new Vue({
   data: {
     person: {
         personID:null,
+        masterID:0,
+        GND:0,
         Title:null,
         FullName:null
     },
-    persons: {},
-    form: [ //Label, JSON Key
-        ["Master","masterID"],
-        ["Family Name","FamilyName"],
-        ["Given Name","GivenName"],
-        ["GND","GND"]
-    ]
-   
+    persons: {}
   },
   computed: {
     
@@ -49,13 +44,18 @@ methods: {
         $.ajax({
             type: "POST",
             url: "/person/"+personID,
-            data: JSON.stringify(this.person),
+            data: JSON.stringify(this.setIntegers()),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function(){
               cb;
             }
         });
+    },
+    setIntegers:function(){
+        this.person.masterID = parseInt(this.person.masterID);
+        this.person.GND = parseInt(this.person.GND);
+        return this.person;
     },
     addPerson:function(){
       this.pic.Persons.push({FullName:"",GND:""});

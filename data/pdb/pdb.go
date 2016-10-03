@@ -108,7 +108,14 @@ func (pdb *PersonDB) GetPerson(id int) (*data.Person, bool) {
 
 // GetAll returns all the persons inside the DB as map
 func (pdb *PersonDB) GetAll() map[int]data.Person {
-	return pdb.Persons
+	// If an entry has a master entry it is not listed
+	all := make(map[int]data.Person)
+	for k, p := range pdb.Persons {
+		if p.MasterID == 0 {
+			all[k] = p
+		}
+	}
+	return all
 }
 
 // SavePerson takes a Person and saves the data inside the struct. That method should

@@ -142,7 +142,7 @@ func PersonSaveHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
-	err = data.SaveType(&person, Conf.DataFolderPersons)
+	err = personDB.SavePerson(&person)
 	if err != nil {
 		log.Println(err)
 	}
