@@ -1,9 +1,3 @@
-var pic = {
-        ID:null,
-        Title:null,
-        Areas:[{areaID:"",rect:{fill:""},Text:""}]
-    }
-
 
 // register the grid component
 Vue.component('grid', {
@@ -21,7 +15,8 @@ Vue.component('grid', {
     })
     return {
       sortKey: '',
-      sortOrders: sortOrders
+      sortOrders: sortOrders,
+      linkBase: this.$parent.gridLinkBase
     }
   },
   computed: {
@@ -62,13 +57,46 @@ Vue.component('grid', {
 
 
 //////////////////
+var types = {
+    "pictures":{
+        "columns":['ID','Title','Topic','YearIssued','Status'],
+        "defaultData": {
+            ID:null,
+            Title:null,
+            Areas:[{areaID:"",rect:{fill:""},Text:""}]
+        },
+        "url": "/pic/all",
+        "linkBase": "/form/",
+        "dataTrans": function(inData){
+            return inData;
+        }
+    },
+    "persons":{
+        "columns":['personID','FullName','GND'],
+        "defaultData": {
+            ID:null,
+            Title:null,
+            Areas:[{areaID:"",rect:{fill:""},Text:""}]
+        },
+        "url": "/person/all",
+        "linkBase": "/person/",
+        "dataTrans": function(inData){
+            return  Object.keys(inData).map(function (key) { 
+                inData[key].ID = key;
+                return inData[key]; });
+        }
+    }
+}
+var type = window.location.href.split("/").pop()
+
+
 app = new Vue({
   el: '#app',
   data: {
     searchQuery: '',
-    gridColumns: ['ID','Title','Topic','YearIssued','Status'],
-    gridData: [pic],
-    pics: [pic],
+    gridColumns: types[type]['columns'],
+    gridData: types[type]['defaultData'],
+    gridLinkBase: types[type]['linkBase'],
     persons: {}
   },
   computed: {
@@ -82,17 +110,10 @@ methods: {
     getData: function() {
         $.ajax({
             context: this,
-            url: "/pic/all",
+            url: types[type]['url'],
             success: function (result) {
-                this.$set("gridData", JSON.parse(result));
-                $.ajax({
-                context: this,
-                url: "/person/all",
-                success: function (result) {
-                    this.$set("persons", JSON.parse(result));
-                    //this.setPersonsNames();
-            }
-        })
+                var trans = types[type]['dataTrans'] 
+                this.$set("gridData", trans(JSON.parse(result)));
             }
         });
         

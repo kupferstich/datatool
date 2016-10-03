@@ -62,14 +62,18 @@ func main() {
 	}
 	router := mux.NewRouter()
 	router.HandleFunc("/", HomeHandler)
-	router.HandleFunc("/list/", ListHandler).Methods("GET")
+	// Html page for all pictures
+	router.HandleFunc("/list/{type}", ListHandler).Methods("GET")
+	// Html page for editing a picture
 	router.HandleFunc("/form/{id}", FormHandler).Methods("GET")
+	// Html page for all persons
+	//router.HandleFunc("/persons/", PersonsHandler).Methods("GET")
 	router.HandleFunc("/pic/all", PicAllHandler).Methods("GET")
 	router.HandleFunc("/pic/{id}", PicHandler).Methods("GET")
 	router.HandleFunc("/pic/{id}", PicSaveHandler).Methods("POST")
 	router.HandleFunc("/person/all", PersonAllHandler).Methods("GET")
 	router.HandleFunc("/person/{id}", PersonHandler).Methods("GET")
-	//router.HandleFunc("/person/{id}", PersonSaveHandler).Methods("POST")
+	router.HandleFunc("/person/{id}", PersonSaveHandler).Methods("POST")
 	router.HandleFunc("/img/{id}-{maxWidth}-{maxHeight}", ImgHandler).Methods("GET")
 	router.PathPrefix(`/files/`).
 		Handler(http.StripPrefix("/files/", http.FileServer(http.Dir(Conf.FilesFolder))))

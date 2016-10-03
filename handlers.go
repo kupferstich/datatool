@@ -49,6 +49,8 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 //ListHandler is for listing all availiable pictures
 func ListHandler(w http.ResponseWriter, r *http.Request) {
+	/*vars := mux.Vars(r)
+	type := vars["type"]*/
 	staticFile, _ := ioutil.ReadFile("./static/tmpl_list.html")
 	w.Write(staticFile)
 }
@@ -58,9 +60,13 @@ func FormHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(staticFile)
 }
 
+/*func PersonsHandler(w http.ResponseWriter, r *http.Request) {
+	staticFile, _ := ioutil.ReadFile("./static/tmpl_plit.html")
+	w.Write(staticFile)
+}*/
+
 // PicAllHandler is for listing all availiable pictures
 func PicAllHandler(w http.ResponseWriter, r *http.Request) {
-
 	collection := stabi.NewData(Conf.DataFolderPictures, personDB)
 	collection.LoadPictures()
 	b, err := json.Marshal(collection.Pictures)
@@ -126,6 +132,23 @@ func PersonHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 	w.Write(b)
+}
+
+// PersonSaveHandler sends the data of a picture in JSON format
+func PersonSaveHandler(w http.ResponseWriter, r *http.Request) {
+	rbody, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println(err)
+	}
+	var person data.Person
+	err = json.Unmarshal(rbody, &person)
+	if err != nil {
+		log.Println(err)
+	}
+	err = data.SaveType(&person, Conf.DataFolderPersons)
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func ImgHandler(w http.ResponseWriter, r *http.Request) {
