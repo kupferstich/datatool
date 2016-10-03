@@ -51,19 +51,16 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 func ListHandler(w http.ResponseWriter, r *http.Request) {
 	/*vars := mux.Vars(r)
 	type := vars["type"]*/
-	staticFile, _ := ioutil.ReadFile("./static/tmpl_list.html")
-	w.Write(staticFile)
+	staticFile(w, "./static/tmpl_list.html")
 }
 
 func FormHandler(w http.ResponseWriter, r *http.Request) {
-	staticFile, _ := ioutil.ReadFile("./static/tmpl_form.html")
-	w.Write(staticFile)
+	staticFile(w, "./static/tmpl_form.html")
 }
 
-/*func PersonsHandler(w http.ResponseWriter, r *http.Request) {
-	staticFile, _ := ioutil.ReadFile("./static/tmpl_plit.html")
-	w.Write(staticFile)
-}*/
+func EditPersonHandler(w http.ResponseWriter, r *http.Request) {
+	staticFile(w, "./static/tmpl_edit_person.html")
+}
 
 // PicAllHandler is for listing all availiable pictures
 func PicAllHandler(w http.ResponseWriter, r *http.Request) {
@@ -179,4 +176,13 @@ func ImgHandler(w http.ResponseWriter, r *http.Request) {
 	t := resize.Thumbnail(uint(maxWidth), uint(maxHeight), img, resize.NearestNeighbor)
 	jpeg.Encode(w, t, nil)
 
+}
+
+func staticFile(w http.ResponseWriter, filename string) {
+	sf, _ := ioutil.ReadFile("./static/tmpl_header.html")
+	w.Write(sf)
+	sf, _ = ioutil.ReadFile(filename)
+	w.Write(sf)
+	sf, _ = ioutil.ReadFile("./static/tmpl_footer.html")
+	w.Write(sf)
 }

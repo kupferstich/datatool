@@ -62,12 +62,14 @@ func main() {
 	}
 	router := mux.NewRouter()
 	router.HandleFunc("/", HomeHandler)
-	// Html page for all pictures
+	// Html page for all pictures and persons.
+	// For type: persons or pictures is allowed. The logic is handled just
+	// by the gui.
 	router.HandleFunc("/list/{type}", ListHandler).Methods("GET")
 	// Html page for editing a picture
 	router.HandleFunc("/form/{id}", FormHandler).Methods("GET")
 	// Html page for all persons
-	//router.HandleFunc("/persons/", PersonsHandler).Methods("GET")
+	router.HandleFunc("/edit/person/{id}", EditPersonHandler).Methods("GET")
 	router.HandleFunc("/pic/all", PicAllHandler).Methods("GET")
 	router.HandleFunc("/pic/{id}", PicHandler).Methods("GET")
 	router.HandleFunc("/pic/{id}", PicSaveHandler).Methods("POST")

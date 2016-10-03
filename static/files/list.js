@@ -79,7 +79,7 @@ var types = {
             Areas:[{areaID:"",rect:{fill:""},Text:""}]
         },
         "url": "/person/all",
-        "linkBase": "/person/",
+        "linkBase": "/edit/person/",
         "dataTrans": function(inData){
             return  Object.keys(inData).map(function (key) { 
                 inData[key].ID = key;
