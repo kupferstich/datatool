@@ -65,26 +65,7 @@ func (d *Data) Save(root string) error {
 // LoadPictures loads the pictures from data folder. For loading the pictures
 // the data.LoadType function is used.
 func (d *Data) LoadPictures() {
-	d.Pictures = nil
-	filepath.Walk(d.Folder, func(path string, info os.FileInfo, err error) error {
-		if !info.IsDir() {
-			return nil
-		}
-
-		var pic data.Picture
-		pic.ID = filepath.Base(info.Name())
-		err = data.LoadType(&pic, d.Folder)
-		// Skip entry if data can not be loaded
-		if err == data.ErrFileNotFound {
-			return nil
-		}
-		if err != nil {
-			log.Println(err)
-			//return err
-		}
-		d.Pictures = append(d.Pictures, pic)
-		return nil
-	})
+	d.Pictures = data.LoadPictures(d.Folder)
 }
 
 // SaveTiffAsJpg takes the tiff pictures and saves them inside the data folder as

@@ -146,6 +146,20 @@ func (pdb *PersonDB) FindPerson(p *data.Person) (int, bool) {
 	return 0, false
 }
 
+// UpdatePictures regenerates the references to a person, which has a masterID.
+func (pdb *PersonDB) UpdatePictures(root string) {
+	pictures := data.LoadPictures(root)
+	for _, pic := range pictures {
+		for i, p := range pic.Persons {
+			dbPerson, ok := pdb.GetPerson(p)
+			if ok {
+				pic.Persons[i] = dbPerson.ID
+			}
+		}
+		data.SaveType(&pic, root)
+	}
+}
+
 func removeDuplicates(elements []string) []string {
 	// Use map to record duplicates as we find them.
 	encountered := map[string]bool{}
