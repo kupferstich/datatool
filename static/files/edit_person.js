@@ -8,12 +8,14 @@ app = new Vue({
         masterID:0,
         GND:0,
         Title:null,
-        FullName:null
+        FullName:null,
+        FamilyName:'',
+        GivenName:''
     },
     persons: {}
   },
   computed: {
-    
+
   },
   ready: function() {
     this.getData()
@@ -56,6 +58,9 @@ methods: {
         this.person.masterID = parseInt(this.person.masterID);
         this.person.GND = parseInt(this.person.GND);
         return this.person;
+    },
+    setFullName:function(){
+        this.person.FullName = this.person.FamilyName + ", " + this.person.GivenName;
     },
     addPerson:function(){
       this.pic.Persons.push({FullName:"",GND:""});

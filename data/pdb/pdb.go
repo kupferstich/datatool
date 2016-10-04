@@ -30,14 +30,14 @@ type PersonDB struct {
 	Persons     map[int]data.Person `json:"Persons"`
 }
 
-func New(root string) *PersonDB {
-	pdb := PersonDB{Root: root, NextID: 1}
+func New(root, pictureRoot string) *PersonDB {
+	pdb := PersonDB{Root: root, PictureRoot: pictureRoot, NextID: 1}
 	pdb.Persons = make(map[int]data.Person)
 	return &pdb
 }
 
-func Load(root string) (*PersonDB, error) {
-	pdb := New(root)
+func Load(root, pictureRoot string) (*PersonDB, error) {
+	pdb := New(root, pictureRoot)
 	err := filepath.Walk(root, func(fpath string, info os.FileInfo, ierr error) error {
 		if info.IsDir() {
 			return nil
@@ -72,6 +72,7 @@ func (pdb *PersonDB) AddPerson(p *data.Person) {
 	id, ok := pdb.FindPerson(p)
 	if ok && p.ID == 0 {
 		// If allready in db set the id to the person.
+		// This means that the person is edited.
 		p.ID = id
 	}
 	if p.ID == 0 {
@@ -83,11 +84,18 @@ func (pdb *PersonDB) AddPerson(p *data.Person) {
 		// Set the nextID if there are IDs
 		pdb.NextID = p.ID + 1
 	}
-	pp, ok := pdb.Persons[p.ID]
+	dbPerson, ok := pdb.Persons[p.ID]
 	if ok {
+		// The person is edited.
 		// If there is that person in the db set the Pictures.
-		p.Pictures = append(p.Pictures, pp.Pictures...)
+		p.Pictures = append(p.Pictures, dbPerson.Pictures...)
 		p.Pictures = removeDuplicates(p.Pictures)
+		// If the masterID changes the references at the pictures had to be
+		// updated.
+		if dbPerson.MasterID != p.MasterID {
+			pdb.Persons[p.ID] = *p
+			pdb.UpdatePictures(pdb.PictureRoot)
+		}
 	}
 	pdb.Persons[p.ID] = *p
 }

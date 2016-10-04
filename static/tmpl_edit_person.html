@@ -4,7 +4,8 @@
        <div class="six wide column">
         <form class="ui form">
         <div class="field">
-           <b>ID:</b> {{person.personID}}
+           <b>ID:</b> {{person.personID}}<br>
+           <b>Name:</b> {{person.FullName}}
         </div>
 
          <div class="field">
@@ -16,13 +17,14 @@
 
         <div class="field">
             <label>Family Name</label>
-            <input v-model="person.FamilyName">
+            <input v-model="person.FamilyName" @keyup="setFullName">
         </div>
 
         <div class="field">
             <label>Given Name</label>
-            <input v-model="person.GivenName">
+            <input v-model="person.GivenName" @keyup="setFullName">
         </div>
+
 
         <div class="field">
             <label>GND</label>

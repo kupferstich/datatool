@@ -31,7 +31,7 @@ func init() {
 	flag.Parse()
 	loadConf()
 	var err error
-	personDB, err = pdb.Load(Conf.DataFolderPersons)
+	personDB, err = pdb.Load(Conf.DataFolderPersons, Conf.DataFolderPictures)
 	if err != nil {
 		log.Println(err)
 	}
