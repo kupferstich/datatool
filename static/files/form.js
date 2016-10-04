@@ -13,12 +13,13 @@ app = new Vue({
         Title:null,
         Areas:[{areaID:"",rect:{fill:""},Text:"",Status:""}]
     },
+    persons: null,
+    newPerson: 0,
     form: [ //Label, JSON Key
-        ["Title","Title"],
-        ["Topic","Topic"],
-        ["Captured","Captured"],
+        ["Titel","Title"],
+        ["Thema","Topic"],
         ["Place","Place"],
-        ["YearIssued","YearIssued"]
+        ["Jahr der Anfertigung","YearIssued"]
     ],
     status : ["neu","in Bearbeitung","fertig"],
     colors: [
@@ -52,6 +53,15 @@ methods: {
 
             }
         })
+        $.ajax({
+            context: this,
+            url: "/person/all",
+            success: function (result) {
+                this.$set("persons", JSON.parse(result));
+                cb;
+
+            }
+        })
     },
     saveData:function(cb) {
         $.ajax({
@@ -65,8 +75,8 @@ methods: {
             }
         });
     },
-    addPerson:function(){
-      this.pic.Persons.push({FullName:"",GND:""});
+    addPerson:function(target){
+        this.pic.Persons.push(parseInt(this.newPerson));      
     },
     removePerson:function(index){
       this.pic.Persons.splice(index,1)
@@ -74,7 +84,7 @@ methods: {
     addArea:function(){
      
       var area = {
-      "areaID": "New area",
+      "areaID": "Neuer Bereich",
       "rect": {
         "type": "rect",
         "left": 100,
@@ -118,6 +128,15 @@ methods: {
         //canvas.add(group);
       }
       
+    },
+    addPersonToArea:function(index){
+      if (this.pic.Areas[index].Persons==null){
+        this.pic.Areas[index].Persons = []
+      }
+      this.pic.Areas[index].Persons.push(parseInt(this.newPerson)); 
+    },
+    removePersonFromArea:function(aindex,index){
+      this.pic.Areas[aindex].Persons.splice(index,1);
     },
     removeArea:function(index){
       canvas.remove(this.pic.Areas[index].rect)

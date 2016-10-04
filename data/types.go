@@ -51,13 +51,13 @@ func (p *Person) TypeName() string {
 }
 
 type Area struct {
-	ID      string   `xml:"id,attr" json:"areaID" schema:"areaID"`
-	Rect    Fabric   `xml:"rect" json:"rect" schema:"rect"`
-	Shape   string   `xml:"shape" json:"Shape" schema:"shape"`
-	Coords  string   `xml:"coords" json:"Coords" schema:"coords"`
-	Persons []Person `xml:"persons" json:"Persons" schema:"persons"`
-	Text    string   `xml:"text" json:"Text" schema:"text"`
-	Links   []Link   `xml:"links" json:"Links" schema:"links"`
+	ID      string `xml:"id,attr" json:"areaID" schema:"areaID"`
+	Rect    Fabric `xml:"rect" json:"rect" schema:"rect"`
+	Shape   string `xml:"shape" json:"Shape" schema:"shape"`
+	Coords  string `xml:"coords" json:"Coords" schema:"coords"`
+	Persons []int  `xml:"persons" json:"Persons" schema:"persons"`
+	Text    string `xml:"text" json:"Text" schema:"text"`
+	Links   []Link `xml:"links" json:"Links" schema:"links"`
 }
 
 type Fabric struct {
