@@ -15,6 +15,8 @@ app = new Vue({
         ProfilePic:'',
         YearBirth: 0,
         YearDeath: 0,
+        CityBirth: '',
+        CityDeath: '',
         Links:[]
     },
     persons: {},

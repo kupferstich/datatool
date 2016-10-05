@@ -33,6 +33,17 @@
 </div>
 <div class="fields">
         <div class="field">
+            <label>Geburtsort</label>
+            <input v-model="person.CityBirth">
+        </div>
+
+        <div class="field">
+            <label>Sterbeort</label>
+            <input v-model="person.CityDeath">
+        </div>
+</div>
+<div class="fields">
+        <div class="field">
             <label>Master:</label>
             <select v-model.number="person.masterID">
             <option v-for="p in persons | orderBy 'FullName'" value="{{p.personID}}">{{p.FullName}}({{p.personID}})</option>
