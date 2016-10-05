@@ -8,11 +8,20 @@ app = new Vue({
         masterID:0,
         GND:0,
         Title:null,
+        Text:"",
         FullName:null,
         FamilyName:'',
-        GivenName:''
+        GivenName:'',
+        ProfilePic:'',
+        YearBirth: 0,
+        YearDeath: 0,
+        Links:[]
     },
-    persons: {}
+    persons: {},
+    newLink: {
+        Url: "",
+        Title: ""
+    }
   },
   computed: {
 
@@ -42,6 +51,22 @@ methods: {
             }
         })
     },
+    addLink:function(){
+        if (this.person.Links == null){
+            this.person.Links = [];
+        }
+        var url = this.newLink.Url;
+        var title = this.newLink.Title;
+        this.person.Links.push({
+            Url: url,
+            Title: title
+        })
+        this.newLink.Url = "";
+        this.newLink.Title = "";
+    },
+    removeLink:function(index){
+      this.person.Links.splice(index,1)
+    },
     saveData:function(cb) {
         $.ajax({
             type: "POST",
@@ -57,6 +82,8 @@ methods: {
     setIntegers:function(){
         this.person.masterID = parseInt(this.person.masterID);
         this.person.GND = parseInt(this.person.GND);
+        this.person.YearBirth = parseInt(this.person.YearBirth);
+        this.person.YearDeath = parseInt(this.person.YearDeath);
         return this.person;
     },
     setFullName:function(){

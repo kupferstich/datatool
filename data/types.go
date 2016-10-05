@@ -35,7 +35,11 @@ type Person struct {
 	NameFamily string   `xml:"name>family" json:"FamilyName"`
 	NameGiven  string   `xml:"name>given" json:"GivenName"`
 	FullName   string   `xml:"fullName" json:"FullName" schema:"fullName"`
+	YearBirth  int      `xml:"yearBirth" json:"YearBirth" schema:"yearBirth"`
+	YearDeath  int      `xml:"yearDeath" json:"YearDeath" schema:"yearDeath"`
+	ProfilePic string   `xml:"profilePic" json:"ProfilePic" schema:"profilePic"`
 	GND        int      `xml:"gnd" json:"GND" schema:"GND"`
+	Text       string   `xml:"text" json:"Text" schema:"text"`
 	Pictures   []string `xml:"pictures" json:"Pictures" schema:"pictures"`
 	Links      []Link   `xml:"links" json:"Links" schema:"links"`
 }
