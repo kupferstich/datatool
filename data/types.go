@@ -2,6 +2,7 @@ package data
 
 import "fmt"
 
+// Picture stores all the entities for the histblogger
 type Picture struct {
 	ID         string `xml:"id,attr" json:"ID"`
 	File       string `xml:"file" json:"File"`
@@ -56,6 +57,7 @@ func (p *Person) TypeName() string {
 	return "personData"
 }
 
+// Area defines parts of the picture
 type Area struct {
 	ID      string `xml:"id,attr" json:"areaID"`
 	Rect    Fabric `xml:"rect" json:"rect"`
@@ -66,6 +68,7 @@ type Area struct {
 	Links   []Link `xml:"links" json:"Links"`
 }
 
+// Fabric defines rects of the fabricjs library
 type Fabric struct {
 	Type             string  `xml:"type" json:"type"`
 	Left             float32 `xml:"left" json:"left"`
@@ -81,6 +84,7 @@ type Fabric struct {
 	CavasHeight      int     `xml:"canvasHeight" json:"canvasHeight"`
 }
 
+// Link for a part of the blog
 type Link struct {
 	URL   string `xml:"url" json:"Url"`
 	Text  string `xml:"text" json:"Text"`
