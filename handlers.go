@@ -148,6 +148,36 @@ func PersonSaveHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func PersonImgHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	filename := vars["file"]
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		log.Println(err)
+	}
+	maxWidth := 200
+	maxHeight := 200
+
+	p, _ := personDB.GetPerson(id)
+
+	picturePath := filepath.Join(
+		filepath.Dir(data.MakePath(p, Conf.DataFolderPersons)),
+		filename,
+	)
+
+	file, err := os.Open(picturePath)
+	defer file.Close()
+	if err != nil {
+		log.Println(err)
+	}
+	img, err := jpeg.Decode(file)
+	if err != nil {
+		log.Println(err)
+	}
+	t := resize.Thumbnail(uint(maxWidth), uint(maxHeight), img, resize.NearestNeighbor)
+	jpeg.Encode(w, t, nil)
+
+}
 func ImgHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]

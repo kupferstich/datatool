@@ -12,7 +12,7 @@ app = new Vue({
         FullName:null,
         FamilyName:'',
         GivenName:'',
-        ProfilePic:'',
+        ProfilePics:null,
         YearBirth: 0,
         YearDeath: 0,
         CityBirth: '',

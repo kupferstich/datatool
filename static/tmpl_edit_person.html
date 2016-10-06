@@ -67,7 +67,9 @@
     <form class="ui form">
         
         
-        
+        <div class="field">
+            <b>Suche Wikimedia nach</b> <a href="https://commons.wikimedia.org/wiki/Category:{{person.GivenName}} {{person.FamilyName}}?uselang=de">{{person.GivenName}} {{person.FamilyName}}</a>
+        </div>
         <div class="field">
             <label>Text</label>
             <textarea v-model="person.Text"></textarea>
@@ -104,12 +106,20 @@
     </div>
 
     <div class="field">
-            <label>Profilbild HTML Code</label>
-            <textarea v-model="person.ProfilePic" rows="2"></textarea>
+           <div class="ui card" v-for="profPic in person.ProfilePics">
+            <div class="image">
+                
+                <img src="/img/person/{{person.personID}}/thumb/{{profPic}}">
+            </div>
+            <div class="content">
+               
+                <div class="description">
+                Kristy is an art director living in New York.
+                </div>
+            </div>
+            </div>
         </div>
-        <div class="field">
-            {{{person.ProfilePic}}}
-    </div>
+       
 
     </form>
 </div>

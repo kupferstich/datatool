@@ -22,6 +22,9 @@ import (
 // ErrGotNilPointer is, when a function gets a nil pointer
 var ErrGotNilPointer = errors.New("Got a nil pointer as input.")
 
+// ErrPersonDeleted describes, when a person is not any more inside the db.
+var ErrPersonDeleted = errors.New("Person instance inside the db was deleted.")
+
 // PersonDB is the struct for storing all the persons.
 type PersonDB struct {
 	Root        string              `json:"rootFolder"`
@@ -84,20 +87,46 @@ func (pdb *PersonDB) AddPerson(p *data.Person) {
 		// Set the nextID if there are IDs
 		pdb.NextID = p.ID + 1
 	}
-	dbPerson, ok := pdb.Persons[p.ID]
-	if ok {
-		// The person is edited.
-		// If there is that person in the db set the Pictures.
-		p.Pictures = append(p.Pictures, dbPerson.Pictures...)
-		p.Pictures = removeDuplicates(p.Pictures)
-		// If the masterID changes the references at the pictures had to be
-		// updated.
-		if dbPerson.MasterID != p.MasterID {
-			pdb.Persons[p.ID] = *p
-			pdb.UpdatePictures(pdb.PictureRoot)
-		}
-	}
 	pdb.Persons[p.ID] = *p
+}
+
+// EditPerson handles if data inside the person has changed. It is compulsory
+// that the person has a valid ID.
+func (pdb *PersonDB) EditPerson(p *data.Person) error {
+	dbPerson, ok := pdb.Persons[p.ID]
+	if !ok {
+		return nil
+	}
+	// The person is edited.
+	// If there is that person in the db set the Pictures.
+	p.Pictures = append(p.Pictures, dbPerson.Pictures...)
+	p.Pictures = removeDuplicates(p.Pictures)
+
+	// If the folderpath changed after edit
+	if data.MakePath(&dbPerson, pdb.Root) != data.MakePath(p, pdb.Root) {
+		// Save person at new location
+		data.SaveType(p, pdb.Root)
+		// Remove the old path
+		os.RemoveAll(filepath.Dir(data.MakePath(&dbPerson, pdb.Root)))
+		// Update the entry inside the pdb
+		pdb.Persons[p.ID] = *p
+	}
+
+	// If the masterID is set the references at the pictures had to be
+	// updated.
+	if p.MasterID != 0 {
+		// Save the person before updating references
+		data.SaveType(p, pdb.Root)
+		pdb.UpdatePictures(pdb.PictureRoot)
+		// Remove the file of the person after the update
+		err := os.RemoveAll(filepath.Dir(data.MakePath(p, pdb.Root)))
+		if err != nil {
+			log.Println(err)
+		}
+		delete(pdb.Persons, p.ID)
+		return ErrPersonDeleted
+	}
+	return nil
 }
 
 // GetPerson by Person.ID. Second parameter returns true if an entry is found.
@@ -111,6 +140,8 @@ func (pdb *PersonDB) GetPerson(id int) (*data.Person, bool) {
 			return &m, mok
 		}
 	}
+	picExt := []string{".jpg", ".jpeg", ".png"}
+	p.ProfilePics, _ = getFiles(filepath.Dir(data.MakePath(&p, pdb.Root)), picExt)
 	return &p, ok
 }
 
@@ -134,7 +165,11 @@ func (pdb *PersonDB) SavePerson(p *data.Person) error {
 		return ErrGotNilPointer
 	}
 	pdb.AddPerson(p)
-	return data.SaveType(p, pdb.Root)
+	err := pdb.EditPerson(p)
+	if err != ErrPersonDeleted {
+		return data.SaveType(p, pdb.Root)
+	}
+	return nil
 }
 
 // FindPerson takes a Person and searches with the name if there is an entry in
@@ -162,6 +197,7 @@ func (pdb *PersonDB) UpdatePictures(root string) {
 			dbPerson, ok := pdb.GetPerson(p)
 			if ok {
 				pic.Persons[i] = dbPerson.ID
+				//pic.Persons = removeDuplicates(pic.Persons)
 			}
 		}
 		for ai, a := range pic.Areas {
@@ -192,4 +228,21 @@ func removeDuplicates(elements []string) []string {
 	}
 	// Return the new slice.
 	return result
+}
+
+func getFiles(folder string, ext []string) ([]string, error) {
+	var outFiles []string
+	files, err := ioutil.ReadDir(folder)
+	if err != nil {
+		return outFiles, err
+	}
+	for _, f := range files {
+		log.Println(f.Name(), filepath.Ext(f.Name()))
+		for _, e := range ext {
+			if strings.EqualFold(e, filepath.Ext(f.Name())) {
+				outFiles = append(outFiles, f.Name())
+			}
+		}
+	}
+	return outFiles, nil
 }

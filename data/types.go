@@ -5,6 +5,7 @@ import "fmt"
 // Picture stores all the entities for the histblogger
 type Picture struct {
 	ID         string `xml:"id,attr" json:"ID"`
+	SrcPath    string `xml:"-" json:"-"`
 	File       string `xml:"file" json:"File"`
 	Title      string `xml:"title" json:"Title"`
 	Topic      string `xml:"topic" json:"Topic"`
@@ -30,21 +31,22 @@ func (p *Picture) TypeName() string {
 
 // Person represents the entities of a person
 type Person struct {
-	ID         int      `xml:"id,attr" json:"personID"`
-	MasterID   int      `xml:"master,attr" json:"masterID"`
-	Type       string   `xml:"type,attr" json:"Type"`
-	NameFamily string   `xml:"name>family" json:"FamilyName"`
-	NameGiven  string   `xml:"name>given" json:"GivenName"`
-	FullName   string   `xml:"fullName" json:"FullName"`
-	YearBirth  int      `xml:"yearBirth" json:"YearBirth"`
-	YearDeath  int      `xml:"yearDeath" json:"YearDeath"`
-	CityBirth  string   `xml:"cityBirth" json:"CityBirth"`
-	CityDeath  string   `xml:"cityDeath" json:"CityDeath"`
-	ProfilePic string   `xml:"profilePic" json:"ProfilePic"`
-	GND        int      `xml:"gnd" json:"GND"`
-	Text       string   `xml:"text" json:"Text"`
-	Pictures   []string `xml:"pictures" json:"Pictures"`
-	Links      []Link   `xml:"links" json:"Links"`
+	ID          int      `xml:"id,attr" json:"personID"`
+	MasterID    int      `xml:"master,attr" json:"masterID"`
+	Type        string   `xml:"type,attr" json:"Type"`
+	NameFamily  string   `xml:"name>family" json:"FamilyName"`
+	NameGiven   string   `xml:"name>given" json:"GivenName"`
+	FullName    string   `xml:"fullName" json:"FullName"`
+	YearBirth   int      `xml:"yearBirth" json:"YearBirth"`
+	YearDeath   int      `xml:"yearDeath" json:"YearDeath"`
+	CityBirth   string   `xml:"cityBirth" json:"CityBirth"`
+	CityDeath   string   `xml:"cityDeath" json:"CityDeath"`
+	ProfilePic  string   `xml:"profilePic" json:"ProfilePic"` // xxx entfernen
+	GND         int      `xml:"gnd" json:"GND"`
+	Text        string   `xml:"text" json:"Text"`
+	ProfilePics []string `xml:"profilePics" json:"ProfilePics"`
+	Pictures    []string `xml:"pictures" json:"Pictures"`
+	Links       []Link   `xml:"links" json:"Links"`
 }
 
 // Identify implements the Identifier interface for loading and saving

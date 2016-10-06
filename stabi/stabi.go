@@ -83,6 +83,12 @@ func (d *Data) SaveTiffAsJpg(root string) error {
 		if err != nil {
 			log.Println(err)
 		}
+		log.Println("Resize:", dst)
+		cmd = exec.Command("convert", dst, "-resize", "3000x2500", dst)
+		err = cmd.Run()
+		if err != nil {
+			log.Println(err)
+		}
 	}
 	return nil
 }
