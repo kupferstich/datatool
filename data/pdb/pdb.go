@@ -141,7 +141,21 @@ func (pdb *PersonDB) GetPerson(id int) (*data.Person, bool) {
 		}
 	}
 	picExt := []string{".jpg", ".jpeg", ".png"}
-	p.ProfilePics, _ = getFiles(filepath.Dir(data.MakePath(&p, pdb.Root)), picExt)
+	ProfilePics, _ := getFiles(filepath.Dir(data.MakePath(&p, pdb.Root)), picExt)
+	// Store the db values in var, because the pic source could be renamed or
+	// deleted, then the old value should be not loaded.
+	dbProfilePics := p.ProfilePics
+	// Delete the old values
+	p.ProfilePics = make(map[string]data.Source)
+	for _, profPic := range ProfilePics {
+		dbSource, pok := dbProfilePics[profPic]
+		// If file is already in the db set the old value
+		if pok {
+			p.ProfilePics[profPic] = dbSource
+		} else {
+			p.ProfilePics[profPic] = data.Source{Value: profPic}
+		}
+	}
 	return &p, ok
 }
 
@@ -237,7 +251,6 @@ func getFiles(folder string, ext []string) ([]string, error) {
 		return outFiles, err
 	}
 	for _, f := range files {
-		log.Println(f.Name(), filepath.Ext(f.Name()))
 		for _, e := range ext {
 			if strings.EqualFold(e, filepath.Ext(f.Name())) {
 				outFiles = append(outFiles, f.Name())

@@ -155,8 +155,8 @@ func PersonImgHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
-	maxWidth := 200
-	maxHeight := 200
+	maxWidth := 290
+	maxHeight := 400
 
 	p, _ := personDB.GetPerson(id)
 

@@ -105,16 +105,16 @@
                 </div>
     </div>
 
-    <div class="field">
+    <div class="field ui two cards">
            <div class="ui card" v-for="profPic in person.ProfilePics">
             <div class="image">
                 
-                <img src="/img/person/{{person.personID}}/thumb/{{profPic}}">
+                <img src="/img/person/{{person.personID}}/thumb/{{profPic.Value}}">
             </div>
             <div class="content">
                
                 <div class="description">
-                Kristy is an art director living in New York.
+               <input v-model="profPic.Title">
                 </div>
             </div>
             </div>

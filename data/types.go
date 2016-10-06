@@ -31,22 +31,21 @@ func (p *Picture) TypeName() string {
 
 // Person represents the entities of a person
 type Person struct {
-	ID          int      `xml:"id,attr" json:"personID"`
-	MasterID    int      `xml:"master,attr" json:"masterID"`
-	Type        string   `xml:"type,attr" json:"Type"`
-	NameFamily  string   `xml:"name>family" json:"FamilyName"`
-	NameGiven   string   `xml:"name>given" json:"GivenName"`
-	FullName    string   `xml:"fullName" json:"FullName"`
-	YearBirth   int      `xml:"yearBirth" json:"YearBirth"`
-	YearDeath   int      `xml:"yearDeath" json:"YearDeath"`
-	CityBirth   string   `xml:"cityBirth" json:"CityBirth"`
-	CityDeath   string   `xml:"cityDeath" json:"CityDeath"`
-	ProfilePic  string   `xml:"profilePic" json:"ProfilePic"` // xxx entfernen
-	GND         int      `xml:"gnd" json:"GND"`
-	Text        string   `xml:"text" json:"Text"`
-	ProfilePics []string `xml:"profilePics" json:"ProfilePics"`
-	Pictures    []string `xml:"pictures" json:"Pictures"`
-	Links       []Link   `xml:"links" json:"Links"`
+	ID          int               `xml:"id,attr" json:"personID"`
+	MasterID    int               `xml:"master,attr" json:"masterID"`
+	Type        string            `xml:"type,attr" json:"Type"`
+	NameFamily  string            `xml:"name>family" json:"FamilyName"`
+	NameGiven   string            `xml:"name>given" json:"GivenName"`
+	FullName    string            `xml:"fullName" json:"FullName"`
+	YearBirth   int               `xml:"yearBirth" json:"YearBirth"`
+	YearDeath   int               `xml:"yearDeath" json:"YearDeath"`
+	CityBirth   string            `xml:"cityBirth" json:"CityBirth"`
+	CityDeath   string            `xml:"cityDeath" json:"CityDeath"`
+	GND         int               `xml:"gnd" json:"GND"`
+	Text        string            `xml:"text" json:"Text"`
+	ProfilePics map[string]Source `xml:"profilePics" json:"ProfilePics"`
+	Pictures    []string          `xml:"pictures" json:"Pictures"`
+	Links       []Link            `xml:"links" json:"Links"`
 }
 
 // Identify implements the Identifier interface for loading and saving
@@ -84,6 +83,14 @@ type Fabric struct {
 	HasRotatingPoint bool    `xml:"hasRotatingPoint" json:"hasRotatingPoint"`
 	CanvasWidth      int     `xml:"canvasWidth" json:"canvasWidth"`
 	CavasHeight      int     `xml:"canvasHeight" json:"canvasHeight"`
+}
+
+// Source defines a source with copyright and source information
+type Source struct {
+	Value       string `xml:"value" json:"Value"`
+	Text        string `xml:"text" json:"Text"`
+	Title       string `xml:"title" json:"Title"`
+	Attribution string `xml:"attribution" json:"Attribution"`
 }
 
 // Link for a part of the blog
