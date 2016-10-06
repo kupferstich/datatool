@@ -1,0 +1,8 @@
+ServerPort: :8081
+# Do not change the FilesFolder
+FilesFolder: ./static/files/
+# Source, where the tiff files are
+SourceFolder: 
+# DataFolders needs read and write access
+DataFolderPictures: C:\DataFolder\Pictures
+DataFolderPersons: C:\DataFolder\Persons
