@@ -27,7 +27,8 @@ app = new Vue({
     }
   },
   watch: {
-       person: function(){
+       person: function(val,oldVal){
+                    
           this.ppUrls = [];
           if (this.person.ProfilePics == undefined) {
               return "";
@@ -51,6 +52,7 @@ methods: {
             url: "/person/"+personID,
             success: function (result) {
                 this.$set("person", JSON.parse(result));
+                this.unsafedChanges = false;
                 cb;
 
             }
@@ -82,6 +84,7 @@ methods: {
       this.person.Links.splice(index,1)
     },
     saveData:function(cb) {
+         this.unsafedChanges = false;
         $.ajax({
             type: "POST",
             url: "/person/"+personID,
@@ -89,6 +92,7 @@ methods: {
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function(){
+               
               cb;
             }
         });

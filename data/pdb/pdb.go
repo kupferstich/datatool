@@ -27,15 +27,15 @@ var ErrPersonDeleted = errors.New("Person instance inside the db was deleted.")
 
 // PersonDB is the struct for storing all the persons.
 type PersonDB struct {
-	Root        string              `json:"rootFolder"`
-	PictureRoot string              `json:"pictureRootFolder"`
-	NextID      int                 `json:"nextID"`
-	Persons     map[int]data.Person `json:"Persons"`
+	Root        string                 `json:"rootFolder"`
+	PictureRoot string                 `json:"pictureRootFolder"`
+	NextID      int                    `json:"nextID"`
+	Persons     map[string]data.Person `json:"Persons"`
 }
 
 func New(root, pictureRoot string) *PersonDB {
 	pdb := PersonDB{Root: root, PictureRoot: pictureRoot, NextID: 1}
-	pdb.Persons = make(map[int]data.Person)
+	pdb.Persons = make(map[string]data.Person)
 	return &pdb
 }
 
@@ -62,7 +62,7 @@ func Load(root, pictureRoot string) (*PersonDB, error) {
 		if p.ID >= pdb.NextID {
 			pdb.NextID = p.ID + 1
 		}
-		pdb.Persons[p.ID] = *p
+		pdb.Persons[p.GetID()] = *p
 		return nil
 	})
 	return pdb, err
@@ -87,13 +87,13 @@ func (pdb *PersonDB) AddPerson(p *data.Person) {
 		// Set the nextID if there are IDs
 		pdb.NextID = p.ID + 1
 	}
-	pdb.Persons[p.ID] = *p
+	pdb.Persons[p.GetID()] = *p
 }
 
 // EditPerson handles if data inside the person has changed. It is compulsory
 // that the person has a valid ID.
 func (pdb *PersonDB) EditPerson(p *data.Person) error {
-	dbPerson, ok := pdb.Persons[p.ID]
+	dbPerson, ok := pdb.Persons[p.GetID()]
 	if !ok {
 		return nil
 	}
@@ -109,7 +109,7 @@ func (pdb *PersonDB) EditPerson(p *data.Person) error {
 		// Remove the old path
 		os.RemoveAll(filepath.Dir(data.MakePath(&dbPerson, pdb.Root)))
 		// Update the entry inside the pdb
-		pdb.Persons[p.ID] = *p
+		pdb.Persons[p.GetID()] = *p
 	}
 
 	// If the masterID is set the references at the pictures had to be
@@ -123,7 +123,7 @@ func (pdb *PersonDB) EditPerson(p *data.Person) error {
 		if err != nil {
 			log.Println(err)
 		}
-		delete(pdb.Persons, p.ID)
+		delete(pdb.Persons, p.GetID())
 		return ErrPersonDeleted
 	}
 	return nil
@@ -131,15 +131,9 @@ func (pdb *PersonDB) EditPerson(p *data.Person) error {
 
 // GetPerson by Person.ID. Second parameter returns true if an entry is found.
 // If there is no such ID inside the pdb the function return nil, false
-func (pdb *PersonDB) GetPerson(id int) (*data.Person, bool) {
+func (pdb *PersonDB) GetPerson(id string) (*data.Person, bool) {
 	p, ok := pdb.Persons[id]
-	// If a MasterID is set, there is a master entry. This should be returned.
-	if p.MasterID > 0 {
-		m, mok := pdb.Persons[p.MasterID]
-		if mok {
-			return &m, mok
-		}
-	}
+
 	pdb.GetProfilePics(&p)
 	return &p, ok
 }
@@ -164,9 +158,9 @@ func (pdb *PersonDB) GetProfilePics(p *data.Person) {
 }
 
 // GetAll returns all the persons inside the DB as map
-func (pdb *PersonDB) GetAll() map[int]data.Person {
+func (pdb *PersonDB) GetAll() map[string]data.Person {
 	// If an entry has a master entry it is not listed
-	all := make(map[int]data.Person)
+	all := make(map[string]data.Person)
 	for k, p := range pdb.Persons {
 		if p.MasterID == 0 {
 			all[k] = p
@@ -214,7 +208,7 @@ func (pdb *PersonDB) UpdatePictures(root string) {
 		for i, p := range pic.Persons {
 			dbPerson, ok := pdb.GetPerson(p)
 			if ok {
-				pic.Persons[i] = dbPerson.ID
+				pic.Persons[i] = dbPerson.GetID()
 				//pic.Persons = removeDuplicates(pic.Persons)
 			}
 		}
@@ -222,7 +216,7 @@ func (pdb *PersonDB) UpdatePictures(root string) {
 			for i, p := range a.Persons {
 				dbPerson, ok := pdb.GetPerson(p)
 				if ok {
-					pic.Areas[ai].Persons[i] = dbPerson.ID
+					pic.Areas[ai].Persons[i] = dbPerson.GetID()
 				}
 			}
 		}

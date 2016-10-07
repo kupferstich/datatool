@@ -30,8 +30,8 @@ type Identifier interface {
 type PersonDBer interface {
 	AddPerson(*Person)
 	FindPerson(*Person) (int, bool)
-	GetPerson(int) (*Person, bool)
-	GetAll() map[int]Person
+	GetPerson(string) (*Person, bool)
+	GetAll() map[string]Person
 	SavePerson(p *Person) error
 }
 

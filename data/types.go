@@ -4,19 +4,19 @@ import "fmt"
 
 // Picture stores all the entities for the histblogger
 type Picture struct {
-	ID         string `xml:"id,attr" json:"ID"`
-	SrcPath    string `xml:"-" json:"-"`
-	File       string `xml:"file" json:"File"`
-	Title      string `xml:"title" json:"Title"`
-	Topic      string `xml:"topic" json:"Topic"`
-	Text       string `xml:"text" json:"Text"`
-	Areas      []Area `xml:"areas" json:"Areas"`
-	Captured   int    `xml:"captured" json:"Captured"` //Year, when picture was digitalized
-	Place      string `xml:"place" json:"Place"`       //Place where the picture was issued
-	YearIssued string `xml:"yearIssued" json:"YearIssued"`
-	Persons    []int  `xml:"persons" json:"Persons"`
-	Links      []Link `xml:"links" json:"Links"`
-	Status     string `xml:"status" json:"Status"`
+	ID         string   `xml:"id,attr" json:"ID"`
+	SrcPath    string   `xml:"-" json:"-"`
+	File       string   `xml:"file" json:"File"`
+	Title      string   `xml:"title" json:"Title"`
+	Topic      string   `xml:"topic" json:"Topic"`
+	Text       string   `xml:"text" json:"Text"`
+	Areas      []Area   `xml:"areas" json:"Areas"`
+	Captured   int      `xml:"captured" json:"Captured"` //Year, when picture was digitalized
+	Place      string   `xml:"place" json:"Place"`       //Place where the picture was issued
+	YearIssued string   `xml:"yearIssued" json:"YearIssued"`
+	Persons    []string `xml:"persons" json:"Persons"`
+	Links      []Link   `xml:"links" json:"Links"`
+	Status     string   `xml:"status" json:"Status"`
 }
 
 // Identify implements the Identifier interface for loading and saving
@@ -49,9 +49,17 @@ type Person struct {
 	Links       []Link            `xml:"links" json:"Links"`
 }
 
+// GetID returns the ID of the person
+func (p *Person) GetID() string {
+	if p.GND != 0 {
+		return fmt.Sprintf("GND%d", p.GND)
+	}
+	return fmt.Sprintf("%04d", p.ID)
+}
+
 // Identify implements the Identifier interface for loading and saving
 func (p *Person) Identify() string {
-	return fmt.Sprintf("%s%s_%04d", p.NameFamily, p.NameGiven, p.ID)
+	return fmt.Sprintf("%s%s_%s", p.NameFamily, p.NameGiven, p.GetID())
 }
 
 // TypeName implements the Identifier inteface for loading and saving
@@ -61,13 +69,13 @@ func (p *Person) TypeName() string {
 
 // Area defines parts of the picture
 type Area struct {
-	ID      string `xml:"id,attr" json:"areaID"`
-	Rect    Fabric `xml:"rect" json:"rect"`
-	Shape   string `xml:"shape" json:"Shape"`
-	Coords  string `xml:"coords" json:"Coords"`
-	Persons []int  `xml:"persons" json:"Persons"`
-	Text    string `xml:"text" json:"Text"`
-	Links   []Link `xml:"links" json:"Links"`
+	ID      string   `xml:"id,attr" json:"areaID"`
+	Rect    Fabric   `xml:"rect" json:"rect"`
+	Shape   string   `xml:"shape" json:"Shape"`
+	Coords  string   `xml:"coords" json:"Coords"`
+	Persons []string `xml:"persons" json:"Persons"`
+	Text    string   `xml:"text" json:"Text"`
+	Links   []Link   `xml:"links" json:"Links"`
 }
 
 // Fabric defines rects of the fabricjs library

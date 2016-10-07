@@ -119,10 +119,7 @@ func PersonAllHandler(w http.ResponseWriter, r *http.Request) {
 
 func PersonHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		log.Println(err)
-	}
+	id := vars["id"]
 	p, _ := personDB.GetPerson(id)
 	b, err := json.Marshal(p)
 	if err != nil {
@@ -151,10 +148,7 @@ func PersonSaveHandler(w http.ResponseWriter, r *http.Request) {
 func PersonImgHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	filename := vars["file"]
-	id, err := strconv.Atoi(vars["id"])
-	if err != nil {
-		log.Println(err)
-	}
+	id := vars["id"]
 	maxWidth := 290
 	maxHeight := 400
 

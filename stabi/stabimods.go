@@ -26,7 +26,7 @@ func NewDataPicture(m *mods.Mets, pdb data.PersonDBer) *data.Picture {
 			log.Println(err)
 		}
 		// SavePerson saves the data and adds the ID
-		pic.Persons = append(pic.Persons, p.ID)
+		pic.Persons = append(pic.Persons, p.GetID())
 	}
 	return &pic
 }
