@@ -32,6 +32,8 @@ func (p *Picture) TypeName() string {
 // Person represents the entities of a person
 type Person struct {
 	ID          int               `xml:"id,attr" json:"personID"`
+	GND         int               `xml:"gnd" json:"GND"`
+	Idents      []Ident           `xml:"idents" json:"idents"`
 	MasterID    int               `xml:"master,attr" json:"masterID"`
 	Type        string            `xml:"type,attr" json:"Type"`
 	NameFamily  string            `xml:"name>family" json:"FamilyName"`
@@ -41,7 +43,6 @@ type Person struct {
 	YearDeath   int               `xml:"yearDeath" json:"YearDeath"`
 	CityBirth   string            `xml:"cityBirth" json:"CityBirth"`
 	CityDeath   string            `xml:"cityDeath" json:"CityDeath"`
-	GND         int               `xml:"gnd" json:"GND"`
 	Text        string            `xml:"text" json:"Text"`
 	ProfilePics map[string]Source `xml:"profilePics" json:"ProfilePics"`
 	Pictures    []string          `xml:"pictures" json:"Pictures"`
@@ -83,6 +84,12 @@ type Fabric struct {
 	HasRotatingPoint bool    `xml:"hasRotatingPoint" json:"hasRotatingPoint"`
 	CanvasWidth      int     `xml:"canvasWidth" json:"canvasWidth"`
 	CavasHeight      int     `xml:"canvasHeight" json:"canvasHeight"`
+}
+
+// Ident is a unique identification
+type Ident struct {
+	Value string `xml:"value" json:"Value"`
+	Type  string `xml:"type,attr" json:"Type"`
 }
 
 // Source defines a source with copyright and source information

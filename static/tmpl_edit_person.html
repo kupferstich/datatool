@@ -106,16 +106,17 @@
     </div>
 
     <div class="field ui two cards">
-           <div class="ui card" v-for="profPic in person.ProfilePics">
+           <div class="ui card" v-for="val in person.ProfilePics">
             <div class="image">
                 
-                <img src="/img/person/{{person.personID}}/thumb/{{profPic.Value}}">
+                <img src="{{ppUrls[$index]}}">
+               
+               <!-- <img src="getImgSrc(person.personID,profPic.Value)">-->
             </div>
             <div class="content">
-               
                 <div class="description">
-               <input v-model="profPic.Title" placeholder="Titel">
-                <input v-model="profPic.Attribution" placeholder="Urheberschaft">
+               <input v-model="val.Title" placeholder="Titel">
+                <input v-model="val.Attribution" placeholder="Urheberschaft">
                 </div>
             </div>
             </div>

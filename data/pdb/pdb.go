@@ -140,8 +140,13 @@ func (pdb *PersonDB) GetPerson(id int) (*data.Person, bool) {
 			return &m, mok
 		}
 	}
+	pdb.GetProfilePics(&p)
+	return &p, ok
+}
+
+func (pdb *PersonDB) GetProfilePics(p *data.Person) {
 	picExt := []string{".jpg", ".jpeg", ".png"}
-	ProfilePics, _ := getFiles(filepath.Dir(data.MakePath(&p, pdb.Root)), picExt)
+	ProfilePics, _ := getFiles(filepath.Dir(data.MakePath(p, pdb.Root)), picExt)
 	// Store the db values in var, because the pic source could be renamed or
 	// deleted, then the old value should be not loaded.
 	dbProfilePics := p.ProfilePics
@@ -156,7 +161,6 @@ func (pdb *PersonDB) GetPerson(id int) (*data.Person, bool) {
 			p.ProfilePics[profPic] = data.Source{Value: profPic}
 		}
 	}
-	return &p, ok
 }
 
 // GetAll returns all the persons inside the DB as map

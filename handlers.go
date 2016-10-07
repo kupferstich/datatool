@@ -169,6 +169,8 @@ func PersonImgHandler(w http.ResponseWriter, r *http.Request) {
 	defer file.Close()
 	if err != nil {
 		log.Println(err)
+		w.WriteHeader(http.StatusNotFound)
+		return
 	}
 	img, err := jpeg.Decode(file)
 	if err != nil {

@@ -12,7 +12,7 @@ app = new Vue({
         FullName:null,
         FamilyName:'',
         GivenName:'',
-        ProfilePics:null,
+        ProfilePics:{},
         YearBirth: 0,
         YearDeath: 0,
         CityBirth: '',
@@ -20,13 +20,25 @@ app = new Vue({
         Links:[]
     },
     persons: {},
+    ppUrls:[],
     newLink: {
         Url: "",
         Title: ""
     }
   },
-  computed: {
-
+  watch: {
+       person: function(){
+          this.ppUrls = [];
+          if (this.person.ProfilePics == undefined) {
+              return "";
+          }
+          for (p in this.person.ProfilePics){
+              //this.person.ProfilePics[p].url = "/img/person/"+personID+"/thumb/"+p;
+              //console.log(this.person.ProfilePics[p].url);
+              this.ppUrls.push("/img/person/"+personID+"/thumb/"+p);
+          }
+         //return picUrls; 
+      }
   },
   ready: function() {
     this.getData()
@@ -96,7 +108,8 @@ methods: {
     },
     removePerson:function(index){
       this.pic.Persons.splice(index,1)
-    }
+    },
+
     
 },
 filters: {
