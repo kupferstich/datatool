@@ -15,10 +15,11 @@ app = new Vue({
     },
     persons: null,
     newPerson: 0,
+    tags: null,
+    newTag: "",
     form: [ //Label, JSON Key
         ["Titel","Title"],
         ["Thema","Topic"],
-        ["Place","Place"],
         ["Jahr der Anfertigung","YearIssued"]
     ],
     status : [
@@ -85,6 +86,16 @@ methods: {
     },
     removePerson:function(index){
       this.pic.Persons.splice(index,1)
+    },
+    addTag:function(target){
+       if (this.pic.Tags == null){
+         this.pic.Tags = [];
+       }
+        this.pic.Tags.push(this.newTag);  
+        this.newTag = "";    
+    },
+    removeTag:function(index){
+      this.pic.Tags.splice(index,1)
     },
     addArea:function(){
      

@@ -15,6 +15,7 @@ type Picture struct {
 	Place      string   `xml:"place" json:"Place"`       //Place where the picture was issued
 	YearIssued string   `xml:"yearIssued" json:"YearIssued"`
 	Persons    []string `xml:"persons" json:"Persons"`
+	Tags       []string `xml:"tags" json:"Tags"`
 	Links      []Link   `xml:"links" json:"Links"`
 	Status     string   `xml:"status" json:"Status"`
 }
