@@ -68,26 +68,44 @@ func Load(root, pictureRoot string) (*PersonDB, error) {
 	return pdb, err
 }
 
+// SavePerson takes a Person and saves the data inside the struct. That method should
+// always be used to save Person data to ensure that the person always get an ID.
+// If the input person has no ID the NextID is set to the person and counter +1.
+func (pdb *PersonDB) SavePerson(p *data.Person) error {
+	if p == nil {
+		return ErrGotNilPointer
+	}
+	pdb.AddPerson(p)
+	err := pdb.EditPerson(p)
+	if err != ErrPersonDeleted {
+		return data.SaveType(p, pdb.Root)
+	}
+	return nil
+}
+
 // AddPerson adda data.Person to the pdb instance. If the person has no ID a new ID
 // is created and set to the person.
 func (pdb *PersonDB) AddPerson(p *data.Person) {
 	// Try to find the person by name
-	id, ok := pdb.FindPerson(p)
+	pp, ok := pdb.FindPerson(p)
 	if ok && p.ID == 0 {
-		// If allready in db set the id to the person.
+		// If allready in db set the id to the person. This is used for the initial
+		// runs. When e.g. the data is read the first time out of the xml files.
+		// Where just the name is given.
 		// This means that the person is edited.
-		p.ID = id
-	}
-	if p.ID == 0 {
-		// New ID if until here no id is found.
-		p.ID = pdb.NextID
-		pdb.NextID++
+		p.ID = pp.ID
 	}
 	if p.ID > pdb.NextID {
 		// Set the nextID if there are IDs
 		pdb.NextID = p.ID + 1
 	}
-	pdb.Persons[p.GetID()] = *p
+	if p.ID == 0 {
+		// New ID if until here no id is found.
+		p.ID = pdb.NextID
+		pdb.NextID++
+		pdb.Persons[p.GetID()] = *p
+	}
+
 }
 
 // EditPerson handles if data inside the person has changed. It is compulsory
@@ -95,7 +113,15 @@ func (pdb *PersonDB) AddPerson(p *data.Person) {
 func (pdb *PersonDB) EditPerson(p *data.Person) error {
 	dbPerson, ok := pdb.Persons[p.GetID()]
 	if !ok {
-		return nil
+		// Try to find the person over the name, because it is possible that
+		// the ID changed. This happens, when e.g. a GND is added.
+		// If there are not unique names that part can causes some strange
+		// behaviour.
+		fp, fok := pdb.FindPerson(p)
+		if !fok {
+			return nil
+		}
+		dbPerson = *fp
 	}
 	// The person is edited.
 	// If there is that person in the db set the Pictures.
@@ -104,16 +130,27 @@ func (pdb *PersonDB) EditPerson(p *data.Person) error {
 
 	// If the folderpath changed after edit
 	if data.MakePath(&dbPerson, pdb.Root) != data.MakePath(p, pdb.Root) {
+		// Rename the folder
+		err := os.Rename(
+			filepath.Dir(data.MakePath(&dbPerson, pdb.Root)),
+			filepath.Dir(data.MakePath(p, pdb.Root)),
+		)
+		if err != nil {
+			return err
+		}
 		// Save person at new location
 		data.SaveType(p, pdb.Root)
-		// Remove the old path
-		os.RemoveAll(filepath.Dir(data.MakePath(&dbPerson, pdb.Root)))
-		// Update the entry inside the pdb
 		pdb.Persons[p.GetID()] = *p
+		// If the ID changed the old ID must be removed from the db
+		if dbPerson.GetID() != p.GetID() {
+			delete(pdb.Persons, dbPerson.GetID())
+		}
+		return ErrPersonDeleted
+
 	}
 
-	// If the masterID is set the references at the pictures had to be
-	// updated.
+	// If the masterID is set or the ID changes the references at the pictures
+	// had to be updated.
 	if p.MasterID != 0 {
 		// Save the person before updating references
 		data.SaveType(p, pdb.Root)
@@ -126,6 +163,8 @@ func (pdb *PersonDB) EditPerson(p *data.Person) error {
 		delete(pdb.Persons, p.GetID())
 		return ErrPersonDeleted
 	}
+	// Update the entry inside the pdb
+	pdb.Persons[p.GetID()] = *p
 	return nil
 }
 
@@ -169,36 +208,21 @@ func (pdb *PersonDB) GetAll() map[string]data.Person {
 	return all
 }
 
-// SavePerson takes a Person and saves the data inside the struct. That method should
-// always be used to save Person data to ensure that the person always get an ID.
-// If the input person has no ID the NextID is set to the person and counter +1.
-func (pdb *PersonDB) SavePerson(p *data.Person) error {
-	if p == nil {
-		return ErrGotNilPointer
-	}
-	pdb.AddPerson(p)
-	err := pdb.EditPerson(p)
-	if err != ErrPersonDeleted {
-		return data.SaveType(p, pdb.Root)
-	}
-	return nil
-}
-
 // FindPerson takes a Person and searches with the name if there is an entry in
 // the db. If there is a person with that name it returns the ID and true.
 // If no person is found it return 0 and false
-func (pdb *PersonDB) FindPerson(p *data.Person) (int, bool) {
+func (pdb *PersonDB) FindPerson(p *data.Person) (*data.Person, bool) {
 	if p == nil {
-		return 0, false
+		return nil, false
 	}
 	for _, pp := range pdb.Persons {
 		// Not only the name is important. Because of a possible master entry the
 		// id has to have no master ID set.
 		if pp.FullName == p.FullName && pp.MasterID == 0 {
-			return pp.ID, true
+			return &pp, true
 		}
 	}
-	return 0, false
+	return nil, false
 }
 
 // UpdatePictures regenerates the references to a person, which has a masterID.
