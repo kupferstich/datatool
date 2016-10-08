@@ -86,7 +86,7 @@ func (pdb *PersonDB) SavePerson(p *data.Person) error {
 // AddPerson adda data.Person to the pdb instance. If the person has no ID a new ID
 // is created and set to the person.
 func (pdb *PersonDB) AddPerson(p *data.Person) {
-	// Try to find the person by name
+	// Try to find the person
 	pp, ok := pdb.FindPerson(p)
 	if ok && p.ID == 0 {
 		// If allready in db set the id to the person. This is used for the initial
@@ -172,7 +172,9 @@ func (pdb *PersonDB) EditPerson(p *data.Person) error {
 // If there is no such ID inside the pdb the function return nil, false
 func (pdb *PersonDB) GetPerson(id string) (*data.Person, bool) {
 	p, ok := pdb.Persons[id]
-
+	if !ok {
+		return nil, false
+	}
 	pdb.GetProfilePics(&p)
 	return &p, ok
 }
@@ -215,6 +217,11 @@ func (pdb *PersonDB) FindPerson(p *data.Person) (*data.Person, bool) {
 	if p == nil {
 		return nil, false
 	}
+	// Check if there is allready an ID availiable and inside the db
+	dbp, ok := pdb.Persons[p.GetID()]
+	if ok {
+		return &dbp, true
+	}
 	for _, pp := range pdb.Persons {
 		// Not only the name is important. Because of a possible master entry the
 		// id has to have no master ID set.
@@ -233,7 +240,7 @@ func (pdb *PersonDB) UpdatePictures(root string) {
 			dbPerson, ok := pdb.GetPerson(p)
 			if ok {
 				pic.Persons[i] = dbPerson.GetID()
-				//pic.Persons = removeDuplicates(pic.Persons)
+				pic.Persons = removeDuplicates(pic.Persons)
 			}
 		}
 		for ai, a := range pic.Areas {

@@ -1,9 +1,13 @@
 package stabi
 
 import (
+	"fmt"
 	"log"
+	"strconv"
+	"strings"
 
 	"github.com/kupferstich/datatool/data"
+	"github.com/kupferstich/datatool/gbv"
 	"github.com/kupferstich/datatool/mods"
 )
 
@@ -14,16 +18,38 @@ func NewDataPicture(m *mods.Mets, pdb data.PersonDBer) *data.Picture {
 	pic.Title = getTitleInfo(m.Mods.TitleInfos, "")
 	pic.Topic = getTitleInfo(m.Mods.TitleInfos, "alternative")
 	pic.YearIssued = m.Mods.OriginInfo.DateIssued
-	for _, name := range m.Mods.Names {
+	// Ask the gbv api to get the current infos about the persons
+	gbvMod, err := gbv.GetModByPPN(pic.ID)
+	var modsNames []mods.Name
+	var gnd int
+	if err != nil || len(gbvMod.Names) == 0 {
+		modsNames = m.Mods.Names
+		gnd = 0
+	} else {
+		modsNames = gbvMod.Names
+		gnd = -1
+	}
+	for _, name := range modsNames {
 		var p data.Person
 		p.Type = name.Type
-		p.FullName = name.DisplayForm
+		//p.FullName = name.DisplayForm
 		p.NameFamily = getNamePart(name.NameParts, "family")
 		p.NameGiven = getNamePart(name.NameParts, "given")
+		p.FullName = fmt.Sprintf("%s, %s", p.NameFamily, p.NameGiven)
+		if gnd == -1 {
+			parts := strings.Split(name.ValueURI, "/")
+			gnd, _ = strconv.Atoi(parts[len(parts)-1])
+		}
+		p.GND = gnd
 		p.Pictures = append(p.Pictures, pic.ID)
-		err := pdb.SavePerson(&p)
-		if err != nil {
-			log.Println(err)
+		// Check if person is in db. If there is an entry to the ID
+		// the data is not going to be saved here.
+		_, ok := pdb.GetPerson(p.GetID())
+		if !ok {
+			err := pdb.SavePerson(&p)
+			if err != nil {
+				log.Println(err)
+			}
 		}
 		// SavePerson saves the data and adds the ID
 		pic.Persons = append(pic.Persons, p.GetID())
