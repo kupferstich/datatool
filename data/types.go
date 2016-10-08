@@ -31,8 +31,9 @@ func (p *Picture) TypeName() string {
 
 // Person represents the entities of a person
 type Person struct {
-	ID          int               `xml:"id,attr" json:"personID"`
-	GND         int               `xml:"gnd" json:"GND"`
+	ID          int               `xml:"id,attr" json:"intID"`
+	GND         string            `xml:"gnd" json:"GND"`
+	ExtID       string            `xml:"gnd" json:"personID"`
 	Idents      []Ident           `xml:"idents" json:"idents"`
 	MasterID    int               `xml:"master,attr" json:"masterID"`
 	Type        string            `xml:"type,attr" json:"Type"`
@@ -51,8 +52,8 @@ type Person struct {
 
 // GetID returns the ID of the person
 func (p *Person) GetID() string {
-	if p.GND != 0 {
-		return fmt.Sprintf("GND%d", p.GND)
+	if p.GND != "" {
+		return fmt.Sprintf("GND%s", p.GND)
 	}
 	return fmt.Sprintf("%04d", p.ID)
 }

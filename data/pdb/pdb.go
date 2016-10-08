@@ -172,6 +172,7 @@ func (pdb *PersonDB) EditPerson(p *data.Person) error {
 // If there is no such ID inside the pdb the function return nil, false
 func (pdb *PersonDB) GetPerson(id string) (*data.Person, bool) {
 	p, ok := pdb.Persons[id]
+	p.ExtID = id
 	if !ok {
 		return nil, false
 	}
@@ -204,6 +205,7 @@ func (pdb *PersonDB) GetAll() map[string]data.Person {
 	all := make(map[string]data.Person)
 	for k, p := range pdb.Persons {
 		if p.MasterID == 0 {
+			p.ExtID = p.GetID()
 			all[k] = p
 		}
 	}

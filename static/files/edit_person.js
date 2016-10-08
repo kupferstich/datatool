@@ -99,7 +99,7 @@ methods: {
     },
     setIntegers:function(){
         this.person.masterID = parseInt(this.person.masterID);
-        this.person.GND = parseInt(this.person.GND);
+        //this.person.GND = parseInt(this.person.GND);
         this.person.YearBirth = parseInt(this.person.YearBirth);
         this.person.YearDeath = parseInt(this.person.YearDeath);
         return this.person;

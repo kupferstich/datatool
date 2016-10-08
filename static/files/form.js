@@ -76,7 +76,7 @@ methods: {
         });
     },
     addPerson:function(target){
-        this.pic.Persons.push(parseInt(this.newPerson));      
+        this.pic.Persons.push(this.newPerson);      
     },
     removePerson:function(index){
       this.pic.Persons.splice(index,1)

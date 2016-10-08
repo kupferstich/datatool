@@ -3,7 +3,6 @@ package stabi
 import (
 	"fmt"
 	"log"
-	"strconv"
 	"strings"
 
 	"github.com/kupferstich/datatool/data"
@@ -21,13 +20,13 @@ func NewDataPicture(m *mods.Mets, pdb data.PersonDBer) *data.Picture {
 	// Ask the gbv api to get the current infos about the persons
 	gbvMod, err := gbv.GetModByPPN(pic.ID)
 	var modsNames []mods.Name
-	var gnd int
+	var gnd string
 	if err != nil || len(gbvMod.Names) == 0 {
 		modsNames = m.Mods.Names
-		gnd = 0
+		gnd = ""
 	} else {
 		modsNames = gbvMod.Names
-		gnd = -1
+		gnd = "-1"
 	}
 	for _, name := range modsNames {
 		var p data.Person
@@ -36,9 +35,9 @@ func NewDataPicture(m *mods.Mets, pdb data.PersonDBer) *data.Picture {
 		p.NameFamily = getNamePart(name.NameParts, "family")
 		p.NameGiven = getNamePart(name.NameParts, "given")
 		p.FullName = fmt.Sprintf("%s, %s", p.NameFamily, p.NameGiven)
-		if gnd == -1 {
+		if gnd == "-1" {
 			parts := strings.Split(name.ValueURI, "/")
-			gnd, _ = strconv.Atoi(parts[len(parts)-1])
+			gnd = parts[len(parts)-1]
 		}
 		p.GND = gnd
 		p.Pictures = append(p.Pictures, pic.ID)
