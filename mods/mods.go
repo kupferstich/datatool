@@ -29,10 +29,13 @@ type Mods struct {
 
 // Name structure for the methadata
 type Name struct {
-	Type        string     `xml:"type,attr"`
-	RoleTerm    string     `xml:"role>roleTerm"`
-	NameParts   []NamePart `xml:"namePart"`
-	DisplayForm string     `xml:"displayForm"`
+	Type         string     `xml:"type,attr"`
+	Authority    string     `xml:"authority,attr"`
+	AuthorityURI string     `xml:"authorityURI,attr"`
+	ValueURI     string     `xml:"valueURI,attr"`
+	RoleTerm     string     `xml:"role>roleTerm"`
+	NameParts    []NamePart `xml:"namePart"`
+	DisplayForm  string     `xml:"displayForm"`
 }
 
 // NamePart provides the information about one element of a name.
