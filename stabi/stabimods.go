@@ -20,22 +20,21 @@ func NewDataPicture(m *mods.Mets, pdb data.PersonDBer) *data.Picture {
 	// Ask the gbv api to get the current infos about the persons
 	gbvMod, err := gbv.GetModByPPN(pic.ID)
 	var modsNames []mods.Name
-	var gnd string
+
 	if err != nil || len(gbvMod.Names) == 0 {
 		modsNames = m.Mods.Names
-		gnd = ""
 	} else {
 		modsNames = gbvMod.Names
-		gnd = "-1"
 	}
 	for _, name := range modsNames {
 		var p data.Person
+		gnd := ""
 		p.Type = name.Type
 		//p.FullName = name.DisplayForm
 		p.NameFamily = getNamePart(name.NameParts, "family")
 		p.NameGiven = getNamePart(name.NameParts, "given")
 		p.FullName = fmt.Sprintf("%s, %s", p.NameFamily, p.NameGiven)
-		if gnd == "-1" {
+		if name.ValueURI != "" {
 			parts := strings.Split(name.ValueURI, "/")
 			gnd = parts[len(parts)-1]
 		}
@@ -43,13 +42,13 @@ func NewDataPicture(m *mods.Mets, pdb data.PersonDBer) *data.Picture {
 		p.Pictures = append(p.Pictures, pic.ID)
 		// Check if person is in db. If there is an entry to the ID
 		// the data is not going to be saved here.
-		_, ok := pdb.GetPerson(p.GetID())
-		if !ok {
-			err := pdb.SavePerson(&p)
-			if err != nil {
-				log.Println(err)
-			}
+		//_, ok := pdb.GetPerson(p.GetID())
+		//if !ok {
+		err := pdb.SavePerson(&p)
+		if err != nil {
+			log.Println(err)
 		}
+		//}
 		if !inSlice(p.GetID(), pic.Persons) {
 			pic.Persons = append(pic.Persons, p.GetID())
 		}
