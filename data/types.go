@@ -6,7 +6,7 @@ import "fmt"
 type Picture struct {
 	ID         string   `xml:"id,attr" json:"ID"`
 	SrcPath    string   `xml:"-" json:"-"`
-	File       string   `xml:"file" json:"File"`
+	File       string   `xml:"-" json:"-"`
 	Title      string   `xml:"title" json:"Title"`
 	Topic      string   `xml:"topic" json:"Topic"`
 	Text       string   `xml:"text" json:"Text"`
