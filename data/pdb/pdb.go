@@ -14,6 +14,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/kupferstich/datatool/data"
@@ -171,13 +172,23 @@ func (pdb *PersonDB) EditPerson(p *data.Person) error {
 // GetPerson by Person.ID. Second parameter returns true if an entry is found.
 // If there is no such ID inside the pdb the function return nil, false
 func (pdb *PersonDB) GetPerson(id string) (*data.Person, bool) {
-	p, ok := pdb.Persons[id]
+	var p data.Person
+	if strings.HasPrefix(id, "GND") {
+		p.GND = string(id[3:])
+	} else {
+		var err error
+		p.ID, err = strconv.Atoi(id)
+		if err != nil {
+			log.Println(err)
+		}
+	}
+	pp, ok := pdb.FindPerson(&p)
 	p.ExtID = id
 	if !ok {
 		return nil, false
 	}
 	pdb.GetProfilePics(&p)
-	return &p, ok
+	return pp, ok
 }
 
 func (pdb *PersonDB) GetProfilePics(p *data.Person) {
@@ -220,14 +231,16 @@ func (pdb *PersonDB) FindPerson(p *data.Person) (*data.Person, bool) {
 		return nil, false
 	}
 	// Check if there is allready an ID availiable and inside the db
+	log.Println(p.GetID())
 	dbp, ok := pdb.Persons[p.GetID()]
 	if ok {
 		return &dbp, true
 	}
 	for _, pp := range pdb.Persons {
+		// Check for the intern ID and then for the name.
 		// Not only the name is important. Because of a possible master entry the
 		// id has to have no master ID set.
-		if pp.FullName == p.FullName && pp.MasterID == 0 {
+		if pp.ID == p.ID || (pp.FullName == p.FullName && pp.MasterID == 0) {
 			return &pp, true
 		}
 	}

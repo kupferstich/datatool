@@ -34,7 +34,7 @@
             <div class="content">
             <div class="field">
                <div class="field">
-                            <div class="ui label" v-for="p in pic.Persons">
+                            <div class="ui label" v-for="p in pic.Persons" track-by="$index">
                                 {{persons[p].FullName}} ({{p}})
                             <i class="delete icon" v-on:click="removePerson($index)"></i>
                             </div>

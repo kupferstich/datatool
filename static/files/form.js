@@ -133,7 +133,7 @@ methods: {
       if (this.pic.Areas[index].Persons==null){
         this.pic.Areas[index].Persons = []
       }
-      this.pic.Areas[index].Persons.push(parseInt(this.newPerson)); 
+      this.pic.Areas[index].Persons.push(this.newPerson); 
     },
     removePersonFromArea:function(aindex,index){
       this.pic.Areas[aindex].Persons.splice(index,1);
