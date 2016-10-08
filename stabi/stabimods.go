@@ -50,10 +50,20 @@ func NewDataPicture(m *mods.Mets, pdb data.PersonDBer) *data.Picture {
 				log.Println(err)
 			}
 		}
-		// SavePerson saves the data and adds the ID
-		pic.Persons = append(pic.Persons, p.GetID())
+		if !inSlice(p.GetID(), pic.Persons) {
+			pic.Persons = append(pic.Persons, p.GetID())
+		}
 	}
 	return &pic
+}
+
+func inSlice(s string, sl []string) bool {
+	for _, v := range sl {
+		if strings.EqualFold(s, v) {
+			return true
+		}
+	}
+	return false
 }
 
 func getTitleInfo(ti []mods.TitleInfo, s string) string {
