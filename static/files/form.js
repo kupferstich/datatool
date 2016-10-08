@@ -21,7 +21,12 @@ app = new Vue({
         ["Place","Place"],
         ["Jahr der Anfertigung","YearIssued"]
     ],
-    status : ["neu","in Bearbeitung","fertig"],
+    status : [
+      "Bild zugeschnitten",
+      "Texte gepflegt",
+      "zur Überarbeitung",
+      "fertig"
+    ],
     colors: [
       "black",
       "blue",
