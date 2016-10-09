@@ -93,12 +93,12 @@
                     <div  v-for="(aindex,area) in pic.Areas">
                         <div class="title" style="background-color: {{area.rect.fill}};filter:opacity(50%);">
                             <i class="icon dropdown"></i>
-                            <span>{{area.areaID}}</span></div>
+                            <span>{{pic.Areas[$index].areaID}}</span></div>
                         <div class="content">
                         <div class="fields">
                         <div class="field">
                             <label>Name:</label>
-                            <input type="text" v-model="area.areaID">
+                            <input type="text" v-model="pic.Areas[$index].areaID">
                             </div>
                             <div class="field">
                                 <label>Color:</label>
@@ -138,7 +138,7 @@
                     </div>
                 </div>
                 <div v-on:click="addArea" class="ui icon primary button">           
-                <i class="add circle icon"></i> hinzufügen
+                <i class="add circle icon"></i>Neuen Bereich hinzufügen
                 </div>
             </div>
 

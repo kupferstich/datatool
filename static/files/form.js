@@ -1,10 +1,11 @@
 
 // create a wrapper around native canvas element (with id="c")
-var canvas = new fabric.Canvas('picture');
+//var canvas = new fabric.Canvas('picture');
 
 app = new Vue({
   el: '#app',
   data: {
+    canvas: new fabric.Canvas('picture'),
     fabricElements: [],
     pid: window.location.href.split("/").pop(),
     picSrc: "/img/"+window.location.href.split("/").pop()+"-700-700",
@@ -46,40 +47,47 @@ app = new Vue({
     this.getData()
     
 },
+watch:{
+  canvas: function(newVal,oldVal){
+    //this.canvas.renderAll();
+    //this.pic = newVal;
+    //this.loadAreas();
+  }
+},
 methods: {
     getData: function(cb) {
-        $.ajax({
-            context: this,
-            url: "/pic/"+this.pid,
-            success: function (result) {
-                this.$set("pic", JSON.parse(result));
-                this.loadAreas();
-                canvas.renderAll();
-                cb;
-
-            }
-        })
-        $.ajax({
-            context: this,
-            url: "/person/all",
-            success: function (result) {
-                this.$set("persons", JSON.parse(result));
-                cb;
-
-            }
-        })
+      this.$http.get("/pic/"+this.pid).then(
+        function(res){
+                var self = this;
+          this.$set('pic', JSON.parse(res.body));
+          this.canvas.clear();
+          //self.canvas = new fabric.Canvas('picture');
+          
+          this.loadAreas();
+          fabric.Image.fromURL(self.picSrc, function(oImg) {
+                  oImg.set('selectable', false);
+                  self.canvas.add(oImg);
+                  self.canvas.sendToBack(oImg);
+                  });
+          this.canvas.renderAll();
+        }
+      );
+      this.$http.get("/person/all").then(
+        function(res){
+          this.$set('persons', JSON.parse(res.body));
+        }
+      );
+      
     },
     saveData:function(cb) {
-        $.ajax({
-            type: "POST",
-            url: "/pic/"+this.pid,
-            data: JSON.stringify(this.pic),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function(){
-              cb;
-            }
-        });
+      this.$http.post("/pic/"+this.pid,JSON.stringify(this.pic)).then(
+        function(res){
+          // getData() have to be called, that the areas inside the canvas
+          // and the areas overview has been updated inside the view.
+          //this.getData();
+          cb();
+        }
+      );
     },
     addPerson:function(target){
         this.pic.Persons.push(this.newPerson);      
@@ -126,20 +134,23 @@ methods: {
       this.pic.Areas[i] = area
       this.fabricElements[i] = new fabric.Rect(this.pic.Areas[i].rect);
       this.pic.Areas[i].rect = this.fabricElements[i];
-      canvas.add(this.pic.Areas[i].rect);
-      this.saveData(
-        window.location.href=window.location.href
+      this.canvas.add(this.pic.Areas[i].rect);
+      this.canvas.renderAll();
+      //this.$set('pic',this.pic)
+      this.saveData(function(){
+        //window.location.href=window.location.href
+        //console.log(this);
+        app.getData();
+      }
       );
     },
     loadAreas:function(){
       for (i in this.pic.Areas){
-        
         this.fabricElements[i] = new fabric.Rect(this.pic.Areas[i].rect);
-       
         this.pic.Areas[i].rect = this.fabricElements[i];
         
         //var group = new fabric.Group([this.pic.Areas[i].rect,label]);
-        canvas.add(this.pic.Areas[i].rect);
+        this.canvas.add(this.pic.Areas[i].rect);
         //canvas.add(label);
         //canvas.add(group);
       }
@@ -155,7 +166,7 @@ methods: {
       this.pic.Areas[aindex].Persons.splice(index,1);
     },
     removeArea:function(index){
-      canvas.remove(this.pic.Areas[index].rect)
+      this.canvas.remove(this.pic.Areas[index].rect)
       this.pic.Areas.splice(index,1)
       this.saveData(
         window.location.href=window.location.href
@@ -172,12 +183,12 @@ filters: {
 }
 })
 
-
 fabric.Image.fromURL(app.picSrc, function(oImg) {
-      oImg.set('selectable', false);
-      canvas.add(oImg);
-      canvas.sendToBack(oImg);
-      });
+                  oImg.set('selectable', false);
+                  app.canvas.add(oImg);
+                  app.canvas.sendToBack(oImg);
+                  });
+
 
   $(document)
     .ready(function() {
