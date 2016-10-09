@@ -11,12 +11,12 @@
          
 <div class="fields">
         <div class="field">
-            <label>Family Name</label>
+            <label>Familienname</label>
             <input v-model="person.FamilyName" @keyup="setFullName">
         </div>
 
         <div class="field">
-            <label>Given Name</label>
+            <label>Vorname(n)</label>
             <input v-model="person.GivenName" @keyup="setFullName">
         </div>
 </div>
@@ -69,7 +69,11 @@
         
         
         <div class="field">
-            <b>Suche Wikimedia nach</b> <a href="https://commons.wikimedia.org/wiki/Category:{{person.GivenName}} {{person.FamilyName}}?uselang=de">{{person.GivenName}} {{person.FamilyName}}</a>
+            <b>Suche Wikimedia nach</b> 
+            <a href="https://commons.wikimedia.org/wiki/Category:{{person.GivenName}} {{person.FamilyName}}?uselang=de" target="_blank">{{person.GivenName}} {{person.FamilyName}}</a>
+            (<a href="https://de.wikipedia.org/wiki/{{person.GivenName}} {{person.FamilyName}}" target="_blank">Wikipedia</a>)
+            <br><br>
+            <b>Suche Nationalbiliothek nach GND</b> <a href="http://d-nb.info/{{person.GND}}" target="_blank">{{person.GND}}</a>
         </div>
         <div class="field">
             <label>Text</label>

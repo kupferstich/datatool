@@ -27,24 +27,7 @@ func init() {
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println(r.URL)
-	if r.URL.Path != "/" {
-		http.Error(w, "Not found", 404)
-		return
-	}
-	if r.Method != "GET" {
-		http.Error(w, "Method not allowed", 405)
-		return
-	}
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	p := &struct {
-		Title string
-		Test  string
-	}{
-		"hi",
-		"ho",
-	}
-	homeTemplate.Execute(w, p)
+	http.Redirect(w, r, "/list/pictures", http.StatusPermanentRedirect)
 }
 
 //ListHandler is for listing all availiable pictures
