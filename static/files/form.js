@@ -2,17 +2,26 @@
 // create a wrapper around native canvas element (with id="c")
 //var canvas = new fabric.Canvas('picture');
 
+// Constant values of the canvas size
+cSize = {
+      width: 700,
+      height: 700
+    };
+
+
 app = new Vue({
   el: '#app',
   data: {
     canvas: new fabric.Canvas('picture'),
     fabricElements: [],
     pid: window.location.href.split("/").pop(),
-    picSrc: "/img/"+window.location.href.split("/").pop()+"-700-700",
+    picSrc: "/img/"+window.location.href.split("/").pop()+"-"+cSize.width+"-"+cSize.height,
     pic: {
         ID:null,
         Title:null,
-        Areas:[{areaID:"",rect:{fill:""},Text:"",Status:""}]
+        Areas:[{areaID:"",rect:{fill:""},Text:"",Status:""}],
+        canvasWidth: cSize.width,
+        canvasHeight: cSize.height
     },
     persons: null,
     newPerson: 0,
@@ -41,7 +50,7 @@ app = new Vue({
     ]
   },
   computed: {
-    
+   
   },
   ready: function() {
     this.getData()
@@ -85,7 +94,7 @@ methods: {
           // getData() have to be called, that the areas inside the canvas
           // and the areas overview has been updated inside the view.
           //this.getData();
-          cb();
+          //cb();
         }
       );
     },
@@ -153,6 +162,9 @@ methods: {
         this.canvas.add(this.pic.Areas[i].rect);
         //canvas.add(label);
         //canvas.add(group);
+        // Set canvas information for the picture
+        this.pic.canvasWidth = cSize.width;
+        this.pic.canvasHeight = cSize.height;
       }
       
     },
