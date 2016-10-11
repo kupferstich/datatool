@@ -88,18 +88,24 @@ methods: {
       );
       
     },
-    saveData:function(redirect) {
+    saveData:function(cb) {
       this.$http.post("/pic/"+this.pid,JSON.stringify(this.pic)).then(
         function(res){
-          if(redirect){
-            window.location = "/list/pictures";
-          }
+          
           // getData() have to be called, that the areas inside the canvas
           // and the areas overview has been updated inside the view.
           //this.getData();
-          //cb();
+          if ($.isFunction(cb)){
+            cb();
+          }
+         
         }
       );
+    },
+    saveDataRedirect:function(){
+      this.saveData(function(){
+        window.location = "/list/pictures";
+      });
     },
     addPerson:function(target){
         this.pic.Persons.push(this.newPerson);     
@@ -185,7 +191,7 @@ methods: {
     removeArea:function(index){
       this.canvas.remove(this.pic.Areas[index].rect)
       this.pic.Areas.splice(index,1)
-      this.saveData(false,function(){
+      this.saveData(function(){
             window.location.href=window.location.href
       }
       );
