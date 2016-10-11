@@ -145,23 +145,37 @@
         </div>
    </form>
 
+<br><br>
 
+   <button v-on:click="saveData(true)" class="ui primary button">
+  Speichern
+</button>
 
-   <button v-on:click="saveData" class="ui primary button">
-  Save
+ <button v-on:click="saveData(false)" class="ui primary button">
+  Speichern und weiter bearbeiten
 </button>
        </div>
        <div class="eight wide column">
-            <div v-for="el in form">
-               <b>{{el[0]}}</b><br>
-               {{pic[el[1]]}}
-           </div>
-           <div v-html="pic.Text | marked"></div>
-           <canvas id="picture" width="700" height="700">
-           </canvas>
-           <!--<img v-bind:src="picSrc">-->
+            <div class="ui styled accordion">
+                <div class="title"><i class="icon dropdown"></i>Textvorschau:</div>
+                <div class="content">
+                    <div v-for="el in form">
+                        <b>{{el[0]}}</b><br>
+                        {{pic[el[1]]}}
+                    </div>
+                    <div><b>Textvorschau:</b><br>    </div>
+                    <div v-html="pic.Text | marked"></div>
+                </div>
+                
+                <div class="active title"><i class="icon dropdown"></i>Bild</div>
+                <div class="active content">
+                    <canvas id="picture" width="700" height="700">
+                    </canvas>
+                </div>
+
+            </div>
            
-          
+       </div>
 
        </div>
    </div>

@@ -10,6 +10,7 @@ package pdb
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -187,7 +188,7 @@ func (pdb *PersonDB) GetPerson(id string) (*data.Person, bool) {
 	if !ok {
 		return nil, false
 	}
-	pdb.GetProfilePics(&p)
+	pdb.GetProfilePics(pp)
 	return pp, ok
 }
 
@@ -289,6 +290,7 @@ func removeDuplicates(elements []string) []string {
 }
 
 func getFiles(folder string, ext []string) ([]string, error) {
+	fmt.Println(folder)
 	var outFiles []string
 	files, err := ioutil.ReadDir(folder)
 	if err != nil {

@@ -24,7 +24,7 @@ app = new Vue({
         canvasHeight: cSize.height
     },
     persons: null,
-    newPerson: 0,
+    newPerson: "",
     tags: null,
     newTag: "",
     form: [ //Label, JSON Key
@@ -88,9 +88,12 @@ methods: {
       );
       
     },
-    saveData:function(cb) {
+    saveData:function(redirect) {
       this.$http.post("/pic/"+this.pid,JSON.stringify(this.pic)).then(
         function(res){
+          if(redirect){
+            window.location = "/list/pictures";
+          }
           // getData() have to be called, that the areas inside the canvas
           // and the areas overview has been updated inside the view.
           //this.getData();
@@ -99,7 +102,8 @@ methods: {
       );
     },
     addPerson:function(target){
-        this.pic.Persons.push(this.newPerson);      
+        this.pic.Persons.push(this.newPerson);     
+        this.newPerson = ""; 
     },
     removePerson:function(index){
       this.pic.Persons.splice(index,1)
@@ -173,6 +177,7 @@ methods: {
         this.pic.Areas[index].Persons = []
       }
       this.pic.Areas[index].Persons.push(this.newPerson); 
+      this.newPerson = "";
     },
     removePersonFromArea:function(aindex,index){
       this.pic.Areas[aindex].Persons.splice(index,1);
@@ -180,8 +185,9 @@ methods: {
     removeArea:function(index){
       this.canvas.remove(this.pic.Areas[index].rect)
       this.pic.Areas.splice(index,1)
-      this.saveData(
-        window.location.href=window.location.href
+      this.saveData(false,function(){
+            window.location.href=window.location.href
+      }
       );
     }
 },

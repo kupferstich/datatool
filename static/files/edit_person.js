@@ -83,19 +83,32 @@ methods: {
     removeLink:function(index){
       this.person.Links.splice(index,1)
     },
-    saveData:function(cb) {
+    saveData:function(redirect,cb) {
          this.unsafedChanges = false;
-        $.ajax({
+         this.$http.post("/person/"+personID,JSON.stringify(this.setIntegers())).then(
+        function(res){
+          if(redirect){
+            window.location = "/list/persons";
+          }
+          // getData() have to be called, that the areas inside the canvas
+          // and the areas overview has been updated inside the view.
+          //this.getData();
+          //cb();
+        }
+      );
+       /* $.ajax({
             type: "POST",
             url: "/person/"+personID,
             data: JSON.stringify(this.setIntegers()),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function(){
-               
-              cb;
+               if (redirect){
+                    window.location = "/list/persons";
+               }
+              //cb;
             }
-        });
+        });*/
     },
     setIntegers:function(){
         this.person.masterID = parseInt(this.person.masterID);
