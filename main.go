@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/kupferstich/datatool/data"
 	"github.com/kupferstich/datatool/data/pdb"
+	"github.com/kupferstich/datatool/hugoexport"
 	"github.com/kupferstich/datatool/stabi"
 )
 
@@ -20,6 +21,8 @@ var ConfFile = flag.String("conf", "conf.yaml", "Path to the conf (yaml) file")
 var Init = flag.String("init", "", `Initial actions
 		CreateList	creates a list from the xml data
 		ImportTiff	imports the tiff pics as jpg`)
+
+var Export = flag.Bool("export", false, "Export the data to hugo")
 
 var sourceData data.Lister
 
@@ -60,6 +63,10 @@ func main() {
 		}
 		return
 	}
+	if *Export == true {
+		hugoexport.ImgArtwork(Conf.DataFolderPictures, Conf.HugoFolder)
+		return
+	}
 	router := mux.NewRouter()
 	router.HandleFunc("/", HomeHandler)
 	// Html page for all pictures and persons.
@@ -79,6 +86,7 @@ func main() {
 	router.HandleFunc("/person/{id}", PersonSaveHandler).Methods("POST")
 	router.HandleFunc("/img/{id}-{maxWidth}-{maxHeight}", ImgHandler).Methods("GET")
 	router.HandleFunc("/img/person/{id}/{size}/{file}", PersonImgHandler).Methods("GET")
+	router.HandleFunc("/action/export", ExportHandler).Methods("GET")
 	router.PathPrefix(`/files/`).
 		Handler(http.StripPrefix("/files/", http.FileServer(http.Dir(Conf.FilesFolder))))
 

@@ -12,8 +12,10 @@ import (
 	"path/filepath"
 	"strconv"
 
+	"github.com/disintegration/imaging"
 	"github.com/gorilla/mux"
 	"github.com/kupferstich/datatool/data"
+	"github.com/kupferstich/datatool/hugoexport"
 	"github.com/kupferstich/datatool/stabi"
 	"github.com/nfnt/resize"
 )
@@ -182,9 +184,16 @@ func ImgHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
-	t := resize.Thumbnail(uint(maxWidth), uint(maxHeight), img, resize.NearestNeighbor)
+	//t := resize.Thumbnail(uint(maxWidth), uint(maxHeight), img, resize.Lanczos3)
+	t := imaging.Fit(img, maxWidth, maxHeight, imaging.Lanczos)
 	jpeg.Encode(w, t, nil)
 
+}
+
+func ExportHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "Export gestartet")
+	hugoexport.ImgArtwork(Conf.DataFolderPictures, Conf.HugoFolder)
+	fmt.Fprintln(w, "Export erfolgt")
 }
 
 func staticFile(w http.ResponseWriter, filename string) {

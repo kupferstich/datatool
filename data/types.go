@@ -1,25 +1,28 @@
 package data
 
-import "fmt"
+import (
+	"fmt"
+	"image"
+)
 
 // Picture stores all the entities for the histblogger
 type Picture struct {
-	ID          string   `xml:"id,attr" json:"ID"`
-	SrcPath     string   `xml:"-" json:"-"`
-	File        string   `xml:"-" json:"-"`
-	Title       string   `xml:"title" json:"Title"`
-	Topic       string   `xml:"topic" json:"Topic"`
-	Text        string   `xml:"text" json:"Text"`
-	CanvasWidth int      `xml:"canvasWidth" json:"canvasWidth"`
-	CavasHeight int      `xml:"canvasHeight" json:"canvasHeight"`
-	Areas       []Area   `xml:"areas" json:"Areas"`
-	Captured    int      `xml:"captured" json:"Captured"` //Year, when picture was digitalized
-	Place       string   `xml:"place" json:"Place"`       //Place where the picture was issued
-	YearIssued  string   `xml:"yearIssued" json:"YearIssued"`
-	Persons     []string `xml:"persons" json:"Persons"`
-	Tags        []string `xml:"tags" json:"Tags"`
-	Links       []Link   `xml:"links" json:"Links"`
-	Status      string   `xml:"status" json:"Status"`
+	ID           string   `xml:"id,attr" json:"ID"`
+	SrcPath      string   `xml:"-" json:"-"`
+	File         string   `xml:"-" json:"-"`
+	Title        string   `xml:"title" json:"Title"`
+	Topic        string   `xml:"topic" json:"Topic"`
+	Text         string   `xml:"text" json:"Text"`
+	CanvasWidth  int      `xml:"canvasWidth" json:"canvasWidth"`
+	CanvasHeight int      `xml:"canvasHeight" json:"canvasHeight"`
+	Areas        []Area   `xml:"areas" json:"Areas"`
+	Captured     int      `xml:"captured" json:"Captured"` //Year, when picture was digitalized
+	Place        string   `xml:"place" json:"Place"`       //Place where the picture was issued
+	YearIssued   string   `xml:"yearIssued" json:"YearIssued"`
+	Persons      []string `xml:"persons" json:"Persons"`
+	Tags         []string `xml:"tags" json:"Tags"`
+	Links        []Link   `xml:"links" json:"Links"`
+	Status       string   `xml:"status" json:"Status"`
 }
 
 // Identify implements the Identifier interface for loading and saving
@@ -80,6 +83,22 @@ type Area struct {
 	Persons []string `xml:"persons" json:"Persons"`
 	Text    string   `xml:"text" json:"Text"`
 	Links   []Link   `xml:"links" json:"Links"`
+}
+
+// ImageRect returns an image.Rectangle for the area. This method is
+// used to cut the area out of the image. The input scale factor scales
+// the size of the source pic to the canvas size, where the area was
+// defined
+func (a Area) ImageRect(scale float32) image.Rectangle {
+	topLeft := image.Point{
+		int(a.Rect.Left * scale),
+		int(a.Rect.Top * scale),
+	}
+	botRight := image.Point{
+		int((a.Rect.Left + (float32(a.Rect.Width) * a.Rect.ScaleX)) * scale),
+		int((a.Rect.Top + (float32(a.Rect.Height) * a.Rect.ScaleY)) * scale),
+	}
+	return image.Rectangle{topLeft, botRight}
 }
 
 // Fabric defines rects of the fabricjs library
