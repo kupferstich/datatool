@@ -24,7 +24,32 @@ func ImgArtwork(picRootFolder, exportRootPath string) {
 			p.ID,
 			ImgArtworkSrcFilename,
 		)
+		log.Println("Exporting ", p.ID)
+		exportImage(picPath, p, exportRootPath)
 		exportAreas(picPath, p, exportRootPath)
+	}
+}
+
+func exportImage(picPath string, p data.Picture, exportRootPath string) {
+	for key, size := range ResizeSizes {
+		dstPath := filepath.Join(
+			exportRootPath,
+			ImgArtworkSubfolder,
+			p.ID,
+			fmt.Sprintf("%s_%s.jpg", p.ID, key),
+		)
+		img := openPic(picPath)
+		resizePic(img, size, dstPath)
+	}
+
+}
+
+func resizePic(img image.Image, size Size, dstPath string) {
+	thumb := imaging.Fit(img, size.Width, size.Height, ResizeFilter)
+	os.MkdirAll(filepath.Dir(dstPath), 0777)
+	err := imaging.Save(thumb, dstPath)
+	if err != nil {
+		log.Println(err)
 	}
 }
 
