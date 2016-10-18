@@ -25,14 +25,16 @@ func ImgArtwork(picRootFolder, exportRootPath string) {
 			ImgArtworkSrcFilename,
 		)
 		log.Println("Exporting ", p.ID)
-		//exportImage(picPath, p, exportRootPath)
-		exportImageData(p, exportRootPath)
-		imageContent(p, exportRootPath)
-		exportAreas(picPath, p, exportRootPath)
+		ExportImage(picPath, p, exportRootPath)
+		ExportImageData(p, exportRootPath)
+		ExportImageContent(&p, exportRootPath)
+		ExportAreas(picPath, p, exportRootPath)
 	}
 }
 
-func exportImage(picPath string, p data.Picture, exportRootPath string) {
+// ExportImage resizes the image into the ResizeSizes and saves them
+// into the exportRootPath.
+func ExportImage(picPath string, p data.Picture, exportRootPath string) {
 	for key, size := range ResizeSizes {
 		dstPath := filepath.Join(
 			exportRootPath,
@@ -41,7 +43,7 @@ func exportImage(picPath string, p data.Picture, exportRootPath string) {
 			fmt.Sprintf("%s_%s.jpg", p.ID, key),
 		)
 		img := openPic(picPath)
-		var rType = ResizeFill
+		var rType = ResizeFit
 		if key == "thumb" {
 			rType = ResizeThumbnail
 		}
@@ -50,8 +52,8 @@ func exportImage(picPath string, p data.Picture, exportRootPath string) {
 
 }
 
-// exportImageData exports the pic data as JSON into the JSONArtworkSubfolder
-func exportImageData(p data.Picture, exportRootPath string) {
+// ExportImageData exports the pic data as JSON into the JSONArtworkSubfolder
+func ExportImageData(p data.Picture, exportRootPath string) {
 	// Export the data
 	dataRootPath := filepath.Join(
 		exportRootPath,
@@ -63,8 +65,8 @@ func exportImageData(p data.Picture, exportRootPath string) {
 	}
 }
 
-// imageContent exports the picture data into the content folder
-func imageContent(p data.Picture, exportRootPath string) {
+// ExportImageContent exports the picture data into the content folder
+func ExportImageContent(p *data.Picture, exportRootPath string) {
 	dstPath := filepath.Join(
 		exportRootPath,
 		ContentArtworkSubfolder,
@@ -79,25 +81,8 @@ func imageContent(p data.Picture, exportRootPath string) {
 	ContentFromPicture(p, f)
 }
 
-// resizePic is for resizing an Image.
-// Following methods are allowed with method string
-func resizePic(img image.Image, size Size, dstPath string, resizeType ResizeType) {
-	var resizedImg *image.NRGBA
-	switch resizeType {
-	case ResizeThumbnail:
-		resizedImg = imaging.Thumbnail(img, size.Width, size.Height, ResizeFilter)
-	default:
-		resizedImg = imaging.Fit(img, size.Width, size.Height, ResizeFilter)
-	}
-
-	os.MkdirAll(filepath.Dir(dstPath), 0777)
-	err := imaging.Save(resizedImg, dstPath)
-	if err != nil {
-		log.Println(err)
-	}
-}
-
-func exportAreas(picPath string, p data.Picture, exportRootPath string) {
+// ExportAreas the defined areas are cut out of the original image.
+func ExportAreas(picPath string, p data.Picture, exportRootPath string) {
 	scale := getScale(picPath, p)
 	for i, area := range p.Areas {
 		aid := fmt.Sprintf(
@@ -112,8 +97,7 @@ func exportAreas(picPath string, p data.Picture, exportRootPath string) {
 			fmt.Sprintf("%s.jpg", aid),
 		)
 		imgArea := extractArea(picPath, area, scale)
-		os.MkdirAll(filepath.Dir(dstPath), 0777)
-		imaging.Save(imgArea, dstPath)
+		resizePic(imgArea, AreaMaxSize, dstPath, ResizeFit)
 	}
 }
 
@@ -146,6 +130,28 @@ func extractArea(picPath string, area data.Area, scale float32) *image.NRGBA {
 	img := openPic(picPath)
 	imgArea := imaging.Crop(img, area.ImageRect(scale))
 	return imgArea
+}
+
+// resizePic is for resizing an Image.
+// Just as const defined ResizeTypes are allowed to use for resizing:
+// - ResizeFit
+// - ResizeThumbnail
+func resizePic(img image.Image, size Size, dstPath string, resizeType ResizeType) {
+	var resizedImg *image.NRGBA
+	switch resizeType {
+	case ResizeThumbnail:
+		resizedImg = imaging.Thumbnail(img, size.Width, size.Height, ResizeFilter)
+	case ResizeFit:
+		resizedImg = imaging.Fit(img, size.Width, size.Height, ResizeFilter)
+	default:
+		log.Println("resizePic got not supporte resizeType")
+	}
+
+	os.MkdirAll(filepath.Dir(dstPath), 0777)
+	err := imaging.Save(resizedImg, dstPath)
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func openPic(picturePath string) image.Image {

@@ -26,8 +26,14 @@ var JSONArtworkSubfolder = filepath.Join("data", "artwork")
 // ImgArtworkSubfolder is where the images will be exported
 var ImgArtworkSubfolder = filepath.Join("static", "img", "artwork")
 
+// ImgArtistSubfolder is where the images will be exported
+var ImgArtistSubfolder = filepath.Join("static", "img", "artist")
+
 // ContentArtworkSubfolder the folder for the md content files.
 var ContentArtworkSubfolder = filepath.Join("content", "artwork")
+
+// ContentArtistSubfolder the folder for the md content files.
+var ContentArtistSubfolder = filepath.Join("content", "artist")
 
 // ImgArtworkSrcFilename is the filename of the picture inside the
 // src (pictures) folder
@@ -37,11 +43,15 @@ var ImgArtworkSrcFilename = "00000001.jpg"
 // thumb will be resized with the thumbnail method. So it will be
 // croped to the given size.
 var ResizeSizes = map[string]Size{
-	//"big": {700, 700},
-	//"medium": {400, 400},
-	"small": {300, 300},
-	//"thumb": {100, 100},
+	"full":   {1600, 900},
+	"big":    {700, 600},
+	"medium": {500, 400},
+	"small":  {300, 300},
+	"thumb":  {100, 100},
 }
+
+// AreaMaxSize is the size where an area should fit into.
+var AreaMaxSize = Size{500, 200}
 
 // ResizeFilter defines thee resize algorithm
 var ResizeFilter = imaging.Lanczos
@@ -51,6 +61,6 @@ type ResizeType int
 
 // Types for resizing
 const (
-	ResizeFill ResizeType = iota
+	ResizeFit ResizeType = iota
 	ResizeThumbnail
 )
