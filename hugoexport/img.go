@@ -25,7 +25,9 @@ func ImgArtwork(picRootFolder, exportRootPath string) {
 			ImgArtworkSrcFilename,
 		)
 		log.Println("Exporting ", p.ID)
-		exportImage(picPath, p, exportRootPath)
+		//exportImage(picPath, p, exportRootPath)
+		exportImageData(p, exportRootPath)
+		imageContent(p, exportRootPath)
 		exportAreas(picPath, p, exportRootPath)
 	}
 }
@@ -39,15 +41,57 @@ func exportImage(picPath string, p data.Picture, exportRootPath string) {
 			fmt.Sprintf("%s_%s.jpg", p.ID, key),
 		)
 		img := openPic(picPath)
-		resizePic(img, size, dstPath)
+		var rType = ResizeFill
+		if key == "thumb" {
+			rType = ResizeThumbnail
+		}
+		resizePic(img, size, dstPath, rType)
 	}
 
 }
 
-func resizePic(img image.Image, size Size, dstPath string) {
-	thumb := imaging.Fit(img, size.Width, size.Height, ResizeFilter)
+// exportImageData exports the pic data as JSON into the JSONArtworkSubfolder
+func exportImageData(p data.Picture, exportRootPath string) {
+	// Export the data
+	dataRootPath := filepath.Join(
+		exportRootPath,
+		JSONArtworkSubfolder,
+	)
+	err := data.SaveType(&p, dataRootPath)
+	if err != nil {
+		log.Println(err)
+	}
+}
+
+// imageContent exports the picture data into the content folder
+func imageContent(p data.Picture, exportRootPath string) {
+	dstPath := filepath.Join(
+		exportRootPath,
+		ContentArtworkSubfolder,
+		fmt.Sprintf("%s.md", p.ID),
+	)
 	os.MkdirAll(filepath.Dir(dstPath), 0777)
-	err := imaging.Save(thumb, dstPath)
+	f, err := os.Create(dstPath)
+	if err != nil {
+		log.Println(err)
+	}
+	defer f.Close()
+	ContentFromPicture(p, f)
+}
+
+// resizePic is for resizing an Image.
+// Following methods are allowed with method string
+func resizePic(img image.Image, size Size, dstPath string, resizeType ResizeType) {
+	var resizedImg *image.NRGBA
+	switch resizeType {
+	case ResizeThumbnail:
+		resizedImg = imaging.Thumbnail(img, size.Width, size.Height, ResizeFilter)
+	default:
+		resizedImg = imaging.Fit(img, size.Width, size.Height, ResizeFilter)
+	}
+
+	os.MkdirAll(filepath.Dir(dstPath), 0777)
+	err := imaging.Save(resizedImg, dstPath)
 	if err != nil {
 		log.Println(err)
 	}
