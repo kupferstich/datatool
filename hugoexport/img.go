@@ -7,7 +7,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/disintegration/imaging"
 	"github.com/kupferstich/datatool/data"
@@ -86,9 +85,8 @@ func ExportAreas(picPath string, p data.Picture, exportRootPath string) {
 	scale := getScale(picPath, p)
 	for i, area := range p.Areas {
 		aid := fmt.Sprintf(
-			"%02d_%s",
+			"area_%d.jpg",
 			i+1,
-			strings.Replace(area.ID, " ", "_", -1),
 		)
 		dstPath := filepath.Join(
 			exportRootPath,
