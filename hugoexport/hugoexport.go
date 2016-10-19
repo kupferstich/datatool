@@ -48,6 +48,7 @@ var ResizeSizes = map[string]Size{
 	"medium": {500, 400},
 	"small":  {300, 300},
 	"thumb":  {100, 100},
+	"square": {350, 290},
 }
 
 // AreaMaxSize is the size where an area should fit into.

@@ -1,7 +1,9 @@
 package hugoexport
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -20,6 +22,7 @@ func Artists(artistRootFolder string, exportRootPath string) {
 		log.Println(artist.Identify())
 		ExportArtistContent(&artist, exportRootPath)
 		ExportArtistProfilePics(&artist, artistRootFolder, exportRootPath)
+		ExportArtistData(&artist, exportRootPath)
 	}
 }
 
@@ -50,5 +53,22 @@ func ExportArtistProfilePics(p *data.Person, artistRootFolder, exportRootPath st
 			pic,
 		)
 		resizePic(img, ResizeSizes["thumb"], dst, ResizeFit)
+	}
+}
+
+func ExportArtistData(p *data.Person, exportRootPath string) {
+	dataPath := filepath.Join(
+		exportRootPath,
+		JSONArtistSubfolder,
+		fmt.Sprintf("%s.json", p.GetID()),
+	)
+	p.ExtID = p.Identify()
+	b, err := json.MarshalIndent(p, "", "  ")
+	if err != nil {
+		log.Println(err)
+	}
+	err = ioutil.WriteFile(dataPath, b, 0777)
+	if err != nil {
+		log.Println(err)
 	}
 }

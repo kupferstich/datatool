@@ -47,7 +47,7 @@ func ExportImage(picPath string, p data.Picture, exportRootPath string) {
 		}
 		img := openPic(picPath)
 		var rType = ResizeFit
-		if key == "thumb" {
+		if key == "thumb" || key == "square" {
 			rType = ResizeThumbnail
 		}
 		resizePic(img, size, dstPath, rType)
