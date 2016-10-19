@@ -41,6 +41,10 @@ func ExportImage(picPath string, p data.Picture, exportRootPath string) {
 			p.ID,
 			fmt.Sprintf("%s_%s.jpg", p.ID, key),
 		)
+		if fileExists(dstPath) {
+			// Aboart when dst File already exists
+			return
+		}
 		img := openPic(picPath)
 		var rType = ResizeFit
 		if key == "thumb" {
@@ -85,7 +89,7 @@ func ExportAreas(picPath string, p data.Picture, exportRootPath string) {
 	scale := getScale(picPath, p)
 	for i, area := range p.Areas {
 		aid := fmt.Sprintf(
-			"area_%d.jpg",
+			"area_%d",
 			i+1,
 		)
 		dstPath := filepath.Join(
@@ -94,6 +98,9 @@ func ExportAreas(picPath string, p data.Picture, exportRootPath string) {
 			p.ID,
 			fmt.Sprintf("%s.jpg", aid),
 		)
+		if fileExists(dstPath) {
+			continue
+		}
 		imgArea := extractArea(picPath, area, scale)
 		resizePic(imgArea, AreaMaxSize, dstPath, ResizeFit)
 	}
@@ -150,6 +157,13 @@ func resizePic(img image.Image, size Size, dstPath string, resizeType ResizeType
 	if err != nil {
 		log.Println(err)
 	}
+}
+
+func fileExists(fpath string) bool {
+	if _, err := os.Stat(fpath); err == nil {
+		return true
+	}
+	return false
 }
 
 func openPic(picturePath string) image.Image {

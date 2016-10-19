@@ -36,6 +36,8 @@ func NewPageFrontMatterFromPicture(p *data.Picture) *PageFrontMatter {
 	pfm.ImageFull = fmt.Sprintf("img/artwork/%s/%s_big.jpg", p.ID, p.ID)
 	pfm.ImageCard = fmt.Sprintf("img/artwork/%s/%s_small.jpg", p.ID, p.ID)
 	pfm.ImageThumb = fmt.Sprintf("img/artwork/%s/%s_thumb.jpg", p.ID, p.ID)
+	pfm.Date = p.BlogDate
+	pfm.PublishDate = p.PublishDate
 	return &pfm
 }
 

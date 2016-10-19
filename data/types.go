@@ -3,26 +3,29 @@ package data
 import (
 	"fmt"
 	"image"
+	"time"
 )
 
 // Picture stores all the entities for the histblogger
 type Picture struct {
-	ID           string   `xml:"id,attr" json:"ID"`
-	SrcPath      string   `xml:"-" json:"-"`
-	File         string   `xml:"-" json:"-"`
-	Title        string   `xml:"title" json:"Title"`
-	Topic        string   `xml:"topic" json:"Topic"`
-	Text         string   `xml:"text" json:"Text"`
-	CanvasWidth  int      `xml:"canvasWidth" json:"canvasWidth"`
-	CanvasHeight int      `xml:"canvasHeight" json:"canvasHeight"`
-	Areas        []Area   `xml:"areas" json:"Areas"`
-	Captured     int      `xml:"captured" json:"Captured"` //Year, when picture was digitalized
-	Place        string   `xml:"place" json:"Place"`       //Place where the picture was issued
-	YearIssued   string   `xml:"yearIssued" json:"YearIssued"`
-	Persons      []string `xml:"persons" json:"Persons"`
-	Tags         []string `xml:"tags" json:"Tags"`
-	Links        []Link   `xml:"links" json:"Links"`
-	Status       string   `xml:"status" json:"Status"`
+	ID           string    `xml:"id,attr" json:"ID"`
+	SrcPath      string    `xml:"-" json:"-"`
+	File         string    `xml:"-" json:"-"`
+	Title        string    `xml:"title" json:"Title"`
+	Topic        string    `xml:"topic" json:"Topic"`
+	Text         string    `xml:"text" json:"Text"`
+	CanvasWidth  int       `xml:"canvasWidth" json:"canvasWidth"`
+	CanvasHeight int       `xml:"canvasHeight" json:"canvasHeight"`
+	Areas        []Area    `xml:"areas" json:"Areas"`
+	Captured     int       `xml:"captured" json:"Captured"` //Year, when picture was digitalized
+	Place        string    `xml:"place" json:"Place"`       //Place where the picture was issued
+	YearIssued   string    `xml:"yearIssued" json:"YearIssued"`
+	Persons      []string  `xml:"persons" json:"Persons"`
+	Tags         []string  `xml:"tags" json:"Tags"`
+	Links        []Link    `xml:"links" json:"Links"`
+	Status       string    `xml:"status" json:"Status"`
+	BlogDate     time.Time `xml:"-" json:"BlogDate"`
+	PublishDate  time.Time `xml:"-" json:"PublishDate"`
 }
 
 // Identify implements the Identifier interface for loading and saving

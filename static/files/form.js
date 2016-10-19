@@ -32,6 +32,10 @@ app = new Vue({
         ["Thema","Topic"],
         ["Jahr der Anfertigung","YearIssued"]
     ],
+    blogForm:[
+        ["Blog Datum", "BlogDate"],
+        ["Veröffentlichung am", "PublishDate"]
+    ],
     status : [
       "Bild zugeschnitten",
       "Texte gepflegt",
@@ -87,6 +91,11 @@ methods: {
         }
       );
       
+    },
+    setBlogMetaToNow: function(){
+      now = new Date();
+      this.pic.BlogDate = now.toJSON();
+      this.pic.PublishDate = now.toJSON();
     },
     saveData:function(cb) {
       this.$http.post("/pic/"+this.pid,JSON.stringify(this.pic)).then(
@@ -217,7 +226,11 @@ fabric.Image.fromURL(app.picSrc, function(oImg) {
   $(document)
     .ready(function() {
         $('.ui.accordion')
-        .accordion()
-;
+        .accordion();
+        var cleave = new Cleave('.datetime',{
+          delimiters: ["-","-","T",":",":","Z"],
+          blocks: [4,2,2,2,2,2,0],
+          uppercase: true
+        });
     })
   ;
