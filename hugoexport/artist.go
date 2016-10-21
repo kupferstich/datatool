@@ -44,15 +44,27 @@ func ExportArtistContent(p *data.Person, exportRootPath string) {
 
 func ExportArtistProfilePics(p *data.Person, artistRootFolder, exportRootPath string) {
 	artistPath := filepath.Dir(data.MakePath(p, artistRootFolder))
+	counter := 0
 	for pic := range p.ProfilePics {
+		counter++
 		img := openPic(filepath.Join(artistPath, pic))
-		dst := filepath.Join(
-			exportRootPath,
-			ImgArtistSubfolder,
-			p.GetID(),
-			pic,
-		)
-		resizePic(img, ResizeSizes["thumb"], dst, ResizeFit)
+		for key, size := range ResizeSizes {
+			dst := filepath.Join(
+				exportRootPath,
+				ImgArtistSubfolder,
+				p.GetID(),
+				fmt.Sprintf("profilepic_%02d_%s.jpg", counter, key),
+			)
+			if skipImageCreation(dst) {
+				continue
+			}
+			var rType = ResizeFit
+			if key == "thumb" || key == "square" {
+				rType = ResizeThumbnail
+			}
+			resizePic(img, size, dst, rType)
+		}
+
 	}
 }
 

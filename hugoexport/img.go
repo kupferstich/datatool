@@ -34,6 +34,7 @@ func ImgArtwork(picRootFolder, exportRootPath string) {
 // ExportImage resizes the image into the ResizeSizes and saves them
 // into the exportRootPath.
 func ExportImage(picPath string, p data.Picture, exportRootPath string) {
+
 	for key, size := range ResizeSizes {
 		dstPath := filepath.Join(
 			exportRootPath,
@@ -41,10 +42,11 @@ func ExportImage(picPath string, p data.Picture, exportRootPath string) {
 			p.ID,
 			fmt.Sprintf("%s_%s.jpg", p.ID, key),
 		)
-		if fileExists(dstPath) {
+		if skipImageCreation(dstPath) {
 			// Aboart when dst File already exists
-			return
+			continue
 		}
+		// Just openPic when needed
 		img := openPic(picPath)
 		var rType = ResizeFit
 		if key == "thumb" || key == "square" {
@@ -98,7 +100,7 @@ func ExportAreas(picPath string, p data.Picture, exportRootPath string) {
 			p.ID,
 			fmt.Sprintf("%s.jpg", aid),
 		)
-		if fileExists(dstPath) {
+		if skipImageCreation(dstPath) {
 			continue
 		}
 		imgArea := extractArea(picPath, area, scale)
@@ -159,7 +161,14 @@ func resizePic(img image.Image, size Size, dstPath string, resizeType ResizeType
 	}
 }
 
-func fileExists(fpath string) bool {
+// skipImageCreation returns true, if the image should be created or not.
+// If the var ImgAlwaysResize is true that function always returns false.
+// No file is skipped then.
+// If not it is checked, if the file exists. An existing file will be skipped.
+func skipImageCreation(fpath string) bool {
+	if ImgAlwaysResize {
+		return false
+	}
 	if _, err := os.Stat(fpath); err == nil {
 		return true
 	}

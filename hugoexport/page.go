@@ -33,7 +33,7 @@ func NewPageFrontMatterFromPicture(p *data.Picture) *PageFrontMatter {
 	var pfm PageFrontMatter
 	pfm.ID = p.ID
 	pfm.Title = p.Title
-	pfm.Description = fmt.Sprintf("Erstellt: %s", p.YearIssued)
+	pfm.Description = fmt.Sprintf("<b>Erstellt</b>: %s", p.YearIssued)
 	//p.Topic
 	pfm.Tags = p.Tags
 	pfm.Draft = true
@@ -70,17 +70,13 @@ func NewPageFrontMatterFromPerson(p *data.Person) *PageFrontMatter {
 		p.CityDeath,
 	)
 	pfm.Draft = false
+	pfm.ImageBase = fmt.Sprintf("img/artist/%s/", p.GetID())
 	if len(p.ProfilePics) > 0 {
-		var ppic string
-		for p := range p.ProfilePics {
-			ppic = p
-		}
-		pfm.ImageMedium = fmt.Sprintf("img/artist/%s/%s", p.GetID(), ppic)
-		pfm.ImageThumb = fmt.Sprintf("img/artist/%s/%s", p.GetID(), ppic)
+		pfm.ImageFull = fmt.Sprintf("img/artist/%s/profilepic_01_full.jpg", p.GetID())
+		pfm.ImageCard = fmt.Sprintf("img/artist/%s/profilepic_01_square.jpg", p.GetID())
+		pfm.ImageMedium = fmt.Sprintf("img/artist/%s/profilepic_01_medium.jpg", p.GetID())
+		pfm.ImageThumb = fmt.Sprintf("img/artist/%s/profilepic_01_thumb.jpg", p.GetID())
 	}
-	//pfm.ImageFull = fmt.Sprintf("img/artwork/%s/%s_big.jpg", p.ID, p.ID)
-	//pfm.ImageCard = fmt.Sprintf("img/artwork/%s/%s_small.jpg", p.ID, p.ID)
-	//pfm.ImageThumb = fmt.Sprintf("img/artwork/%s/%s_thumb.jpg", p.ID, p.ID)
 	return &pfm
 }
 
