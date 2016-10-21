@@ -90,7 +90,7 @@ func ExportAreas(picPath string, p data.Picture, exportRootPath string) {
 	for i, area := range p.Areas {
 		aid := fmt.Sprintf(
 			"area_%d",
-			i+1,
+			i,
 		)
 		dstPath := filepath.Join(
 			exportRootPath,

@@ -20,7 +20,9 @@ type PageFrontMatter struct {
 	Draft       bool      `json:"draft"`
 	ID          string    `json:"id"`
 	Artists     []string  `json:"artists"`
+	ImageBase   string    `json:"imagebase"` // Basepath the the Images
 	ImageFull   string    `json:"imagefull"`
+	ImageMedium string    `json:"imagemedium"`
 	ImageCard   string    `json:"imagecard"`
 	ImageThumb  string    `json:"imagethumb"`
 }
@@ -39,7 +41,9 @@ func NewPageFrontMatterFromPicture(p *data.Picture) *PageFrontMatter {
 		pfm.Draft = false
 	}
 	pfm.Artists = p.Persons
+	pfm.ImageBase = fmt.Sprintf("img/artwork/%s/", p.ID)
 	pfm.ImageFull = fmt.Sprintf("img/artwork/%s/%s_big.jpg", p.ID, p.ID)
+	pfm.ImageMedium = fmt.Sprintf("img/artwork/%s/%s_medium.jpg", p.ID, p.ID)
 	pfm.ImageCard = fmt.Sprintf("img/artwork/%s/%s_square.jpg", p.ID, p.ID)
 	pfm.ImageThumb = fmt.Sprintf("img/artwork/%s/%s_thumb.jpg", p.ID, p.ID)
 	pfm.Date = p.BlogDate
@@ -71,6 +75,7 @@ func NewPageFrontMatterFromPerson(p *data.Person) *PageFrontMatter {
 		for p := range p.ProfilePics {
 			ppic = p
 		}
+		pfm.ImageMedium = fmt.Sprintf("img/artist/%s/%s", p.GetID(), ppic)
 		pfm.ImageThumb = fmt.Sprintf("img/artist/%s/%s", p.GetID(), ppic)
 	}
 	//pfm.ImageFull = fmt.Sprintf("img/artwork/%s/%s_big.jpg", p.ID, p.ID)
