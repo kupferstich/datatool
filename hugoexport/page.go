@@ -42,7 +42,7 @@ func NewPageFrontMatterFromPicture(p *data.Picture) *PageFrontMatter {
 	}
 	pfm.Artists = p.Persons
 	pfm.ImageBase = fmt.Sprintf("img/artwork/%s/", p.ID)
-	pfm.ImageFull = fmt.Sprintf("img/artwork/%s/%s_big.jpg", p.ID, p.ID)
+	pfm.ImageFull = fmt.Sprintf("img/artwork/%s/%s_full.jpg", p.ID, p.ID)
 	pfm.ImageMedium = fmt.Sprintf("img/artwork/%s/%s_medium.jpg", p.ID, p.ID)
 	pfm.ImageCard = fmt.Sprintf("img/artwork/%s/%s_square.jpg", p.ID, p.ID)
 	pfm.ImageThumb = fmt.Sprintf("img/artwork/%s/%s_thumb.jpg", p.ID, p.ID)

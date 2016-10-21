@@ -13,7 +13,7 @@ import (
 )
 
 // Artists exports all the artists into the Artist content folder
-func Artists(artistRootFolder string, exportRootPath string) {
+func Artists(artistRootFolder, pictureRootFolder, exportRootPath string) {
 	artists, err := pdb.Load(artistRootFolder, "")
 	if err != nil {
 		log.Println(err)
@@ -22,7 +22,7 @@ func Artists(artistRootFolder string, exportRootPath string) {
 		log.Println(artist.Identify())
 		ExportArtistContent(&artist, exportRootPath)
 		ExportArtistProfilePics(&artist, artistRootFolder, exportRootPath)
-		ExportArtistData(&artist, exportRootPath)
+		ExportArtistData(&artist, pictureRootFolder, exportRootPath)
 	}
 }
 
@@ -68,13 +68,14 @@ func ExportArtistProfilePics(p *data.Person, artistRootFolder, exportRootPath st
 	}
 }
 
-func ExportArtistData(p *data.Person, exportRootPath string) {
+func ExportArtistData(p *data.Person, picRoot, exportRootPath string) {
 	dataPath := filepath.Join(
 		exportRootPath,
 		JSONArtistSubfolder,
 		fmt.Sprintf("%s.json", p.GetID()),
 	)
 	p.ExtID = p.Identify()
+	p.Pictures = data.SortPictures(p.Pictures, picRoot)
 	b, err := json.MarshalIndent(p, "", "  ")
 	if err != nil {
 		log.Println(err)

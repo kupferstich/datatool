@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"sort"
 )
 
 // LoadPictures loads the pictures from data folder. For loading the pictures
@@ -29,4 +30,27 @@ func LoadPictures(root string) []Picture {
 		return nil
 	})
 	return pics
+}
+
+// SortPictures by YearIssued takes a slice of stings with the ids and returns
+// the values sorted by year.
+func SortPictures(picIDs []string, root string) []string {
+	pics := LoadPictures(root)
+	sort.Sort(ByYearIssued(pics))
+	var sorted []string
+	for _, p := range pics {
+		if strInSlice(p.ID, picIDs) {
+			sorted = append(sorted, p.ID)
+		}
+	}
+	return sorted
+}
+
+func strInSlice(str string, sl []string) bool {
+	for _, s := range sl {
+		if str == s {
+			return true
+		}
+	}
+	return false
 }

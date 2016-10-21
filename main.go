@@ -65,7 +65,7 @@ func main() {
 	}
 	if *Export == true {
 		hugoexport.ImgArtwork(Conf.DataFolderPictures, Conf.HugoFolder)
-		hugoexport.Artists(Conf.DataFolderPersons, Conf.HugoFolder)
+		hugoexport.Artists(Conf.DataFolderPersons, Conf.DataFolderPictures, Conf.HugoFolder)
 		return
 	}
 	router := mux.NewRouter()

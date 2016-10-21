@@ -1,9 +1,11 @@
 package hugoexport
 
 import (
+	"encoding/json"
 	"fmt"
 	"image"
 	"image/jpeg"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -60,11 +62,16 @@ func ExportImage(picPath string, p data.Picture, exportRootPath string) {
 // ExportImageData exports the pic data as JSON into the JSONArtworkSubfolder
 func ExportImageData(p data.Picture, exportRootPath string) {
 	// Export the data
-	dataRootPath := filepath.Join(
+	dataPath := filepath.Join(
 		exportRootPath,
 		JSONArtworkSubfolder,
+		fmt.Sprintf("%s.json", p.ID),
 	)
-	err := data.SaveType(&p, dataRootPath)
+	b, err := json.MarshalIndent(p, "", "  ")
+	if err != nil {
+		log.Println(err)
+	}
+	err = ioutil.WriteFile(dataPath, b, 0777)
 	if err != nil {
 		log.Println(err)
 	}

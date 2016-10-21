@@ -3,6 +3,7 @@ package data
 import (
 	"fmt"
 	"image"
+	"strconv"
 	"time"
 )
 
@@ -36,6 +37,23 @@ func (p *Picture) Identify() string {
 // TypeName implements the Identifier inteface for loading and saving
 func (p *Picture) TypeName() string {
 	return "picture"
+}
+
+// ByYearIssued implements sort.Interface for []Picture
+type ByYearIssued []Picture
+
+func (a ByYearIssued) Len() int      { return len(a) }
+func (a ByYearIssued) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+func (a ByYearIssued) Less(i, j int) bool {
+	ival, err := strconv.Atoi(a[i].YearIssued)
+	if err != nil {
+		return true
+	}
+	jval, err := strconv.Atoi(a[j].YearIssued)
+	if err != nil {
+		return false
+	}
+	return ival < jval
 }
 
 // Person represents the entities of a person
