@@ -85,6 +85,21 @@ var types = {
                 inData[key].ID = key;
                 return inData[key]; });
         }
+    },
+    "posts":{
+        "columns":['id','title','date'],
+        "defaultData": {
+            ID:null,
+            Title:null,
+            Areas:[{areaID:"",rect:{fill:""},Text:""}]
+        },
+        "url": "/post/all",
+        "linkBase": "/edit/post/",
+        "dataTrans": function(inData){
+            return  Object.keys(inData).map(function (key) { 
+                inData[key].ID = key;
+                return inData[key]; });
+        }
     }
 }
 var type = window.location.href.split("/").pop()

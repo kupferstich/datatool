@@ -97,13 +97,13 @@ func (p *Person) TypeName() string {
 
 // Area defines parts of the picture
 type Area struct {
-	ID      string   `xml:"id,attr" json:"areaID"`
-	Rect    Fabric   `xml:"rect" json:"rect"`
-	Shape   string   `xml:"shape" json:"Shape"`
-	Coords  string   `xml:"coords" json:"Coords"`
-	Persons []string `xml:"persons" json:"Persons"`
-	Text    string   `xml:"text" json:"Text"`
-	Links   []Link   `xml:"links" json:"Links"`
+	ID     string `xml:"id,attr" json:"areaID"`
+	Rect   Fabric `xml:"rect" json:"rect"`
+	Shape  string `xml:"shape" json:"Shape"`
+	Coords string `xml:"coords" json:"Coords"`
+
+	Text  string `xml:"text" json:"Text"`
+	Links []Link `xml:"links" json:"Links"`
 }
 
 // ImageRect returns an image.Rectangle for the area. This method is
@@ -155,4 +155,37 @@ type Link struct {
 	URL   string `xml:"url" json:"Url"`
 	Text  string `xml:"text" json:"Text"`
 	Title string `xml:"title" json:"Title"`
+}
+
+// PageFrontMatter defines the front matter of the hugo page.
+type PageFrontMatter struct {
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	Date        time.Time `json:"date"`
+	Tags        []string  `json:"tags"`
+	PublishDate time.Time `json:"publishdate"`
+	Draft       bool      `json:"draft"`
+	ID          string    `json:"id"`
+	Artists     []string  `json:"artists"`
+	Pictures    []string  `json:"pictures"`
+	ImageBase   string    `json:"imagebase"` // Basepath the the Images
+	ImageFull   string    `json:"imagefull"`
+	ImageMedium string    `json:"imagemedium"`
+	ImageCard   string    `json:"imagecard"`
+	ImageThumb  string    `json:"imagethumb"`
+}
+
+type Post struct {
+	PageFrontMatter
+	Content string `json:"content"`
+}
+
+// Identify implements the Identifier interface for loading and saving
+func (p *Post) Identify() string {
+	return p.ID
+}
+
+// TypeName implements the Identifier inteface for loading and saving
+func (p *Post) TypeName() string {
+	return "post"
 }

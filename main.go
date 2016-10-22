@@ -78,13 +78,20 @@ func main() {
 	router.HandleFunc("/form/{id}", FormHandler).Methods("GET")
 	// Html page for all persons
 	router.HandleFunc("/edit/person/{id}", EditPersonHandler).Methods("GET")
+	router.HandleFunc("/edit/post/{id}", EditPostHandler).Methods("GET")
+
 	router.HandleFunc("/pic/all", PicAllHandler).Methods("GET")
 	router.HandleFunc("/pic/{id}", PicHandler).Methods("GET")
 	router.HandleFunc("/pic/{id}", PicSaveHandler).Methods("POST")
+
 	router.HandleFunc("/person/all", PersonAllHandler).Methods("GET")
 	router.HandleFunc("/person/{id}", PersonHandler).Methods("GET")
-
 	router.HandleFunc("/person/{id}", PersonSaveHandler).Methods("POST")
+
+	router.HandleFunc("/post/all", PostAllHandler).Methods("GET")
+	router.HandleFunc("/post/{id}", PostHandler).Methods("GET")
+	router.HandleFunc("/post/{id}", PostSaveHandler).Methods("POST")
+
 	router.HandleFunc("/img/{id}-{maxWidth}-{maxHeight}", ImgHandler).Methods("GET")
 	router.HandleFunc("/img/person/{id}/{size}/{file}", PersonImgHandler).Methods("GET")
 	router.HandleFunc("/action/export", ExportHandler).Methods("GET")

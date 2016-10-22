@@ -259,14 +259,7 @@ func (pdb *PersonDB) UpdatePictures(root string) {
 				pic.Persons = removeDuplicates(pic.Persons)
 			}
 		}
-		for ai, a := range pic.Areas {
-			for i, p := range a.Persons {
-				dbPerson, ok := pdb.GetPerson(p)
-				if ok {
-					pic.Areas[ai].Persons[i] = dbPerson.GetID()
-				}
-			}
-		}
+
 		data.SaveType(&pic, root)
 	}
 }

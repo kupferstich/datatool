@@ -1,0 +1,57 @@
+<div id="app" class="ui container">
+   <h1>Edit - {{person.FullName}}</h1>
+    <div class="ui grid">
+       <div class="ten wide column">
+        <form class="ui form">
+        <div class="field">
+           <b>ID:</b> {{post.id}}<br>
+           <b>Title:</b> {{post.title}}
+        </div>
+
+<div class="field" v-for="el in formMeta">
+    <label>{{el[0]}}:</label>
+    <div class="ui left icon input">
+        <input v-model="post[el[1]]" type="text" class="datetime">
+        <i class="calendar icon"></i>
+    </div>
+    </div>
+    <div v-on:click="setBlogMetaToNow" class="ui icon  button">           
+    <i class="calendar icon"></i> Setze Datum und Zeit auf jetzt
+    </div>
+
+
+<div class="field" v-for="el in form">
+    <label>{{el[0]}}:</label>
+    <div class="ui input">
+        <input v-model="post[el[1]]" type="text">
+       
+    </div>
+    </div>       
+
+<div class="field">
+    <label>Text</label>
+    <textarea v-model="post.content"></textarea>
+</div>
+
+
+        
+        
+        </form>
+        <br>
+        <div v-on:click="saveData(true)" class="ui primary button">           
+             Speichern
+        </div>
+        <div v-on:click="saveData(false)" class="ui primary button">           
+             Speichern und weiter bearbeiten
+        </div>
+
+       </div>
+<div class="six wide column">
+    Textvorschau:<br>
+    <div class="ui segment">
+        <div v-html="post.content | marked"></div>
+    </div>
+</div>
+    </div>
+</div>
+<script src="/files/edit_post.js"></script>

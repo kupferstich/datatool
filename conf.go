@@ -17,6 +17,7 @@ type Options struct {
 	SourceFolder       string `yaml:"SourceFolder"`
 	DataFolderPictures string `yaml:"DataFolderPictures"`
 	DataFolderPersons  string `yaml:"DataFolderPersons"`
+	DataFolderPosts    string `yaml:"DataFolderPosts"`
 	HugoFolder         string `yaml:"HugoFolder"`
 	DDBApiKey          string `yaml:"DDBApiKey"`
 }

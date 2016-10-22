@@ -5,27 +5,12 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"time"
 
 	"github.com/kupferstich/datatool/data"
 )
 
 // PageFrontMatter defines the front matter of the hugo page.
-type PageFrontMatter struct {
-	Title       string    `json:"title"`
-	Description string    `json:"description"`
-	Date        time.Time `json:"date"`
-	Tags        []string  `json:"tags"`
-	PublishDate time.Time `json:"publishdate"`
-	Draft       bool      `json:"draft"`
-	ID          string    `json:"id"`
-	Artists     []string  `json:"artists"`
-	ImageBase   string    `json:"imagebase"` // Basepath the the Images
-	ImageFull   string    `json:"imagefull"`
-	ImageMedium string    `json:"imagemedium"`
-	ImageCard   string    `json:"imagecard"`
-	ImageThumb  string    `json:"imagethumb"`
-}
+type PageFrontMatter data.PageFrontMatter
 
 // NewPageFrontMatterFromPicture maps the structure to the Picture
 // type.
@@ -33,7 +18,7 @@ func NewPageFrontMatterFromPicture(p *data.Picture) *PageFrontMatter {
 	var pfm PageFrontMatter
 	pfm.ID = p.ID
 	pfm.Title = p.Title
-	pfm.Description = fmt.Sprintf("<b>Erstellt</b>: %s", p.YearIssued)
+	pfm.Description = fmt.Sprintf("**Erstellt**: %s", p.YearIssued)
 	//p.Topic
 	pfm.Tags = p.Tags
 	pfm.Draft = true

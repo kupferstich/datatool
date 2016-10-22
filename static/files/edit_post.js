@@ -1,0 +1,92 @@
+var postID = window.location.href.split("/").pop();
+
+app = new Vue({
+  el: '#app',
+  data: {
+    post: {
+    },
+    form:[
+        ["Titel", "title"],
+        ["Beschreibung", "description"]
+    ],
+    formMeta:[
+        ["Post Datum", "date"],
+        ["Veröffentlichung am", "publishdate"]
+    ],
+    
+  },
+  ready: function() {
+    this.getData()
+    
+},
+methods: {
+    getData: function(cb) {
+        this.$http.get("/post/"+postID).then(
+        function(res){
+          this.$set('post', JSON.parse(res.body));
+        }
+        )
+    },
+    setBlogMetaToNow: function(){
+      now = new Date();
+      this.post.date = now.toJSON();
+      this.post.publishdate = now.toJSON();
+    },
+    addLink:function(){
+        if (this.post.Links == null){
+            this.post.Links = [];
+        }
+        var url = this.newLink.Url;
+        var title = this.newLink.Title;
+        this.post.Links.push({
+            Url: url,
+            Title: title
+        })
+        this.newLink.Url = "";
+        this.newLink.Title = "";
+    },
+    removeLink:function(index){
+      this.post.Links.splice(index,1)
+    },
+    saveData:function(redirect,cb) {
+        this.unsafedChanges = false;
+        this.$http.post("/post/"+this.post.id,JSON.stringify(this.post)).then(
+            function(res){
+                if(redirect){
+                    window.location = "/list/posts";
+                }
+            }
+        )
+    },
+    addPerson:function(){
+      this.post.Persons.push({FullName:"",GND:""});
+    },
+    removePerson:function(index){
+      this.post.Persons.splice(index,1)
+    },
+
+    
+},
+filters: {
+  marked: function(value){
+    if (value === undefined){
+      value = "";
+    }
+    return marked(value);
+  }
+}
+})
+
+
+
+ $(document)
+    .ready(function() {
+        $('.ui.accordion')
+        .accordion();
+        var cleave = new Cleave('.datetime',{
+          delimiters: ["-","-","T",":",":","Z"],
+          blocks: [4,2,2,2,2,2,0],
+          uppercase: true
+        });
+    })
+  ;

@@ -47,6 +47,10 @@ func EditPersonHandler(w http.ResponseWriter, r *http.Request) {
 	staticFile(w, "./static/tmpl_edit_person.html")
 }
 
+func EditPostHandler(w http.ResponseWriter, r *http.Request) {
+	staticFile(w, "./static/tmpl_edit_post.html")
+}
+
 // PicAllHandler is for listing all availiable pictures
 func PicAllHandler(w http.ResponseWriter, r *http.Request) {
 	collection := stabi.NewData(Conf.DataFolderPictures, personDB)
@@ -159,6 +163,60 @@ func PersonImgHandler(w http.ResponseWriter, r *http.Request) {
 	jpeg.Encode(w, t, nil)
 
 }
+
+// PicAllHandler is for listing all availiable pictures
+func PostAllHandler(w http.ResponseWriter, r *http.Request) {
+	posts := data.NewPosts(Conf.DataFolderPosts)
+	posts.Load()
+
+	b, err := json.Marshal(posts.Posts)
+	if err != nil {
+		log.Println(err)
+	}
+	w.Write(b)
+}
+
+// PicHandler sends the data of a picture in JSON format
+func PostHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	var post data.Post
+	if id == "new" {
+		posts := data.NewPosts(Conf.DataFolderPosts)
+		posts.Load()
+		post.ID = fmt.Sprintf("%d", len(posts.Posts))
+	} else {
+		post.ID = id
+		err := data.LoadType(&post, Conf.DataFolderPosts)
+		if err != nil {
+			log.Println(err)
+		}
+	}
+	fmt.Println(id)
+	b, err := json.Marshal(post)
+	if err != nil {
+		log.Println(err)
+	}
+	w.Write(b)
+}
+
+// PicSaveHandler sends the data of a picture in JSON format
+func PostSaveHandler(w http.ResponseWriter, r *http.Request) {
+	rbody, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println(err)
+	}
+	var post data.Post
+	err = json.Unmarshal(rbody, &post)
+	if err != nil {
+		log.Println(err)
+	}
+	err = data.SaveType(&post, Conf.DataFolderPosts)
+	if err != nil {
+		log.Println(err)
+	}
+}
+
 func ImgHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
