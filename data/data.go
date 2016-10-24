@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // ErrFileNotFound is used when try to load a file and that file does not exist
@@ -75,4 +76,22 @@ func MakePath(i Identifier, root string) string {
 		i.Identify(),
 		fmt.Sprintf("%s.json", i.TypeName()),
 	)
+}
+
+// GetFiles returns alle the files of a folder, which have a special
+// extension
+func GetFiles(folder string, ext []string) ([]string, error) {
+	var outFiles []string
+	files, err := ioutil.ReadDir(folder)
+	if err != nil {
+		return outFiles, err
+	}
+	for _, f := range files {
+		for _, e := range ext {
+			if strings.EqualFold(e, filepath.Ext(f.Name())) {
+				outFiles = append(outFiles, f.Name())
+			}
+		}
+	}
+	return outFiles, nil
 }

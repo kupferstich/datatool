@@ -159,20 +159,22 @@ type Link struct {
 
 // PageFrontMatter defines the front matter of the hugo page.
 type PageFrontMatter struct {
-	Title       string    `json:"title"`
-	Description string    `json:"description"`
-	Date        time.Time `json:"date"`
-	Tags        []string  `json:"tags"`
-	PublishDate time.Time `json:"publishdate"`
-	Draft       bool      `json:"draft"`
-	ID          string    `json:"id"`
-	Artists     []string  `json:"artists"`
-	Pictures    []string  `json:"pictures"`
-	ImageBase   string    `json:"imagebase"` // Basepath the the Images
-	ImageFull   string    `json:"imagefull"`
-	ImageMedium string    `json:"imagemedium"`
-	ImageCard   string    `json:"imagecard"`
-	ImageThumb  string    `json:"imagethumb"`
+	Title       string            `json:"title"`
+	Description string            `json:"description"`
+	Date        time.Time         `json:"date"`
+	Tags        []string          `json:"tags"`
+	PublishDate time.Time         `json:"publishdate"`
+	Draft       bool              `json:"draft"`
+	ID          string            `json:"id"`
+	Artists     []string          `json:"artists"`
+	Pictures    []string          `json:"pictures"`
+	Links       []Link            `json:"links"`
+	PostPics    map[string]Source `json:"postpics"`
+	ImageBase   string            `json:"imagebase"` // Basepath the the Images
+	ImageFull   string            `json:"imagefull"`
+	ImageMedium string            `json:"imagemedium"`
+	ImageCard   string            `json:"imagecard"`
+	ImageThumb  string            `json:"imagethumb"`
 }
 
 type Post struct {

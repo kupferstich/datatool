@@ -1,40 +1,47 @@
 <div id="app" class="ui container">
    <h1>Edit - {{person.FullName}}</h1>
     <div class="ui grid">
-       <div class="ten wide column">
+       <div class="eight wide column">
         <form class="ui form">
         <div class="field">
            <b>ID:</b> {{post.id}}<br>
            <b>Title:</b> {{post.title}}
         </div>
 
-<div class="field" v-for="el in formMeta">
-    <label>{{el[0]}}:</label>
-    <div class="ui left icon input">
-        <input v-model="post[el[1]]" type="text" class="datetime">
-        <i class="calendar icon"></i>
-    </div>
-    </div>
-    <div v-on:click="setBlogMetaToNow" class="ui icon  button">           
-    <i class="calendar icon"></i> Setze Datum und Zeit auf jetzt
-    </div>
+<div class="ui styled accordion">
+<div class="title"><i class="icon dropdown"></i>Blog Daten</div>
+<div class="content">
+    <div class="field" v-for="el in formMeta">
+        <label>{{el[0]}}:</label>
+        <div class="ui left icon input">
+            <input v-model="post[el[1]]" type="text" class="datetime">
+            <i class="calendar icon"></i>
+        </div>
+        </div>
+        <div v-on:click="setBlogMetaToNow" class="ui icon  button">           
+        <i class="calendar icon"></i> Setze Datum und Zeit auf jetzt
+        </div>
+</div>
 
-
+<div class="title"><i class="icon dropdown"></i>Daten</div>
+<div class="content">
 <div class="field" v-for="el in form">
     <label>{{el[0]}}:</label>
     <div class="ui input">
         <input v-model="post[el[1]]" type="text">
        
     </div>
-    </div>       
-
+    </div>  
+</div>     
+<div class="title"><i class="icon dropdown"></i>Text</div>
+<div class="content">
 <div class="field">
     <label>Text</label>
     <textarea v-model="post.content"></textarea>
 </div>
+</div>
+</div>
 
-
-        
         
         </form>
         <br>
@@ -46,10 +53,13 @@
         </div>
 
        </div>
-<div class="six wide column">
+<div class="eight wide column">
     Textvorschau:<br>
     <div class="ui segment">
         <div v-html="post.content | marked"></div>
+    </div>
+    <div v-for="pic in post.Pictures">
+        <img v-src="pic">
     </div>
 </div>
     </div>

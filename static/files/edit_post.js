@@ -19,6 +19,20 @@ app = new Vue({
     this.getData()
     
 },
+watch: {
+       /*post: function(val,oldVal){          
+          this.picUrls = [];
+          if (this.post.PostPics == undefined) {
+              return "";
+          }
+          for (p in this.post.PostPics){
+              //this.person.ProfilePics[p].url = "/img/person/"+personID+"/thumb/"+p;
+              //console.log(this.person.ProfilePics[p].url);
+              this.picUrls.push("/img/person/"+personID+"/thumb/"+p);
+          }
+         //return picUrls; 
+      }*/
+  },
 methods: {
     getData: function(cb) {
         this.$http.get("/post/"+postID).then(

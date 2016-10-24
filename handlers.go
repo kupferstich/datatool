@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"html/template"
 	"image/jpeg"
 	"io/ioutil"
 	"log"
@@ -20,14 +19,6 @@ import (
 	"github.com/nfnt/resize"
 )
 
-var homeTemplate = template.Must(template.ParseFiles(
-	"./static/index.html",
-	"./static/tmpl_header.html"))
-
-func init() {
-
-}
-
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/list/pictures", http.StatusPermanentRedirect)
 }
@@ -36,19 +27,19 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 func ListHandler(w http.ResponseWriter, r *http.Request) {
 	/*vars := mux.Vars(r)
 	type := vars["type"]*/
-	staticFile(w, "./static/tmpl_list.html")
+	staticFile(w, "tmpl_list.html")
 }
 
 func FormHandler(w http.ResponseWriter, r *http.Request) {
-	staticFile(w, "./static/tmpl_form.html")
+	staticFile(w, "tmpl_form.html")
 }
 
 func EditPersonHandler(w http.ResponseWriter, r *http.Request) {
-	staticFile(w, "./static/tmpl_edit_person.html")
+	staticFile(w, "tmpl_edit_person.html")
 }
 
 func EditPostHandler(w http.ResponseWriter, r *http.Request) {
-	staticFile(w, "./static/tmpl_edit_post.html")
+	staticFile(w, "tmpl_edit_post.html")
 }
 
 // PicAllHandler is for listing all availiable pictures
@@ -164,6 +155,39 @@ func PersonImgHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func PostImgHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	filename := vars["file"]
+	id := vars["id"]
+	maxWidth := 290
+	maxHeight := 400
+	var post data.Post
+	post.ID = id
+	log.Println(vars)
+
+	data.LoadType(&post, Conf.DataFolderPosts)
+
+	picturePath := filepath.Join(
+		filepath.Dir(data.MakePath(&post, Conf.DataFolderPosts)),
+		filename,
+	)
+
+	file, err := os.Open(picturePath)
+	defer file.Close()
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+	img, err := jpeg.Decode(file)
+	if err != nil {
+		log.Println(err)
+	}
+	t := resize.Thumbnail(uint(maxWidth), uint(maxHeight), img, resize.Lanczos3)
+	jpeg.Encode(w, t, nil)
+
+}
+
 // PicAllHandler is for listing all availiable pictures
 func PostAllHandler(w http.ResponseWriter, r *http.Request) {
 	posts := data.NewPosts(Conf.DataFolderPosts)
@@ -191,6 +215,8 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Println(err)
 		}
+		data.GetPostPics(&post, Conf.DataFolderPosts)
+
 	}
 	fmt.Println(id)
 	b, err := json.Marshal(post)
@@ -255,10 +281,22 @@ func ExportHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func staticFile(w http.ResponseWriter, filename string) {
-	sf, _ := ioutil.ReadFile("./static/tmpl_header.html")
+	sf, _ := ioutil.ReadFile(
+		filepath.Join(
+			Conf.StaticFolder,
+			"tmpl_header.html",
+		))
 	w.Write(sf)
-	sf, _ = ioutil.ReadFile(filename)
+	sf, _ = ioutil.ReadFile(
+		filepath.Join(
+			Conf.StaticFolder,
+			filename,
+		))
 	w.Write(sf)
-	sf, _ = ioutil.ReadFile("./static/tmpl_footer.html")
+	sf, _ = ioutil.ReadFile(
+		filepath.Join(
+			Conf.StaticFolder,
+			"footer.html",
+		))
 	w.Write(sf)
 }

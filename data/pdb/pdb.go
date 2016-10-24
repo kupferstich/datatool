@@ -10,7 +10,6 @@ package pdb
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -194,7 +193,7 @@ func (pdb *PersonDB) GetPerson(id string) (*data.Person, bool) {
 
 func (pdb *PersonDB) GetProfilePics(p *data.Person) {
 	picExt := []string{".jpg", ".jpeg", ".png"}
-	ProfilePics, _ := getFiles(filepath.Dir(data.MakePath(p, pdb.Root)), picExt)
+	ProfilePics, _ := data.GetFiles(filepath.Dir(data.MakePath(p, pdb.Root)), picExt)
 	// Store the db values in var, because the pic source could be renamed or
 	// deleted, then the old value should be not loaded.
 	dbProfilePics := p.ProfilePics
@@ -280,21 +279,4 @@ func removeDuplicates(elements []string) []string {
 	}
 	// Return the new slice.
 	return result
-}
-
-func getFiles(folder string, ext []string) ([]string, error) {
-	fmt.Println(folder)
-	var outFiles []string
-	files, err := ioutil.ReadDir(folder)
-	if err != nil {
-		return outFiles, err
-	}
-	for _, f := range files {
-		for _, e := range ext {
-			if strings.EqualFold(e, filepath.Ext(f.Name())) {
-				outFiles = append(outFiles, f.Name())
-			}
-		}
-	}
-	return outFiles, nil
 }
