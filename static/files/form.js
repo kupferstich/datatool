@@ -38,8 +38,10 @@ app = new Vue({
     ],
     status : [
       "Bild zugeschnitten",
+      "Texte werden gepflegt",
       "Texte gepflegt",
       "zur Überarbeitung",
+      "Metadaten prüfen",
       "fertig"
     ],
     colors: [

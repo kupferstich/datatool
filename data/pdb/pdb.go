@@ -192,7 +192,7 @@ func (pdb *PersonDB) GetPerson(id string) (*data.Person, bool) {
 }
 
 func (pdb *PersonDB) GetProfilePics(p *data.Person) {
-	picExt := []string{".jpg", ".jpeg", ".png"}
+	picExt := []string{".jpg", ".jpeg"}
 	ProfilePics, _ := data.GetFiles(filepath.Dir(data.MakePath(p, pdb.Root)), picExt)
 	// Store the db values in var, because the pic source could be renamed or
 	// deleted, then the old value should be not loaded.

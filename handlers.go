@@ -204,6 +204,15 @@ func PostAllHandler(w http.ResponseWriter, r *http.Request) {
 func PostHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
+	/*
+		// The root of the post should handle also the pictures of the
+		// post folder.
+		ext := filepath.Ext(id)
+		if strings.EqualFold(ext, "jpg") || strings.EqualFold(ext, "jpeg") {
+			PostImgHandler(w, r)
+			return
+		}*/
+
 	var post data.Post
 	if id == "new" {
 		posts := data.NewPosts(Conf.DataFolderPosts)
@@ -216,9 +225,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println(err)
 		}
 		data.GetPostPics(&post, Conf.DataFolderPosts)
-
 	}
-	fmt.Println(id)
 	b, err := json.Marshal(post)
 	if err != nil {
 		log.Println(err)

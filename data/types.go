@@ -180,6 +180,7 @@ type PageFrontMatter struct {
 type Post struct {
 	PageFrontMatter
 	Content string `json:"content"`
+	Image   string `json:image`
 }
 
 // Identify implements the Identifier interface for loading and saving

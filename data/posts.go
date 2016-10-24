@@ -43,8 +43,6 @@ func GetPostPics(post *Post, pRootPath string) error {
 		return err
 	}
 	pics, _ := GetFiles(filepath.Dir(MakePath(post, pRootPath)), picExt)
-	// Store the db values in var, because the pic source could be renamed or
-	// deleted, then the old value should be not loaded.
 
 	dbPostPics := post.PostPics
 	// Delete the old values

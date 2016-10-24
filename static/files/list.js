@@ -1,3 +1,9 @@
+function getCookie(name) {
+  var value = "; " + document.cookie;
+  var parts = value.split("; " + name + "=");
+  if (parts.length == 2) return parts.pop().split(";").shift();
+}
+
 
 // register the grid component
 Vue.component('grid', {
@@ -104,7 +110,7 @@ var types = {
 }
 var type = window.location.href.split("/").pop()
 
-
+var searchQueryCookie = getCookie("searchQuery");
 app = new Vue({
   el: '#app',
   data: {

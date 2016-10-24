@@ -3,11 +3,22 @@ var postID = window.location.href.split("/").pop();
 app = new Vue({
   el: '#app',
   data: {
+    newTag : "",
     post: {
+        PostPics: {}
+
     },
+    status : [
+      "Post in Erstellung",
+      "Bilder prüfen",
+      "zur Überarbeitung",
+      "Metadaten prüfen",
+      "fertig"
+    ],
     form:[
         ["Titel", "title"],
-        ["Beschreibung", "description"]
+        ["Beschreibung", "description"],
+        ["Bild","image"]
     ],
     formMeta:[
         ["Post Datum", "date"],
@@ -77,6 +88,16 @@ methods: {
     },
     removePerson:function(index){
       this.post.Persons.splice(index,1)
+    },
+    addTag:function(){
+       if (this.post.tags == null){
+         this.post.tags = [];
+       }
+        this.post.tags.push(this.newTag);  
+        this.newTag = "";    
+    },
+    removeTag:function(index){
+      this.post.tags.splice(index,1)
     },
 
     
