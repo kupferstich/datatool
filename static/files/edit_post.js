@@ -8,6 +8,10 @@ app = new Vue({
         PostPics: {}
 
     },
+    persons: null,
+    pics: null,
+    newPerson: "",
+    newPicture: "",
     status : [
       "Post in Erstellung",
       "Bilder prüfen",
@@ -50,8 +54,25 @@ methods: {
         function(res){
           this.$set('post', JSON.parse(res.body));
         }
-        )
+        );
+        this.$http.get("/person/all").then(
+        function(res){
+          this.$set('persons', JSON.parse(res.body));
+        }
+        );
+        this.$http.get("/pic/all").then(
+        function(res){
+          this.$set('pics', this.dataTrans(JSON.parse(res.body)));
+        }
+        );
     },
+    dataTrans: function(inData){
+            var out = {};
+            Object.keys(inData).map(function (key) { 
+                out[inData[key].ID] = inData[key];
+             });
+             return out
+        },
     setBlogMetaToNow: function(){
       now = new Date();
       this.post.date = now.toJSON();
@@ -84,10 +105,24 @@ methods: {
         )
     },
     addPerson:function(){
-      this.post.Persons.push({FullName:"",GND:""});
+        if (this.post.artists == null) {
+            this.post.artists = [];
+        }
+      this.post.artists.push(this.newPerson);
+      this.newPerson = "";
     },
     removePerson:function(index){
-      this.post.Persons.splice(index,1)
+      this.post.artists.splice(index,1)
+    },
+    addPicture:function(){
+        if (this.post.pictures == null) {
+            this.post.pictures = [];
+        }
+      this.post.pictures.push(this.newPicture);
+      this.newPicture = "";
+    },
+    removePicture:function(index){
+      this.post.pictures.splice(index,1)
     },
     addTag:function(){
        if (this.post.tags == null){

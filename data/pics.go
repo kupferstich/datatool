@@ -5,6 +5,8 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+
+	"github.com/kupferstich/datatool/helpers"
 )
 
 // LoadPictures loads the pictures from data folder. For loading the pictures
@@ -39,18 +41,9 @@ func SortPictures(picIDs []string, root string) []string {
 	sort.Sort(ByYearIssued(pics))
 	var sorted []string
 	for _, p := range pics {
-		if strInSlice(p.ID, picIDs) {
+		if helpers.StrInSlice(p.ID, picIDs) {
 			sorted = append(sorted, p.ID)
 		}
 	}
 	return sorted
-}
-
-func strInSlice(str string, sl []string) bool {
-	for _, s := range sl {
-		if str == s {
-			return true
-		}
-	}
-	return false
 }

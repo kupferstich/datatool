@@ -23,6 +23,7 @@ type Picture struct {
 	YearIssued   string    `xml:"yearIssued" json:"YearIssued"`
 	Persons      []string  `xml:"persons" json:"Persons"`
 	Tags         []string  `xml:"tags" json:"Tags"`
+	Posts        []string  `json:"Posts"`
 	Links        []Link    `xml:"links" json:"Links"`
 	Status       string    `xml:"status" json:"Status"`
 	BlogDate     time.Time `xml:"-" json:"BlogDate"`
@@ -74,6 +75,7 @@ type Person struct {
 	Text        string            `xml:"text" json:"Text"`
 	ProfilePics map[string]Source `xml:"profilePics" json:"ProfilePics"`
 	Pictures    []string          `xml:"pictures" json:"Pictures"`
+	Posts       []string          `json:"Posts"`
 	Links       []Link            `xml:"links" json:"Links"`
 }
 
