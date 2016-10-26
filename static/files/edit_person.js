@@ -19,6 +19,12 @@ app = new Vue({
         CityDeath: '',
         Links:[]
     },
+    status : [
+      "In Erstellung",
+      "zur Überarbeitung",
+      "Metadaten prüfen",
+      "fertig"
+    ],
     persons: {},
     ppUrls:[],
     newLink: {

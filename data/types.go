@@ -76,6 +76,7 @@ type Person struct {
 	ProfilePics map[string]Source `xml:"profilePics" json:"ProfilePics"`
 	Pictures    []string          `xml:"pictures" json:"Pictures"`
 	Posts       []string          `json:"Posts"`
+	Status      string            `xml:"status" json:"Status"`
 	Links       []Link            `xml:"links" json:"Links"`
 }
 

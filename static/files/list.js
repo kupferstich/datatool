@@ -78,7 +78,7 @@ var types = {
         }
     },
     "persons":{
-        "columns":['personID','FullName','GND'],
+        "columns":['personID','FullName','GND','Status'],
         "defaultData": {
             ID:null,
             Title:null,

@@ -7,7 +7,12 @@
            <b>ID:</b> {{person.personID}}<br>
            <b>Name:</b> {{person.FullName}}
         </div>
-
+         <div class="field">
+           <b>Status:</b> 
+           <select v-model="person.Status">
+            <option v-for="s in status" value="{{s}}">{{s}}</option>
+            </select>
+       </div>
          
 <div class="fields">
         <div class="field">

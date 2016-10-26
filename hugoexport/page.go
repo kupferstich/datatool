@@ -74,8 +74,14 @@ func ContentFromPerson(p *data.Person, w io.Writer) {
 // NewPageFrontMatterFromPost maps the person structur to the hugo content.
 func NewPageFrontMatterFromPost(p *data.Post) *PageFrontMatter {
 	pfm := PageFrontMatter(p.PageFrontMatter)
-	pfm.ImageCard = fmt.Sprintf("img/post/%s", p.Image)
-	pfm.ImageMedium = fmt.Sprintf("img/post/%s", p.Image)
+	if p.Image == "" {
+		for k := range p.PostPics {
+			p.Image = fmt.Sprintf("img/post/%s", k)
+			break
+		}
+	}
+	pfm.ImageCard = p.Image
+	pfm.ImageMedium = p.Image
 	return &pfm
 }
 
