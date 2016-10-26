@@ -8,7 +8,7 @@
         </div>
         <div class="field">
            <b>Status:</b> 
-           <select v-model="post.Status">
+           <select v-model="post.status">
             <option v-for="s in status" value="{{s}}">{{s}}</option>
             </select>
        </div>
@@ -35,7 +35,7 @@
                         {{pics[p].Title}} ({{p}})
                     <i class="delete icon" v-on:click="removePicture($index)"></i>
                     </div>
-                    <br>
+                    <br><br>
                     <div class="two fields">
                         <div class="field">
                         <select v-model.number="newPicture">
@@ -56,7 +56,7 @@
                             {{persons[p].FullName}} ({{p}})
                         <i class="delete icon" v-on:click="removePerson($index)"></i>
                         </div>
-                        <br>
+                        <br><br>
                         <div class="two fields">
                             <div class="field">
                             <select v-model.number="newPerson">

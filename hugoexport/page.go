@@ -71,6 +71,19 @@ func ContentFromPerson(p *data.Person, w io.Writer) {
 	WritePage(pfm, p.Text, w)
 }
 
+// NewPageFrontMatterFromPost maps the person structur to the hugo content.
+func NewPageFrontMatterFromPost(p *data.Post) *PageFrontMatter {
+	pfm := PageFrontMatter(p.PageFrontMatter)
+	pfm.ImageCard = fmt.Sprintf("img/post/%s", p.Image)
+	pfm.ImageMedium = fmt.Sprintf("img/post/%s", p.Image)
+	return &pfm
+}
+
+func ContentFromPost(p *data.Post, w io.Writer) {
+	pfm := NewPageFrontMatterFromPost(p)
+	WritePage(pfm, p.Content, w)
+}
+
 // WritePage writes the page into the io.Writer. First the FrontMatter and then the
 // content.
 func WritePage(pfm *PageFrontMatter, content string, w io.Writer) {

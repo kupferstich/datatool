@@ -166,6 +166,7 @@ type PageFrontMatter struct {
 	Date        time.Time         `json:"date"`
 	Tags        []string          `json:"tags"`
 	PublishDate time.Time         `json:"publishdate"`
+	Status      string            `json:"status"`
 	Draft       bool              `json:"draft"`
 	ID          string            `json:"id"`
 	Artists     []string          `json:"artists"`

@@ -93,7 +93,7 @@ var types = {
         }
     },
     "posts":{
-        "columns":['id','title','date'],
+        "columns":['id','title','date','status'],
         "defaultData": {
             ID:null,
             Title:null,

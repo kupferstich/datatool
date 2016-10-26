@@ -29,11 +29,17 @@ var ImgArtworkSubfolder = filepath.Join("static", "img", "artwork")
 // ImgArtistSubfolder is where the images will be exported
 var ImgArtistSubfolder = filepath.Join("static", "img", "artist")
 
+// ImgArtistSubfolder is where the images will be exported
+var ImgPostSubfolder = filepath.Join("static", "img", "post")
+
 // ContentArtworkSubfolder the folder for the md content files.
 var ContentArtworkSubfolder = filepath.Join("content", "artwork")
 
 // ContentArtistSubfolder the folder for the md content files.
 var ContentArtistSubfolder = filepath.Join("content", "artist")
+
+// ContentPostSubfolder the folder for the md content files.
+var ContentPostSubfolder = filepath.Join("content", "post")
 
 // ImgArtworkSrcFilename is the filename of the picture inside the
 // src (pictures) folder
@@ -70,3 +76,10 @@ const (
 	ResizeFit ResizeType = iota
 	ResizeThumbnail
 )
+
+// PostPicSize defines the size for the pictures embeded inside a
+// blog post.
+var PostPicSize = Size{350, 350}
+
+// PostPicResizeType defines the ResizeType for all the blog pics.
+var PostPicResizeType = ResizeFit

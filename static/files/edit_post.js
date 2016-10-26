@@ -69,7 +69,10 @@ methods: {
     dataTrans: function(inData){
             var out = {};
             Object.keys(inData).map(function (key) { 
-                out[inData[key].ID] = inData[key];
+                if (inData[key].Status == "fertig"){
+                    out[inData[key].ID] = inData[key];
+                }
+                
              });
              return out
         },
