@@ -75,7 +75,6 @@ type Person struct {
 	Text        string            `xml:"text" json:"Text"`
 	ProfilePics map[string]Source `xml:"profilePics" json:"ProfilePics"`
 	Pictures    []string          `xml:"pictures" json:"Pictures"`
-	Posts       []string          `json:"Posts"`
 	Status      string            `xml:"status" json:"Status"`
 	Links       []Link            `xml:"links" json:"Links"`
 }
@@ -172,6 +171,7 @@ type PageFrontMatter struct {
 	ID          string            `json:"id"`
 	Artists     []string          `json:"artists"`
 	Pictures    []string          `json:"pictures"`
+	Posts       []string          `json:"posts"`
 	Links       []Link            `json:"links"`
 	PostPics    map[string]Source `json:"postpics"`
 	ImageBase   string            `json:"imagebase"` // Basepath the the Images
@@ -195,4 +195,14 @@ func (p *Post) Identify() string {
 // TypeName implements the Identifier inteface for loading and saving
 func (p *Post) TypeName() string {
 	return "post"
+}
+
+// ByPostDate implements sort.Interface for []Post
+type ByPostDate []Post
+
+func (a ByPostDate) Len() int      { return len(a) }
+func (a ByPostDate) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+func (a ByPostDate) Less(i, j int) bool {
+	// After sorts the posts that the latest will be first.
+	return a[i].Date.After(a[j].Date)
 }

@@ -283,7 +283,7 @@ func ImgHandler(w http.ResponseWriter, r *http.Request) {
 
 func ExportHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Export gestartet")
-	hugoexport.ImgArtwork(Conf.DataFolderPictures, Conf.HugoFolder)
+	hugoexport.ImgArtwork(Conf.DataFolderPictures, Conf.DataFolderPosts, Conf.HugoFolder)
 	fmt.Fprintln(w, "Export erfolgt")
 }
 

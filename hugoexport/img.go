@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"sort"
 
 	"github.com/disintegration/imaging"
 	"github.com/kupferstich/datatool/data"
@@ -17,8 +18,11 @@ import (
 // ImgArtwork exports all the images. PicRootFolder describes the source
 // folder, where all the pictrues are edited. exportRootPath is the
 // destination root folder.
-func ImgArtwork(picRootFolder, exportRootPath string) {
+func ImgArtwork(picRootFolder, postsRootFolder, exportRootPath string) {
 	pics := data.LoadPictures(picRootFolder)
+	posts := data.NewPosts(postsRootFolder)
+	posts.Load()
+	sort.Sort(data.ByPostDate(posts.Posts))
 	for _, p := range pics {
 		picPath := filepath.Join(
 			picRootFolder,
@@ -28,7 +32,7 @@ func ImgArtwork(picRootFolder, exportRootPath string) {
 		log.Println("Exporting ", p.ID)
 		ExportImage(picPath, p, exportRootPath)
 		ExportImageData(p, exportRootPath)
-		ExportImageContent(&p, exportRootPath)
+		ExportImageContent(&p, posts, exportRootPath)
 		ExportAreas(picPath, p, exportRootPath)
 	}
 }
@@ -78,7 +82,7 @@ func ExportImageData(p data.Picture, exportRootPath string) {
 }
 
 // ExportImageContent exports the picture data into the content folder
-func ExportImageContent(p *data.Picture, exportRootPath string) {
+func ExportImageContent(p *data.Picture, posts *data.Posts, exportRootPath string) {
 	dstPath := filepath.Join(
 		exportRootPath,
 		ContentArtworkSubfolder,
@@ -90,7 +94,7 @@ func ExportImageContent(p *data.Picture, exportRootPath string) {
 		log.Println(err)
 	}
 	defer f.Close()
-	ContentFromPicture(p, f)
+	ContentFromPicture(p, posts, f)
 }
 
 // ExportAreas the defined areas are cut out of the original image.

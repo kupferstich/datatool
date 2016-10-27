@@ -18,6 +18,7 @@ import (
 	"strings"
 
 	"github.com/kupferstich/datatool/data"
+	"github.com/kupferstich/datatool/helpers"
 )
 
 // ErrGotNilPointer is, when a function gets a nil pointer
@@ -127,7 +128,7 @@ func (pdb *PersonDB) EditPerson(p *data.Person) error {
 	// The person is edited.
 	// If there is that person in the db set the Pictures.
 	p.Pictures = append(p.Pictures, dbPerson.Pictures...)
-	p.Pictures = removeDuplicates(p.Pictures)
+	p.Pictures = helpers.RemoveDuplicateStrFromSlice(p.Pictures)
 
 	// If the folderpath changed after edit
 	if data.MakePath(&dbPerson, pdb.Root) != data.MakePath(p, pdb.Root) {
@@ -255,28 +256,10 @@ func (pdb *PersonDB) UpdatePictures(root string) {
 			dbPerson, ok := pdb.GetPerson(p)
 			if ok {
 				pic.Persons[i] = dbPerson.GetID()
-				pic.Persons = removeDuplicates(pic.Persons)
+				pic.Persons = helpers.RemoveDuplicateStrFromSlice(pic.Persons)
 			}
 		}
 
 		data.SaveType(&pic, root)
 	}
-}
-
-func removeDuplicates(elements []string) []string {
-	// Use map to record duplicates as we find them.
-	encountered := map[string]bool{}
-	result := []string{}
-	for v := range elements {
-		if encountered[elements[v]] == true {
-			// Do not add duplicate.
-		} else {
-			// Record this element as an encountered element.
-			encountered[elements[v]] = true
-			// Append to result slice.
-			result = append(result, elements[v])
-		}
-	}
-	// Return the new slice.
-	return result
 }

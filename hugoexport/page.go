@@ -14,13 +14,14 @@ type PageFrontMatter data.PageFrontMatter
 
 // NewPageFrontMatterFromPicture maps the structure to the Picture
 // type.
-func NewPageFrontMatterFromPicture(p *data.Picture) *PageFrontMatter {
+func NewPageFrontMatterFromPicture(p *data.Picture, posts *data.Posts) *PageFrontMatter {
 	var pfm PageFrontMatter
 	pfm.ID = p.ID
 	pfm.Title = p.Title
 	pfm.Description = fmt.Sprintf("**Erstellt**: %s", p.YearIssued)
 	//p.Topic
 	pfm.Tags = p.Tags
+	pfm.Posts = posts.GetPostsForPicture(p.ID)
 	pfm.Draft = true
 	if p.Status == "fertig" {
 		pfm.Draft = false
@@ -37,8 +38,8 @@ func NewPageFrontMatterFromPicture(p *data.Picture) *PageFrontMatter {
 }
 
 // ContentFromPicture creates a content page from a picture.
-func ContentFromPicture(p *data.Picture, w io.Writer) {
-	pfm := NewPageFrontMatterFromPicture(p)
+func ContentFromPicture(p *data.Picture, posts *data.Posts, w io.Writer) {
+	pfm := NewPageFrontMatterFromPicture(p, posts)
 	WritePage(pfm, p.Text, w)
 }
 

@@ -4,6 +4,8 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/kupferstich/datatool/helpers"
 )
 
 type Posts struct {
@@ -34,6 +36,16 @@ func (p *Posts) Load() {
 		p.Posts = append(p.Posts, post)
 		return nil
 	})
+}
+
+func (p *Posts) GetPostsForPicture(pictureID string) []string {
+	var out []string
+	for _, post := range p.Posts {
+		if helpers.StrInSlice(pictureID, post.Pictures) {
+			out = append(out, post.ID)
+		}
+	}
+	return out
 }
 
 func GetPostPics(post *Post, pRootPath string) error {
