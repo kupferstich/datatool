@@ -18,12 +18,16 @@ app = new Vue({
         CityBirth: '',
         CityDeath: '',
         Links:[]
-    },
+    }, 
     status : [
       "In Erstellung",
       "zur Überarbeitung",
       "Metadaten prüfen",
       "fertig"
+    ],
+    blogForm:[
+        ["Blog Datum", "BlogDate"],
+        ["Veröffentlichung am", "PublishDate"]
     ],
     persons: {},
     ppUrls:[],
@@ -132,6 +136,11 @@ methods: {
     removePerson:function(index){
       this.pic.Persons.splice(index,1)
     },
+    setBlogMetaToNow: function(){
+      now = new Date();
+      this.person.BlogDate = now.toJSON();
+      this.person.PublishDate = now.toJSON();
+    },
 
     
 },
@@ -146,11 +155,14 @@ filters: {
 })
 
 
-
-  $(document)
+ $(document)
     .ready(function() {
         $('.ui.accordion')
-        .accordion()
-;
+        .accordion();
+        var cleave = new Cleave('.datetime',{
+          delimiters: ["-","-","T",":",":","Z"],
+          blocks: [4,2,2,2,2,2,0],
+          uppercase: true
+        });
     })
   ;

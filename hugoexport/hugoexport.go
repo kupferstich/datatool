@@ -23,6 +23,9 @@ var JSONArtistSubfolder = filepath.Join("data", "artist")
 // JSONArtworkSubfolder is where the pictures json files will be copied
 var JSONArtworkSubfolder = filepath.Join("data", "artwork")
 
+// JSONPostSubfolder is where the post json files will be copied
+var JSONPostSubfolder = filepath.Join("data", "post")
+
 // ImgArtworkSubfolder is where the images will be exported
 var ImgArtworkSubfolder = filepath.Join("static", "img", "artwork")
 

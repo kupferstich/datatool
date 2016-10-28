@@ -1,7 +1,9 @@
 package hugoexport
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -15,6 +17,7 @@ func Posts(postRootPath, exportRootPath string) {
 	for _, p := range posts.Posts {
 		ExportPostPics(&p, postRootPath, exportRootPath)
 		ExportPostContent(&p, exportRootPath)
+		ExportPostData(&p, postRootPath, exportRootPath)
 	}
 }
 
@@ -47,5 +50,22 @@ func ExportPostPics(p *data.Post, postRootPath, exportRootPath string) {
 			continue
 		}
 		resizePic(img, PostPicSize, dst, PostPicResizeType)
+	}
+}
+
+func ExportPostData(p *data.Post, postRootPath, exportRootPath string) {
+	dataPath := filepath.Join(
+		exportRootPath,
+		JSONPostSubfolder,
+		fmt.Sprintf("%s.json", p.ID),
+	)
+	os.MkdirAll(filepath.Dir(dataPath), 0777)
+	b, err := json.MarshalIndent(p, "", "  ")
+	if err != nil {
+		log.Println(err)
+	}
+	err = ioutil.WriteFile(dataPath, b, 0777)
+	if err != nil {
+		log.Println(err)
 	}
 }

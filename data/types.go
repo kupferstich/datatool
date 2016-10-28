@@ -74,9 +74,12 @@ type Person struct {
 	CityDeath   string            `xml:"cityDeath" json:"CityDeath"`
 	Text        string            `xml:"text" json:"Text"`
 	ProfilePics map[string]Source `xml:"profilePics" json:"ProfilePics"`
+	PostImage   string            `json:"PostImage"`
 	Pictures    []string          `xml:"pictures" json:"Pictures"`
 	Status      string            `xml:"status" json:"Status"`
 	Links       []Link            `xml:"links" json:"Links"`
+	BlogDate    time.Time         `xml:"-" json:"BlogDate"`
+	PublishDate time.Time         `xml:"-" json:"PublishDate"`
 }
 
 // GetID returns the ID of the person
@@ -179,6 +182,7 @@ type PageFrontMatter struct {
 	ImageMedium string            `json:"imagemedium"`
 	ImageCard   string            `json:"imagecard"`
 	ImageThumb  string            `json:"imagethumb"`
+	ImageSource Source            `json:"imagesource"`
 }
 
 type Post struct {

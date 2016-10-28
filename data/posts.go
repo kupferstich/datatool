@@ -48,6 +48,16 @@ func (p *Posts) GetPostsForPicture(pictureID string) []string {
 	return out
 }
 
+func (p *Posts) GetPostsForPerson(personID string) []string {
+	var out []string
+	for _, post := range p.Posts {
+		if helpers.StrInSlice(personID, post.Artists) {
+			out = append(out, post.ID)
+		}
+	}
+	return out
+}
+
 func GetPostPics(post *Post, pRootPath string) error {
 	picExt := []string{".jpg", ".jpeg"}
 	err := LoadType(post, pRootPath)

@@ -44,7 +44,7 @@ func ContentFromPicture(p *data.Picture, posts *data.Posts, w io.Writer) {
 }
 
 // NewPageFrontMatterFromPerson maps the person structur to the hugo content.
-func NewPageFrontMatterFromPerson(p *data.Person) *PageFrontMatter {
+func NewPageFrontMatterFromPerson(p *data.Person, posts *data.Posts) *PageFrontMatter {
 	var pfm PageFrontMatter
 	pfm.ID = p.GetID()
 	pfm.Title = p.FullName
@@ -55,20 +55,28 @@ func NewPageFrontMatterFromPerson(p *data.Person) *PageFrontMatter {
 		p.YearDeath,
 		p.CityDeath,
 	)
-	pfm.Draft = false
+	pfm.Links = p.Links
+	pfm.Draft = true
+	if p.Status == "fertig" {
+		pfm.Draft = false
+	}
+	pfm.Posts = posts.GetPostsForPerson(p.GetID())
+	pfm.Date = p.BlogDate
+	pfm.PublishDate = p.PublishDate
 	pfm.ImageBase = fmt.Sprintf("img/artist/%s/", p.GetID())
 	if len(p.ProfilePics) > 0 {
 		pfm.ImageFull = fmt.Sprintf("img/artist/%s/profilepic_01_full.jpg", p.GetID())
 		pfm.ImageCard = fmt.Sprintf("img/artist/%s/profilepic_01_square.jpg", p.GetID())
 		pfm.ImageMedium = fmt.Sprintf("img/artist/%s/profilepic_01_medium.jpg", p.GetID())
 		pfm.ImageThumb = fmt.Sprintf("img/artist/%s/profilepic_01_thumb.jpg", p.GetID())
+		pfm.ImageSource = p.ProfilePics[p.PostImage]
 	}
 	return &pfm
 }
 
 // ContentFromPerson creates a content page from a person.
-func ContentFromPerson(p *data.Person, w io.Writer) {
-	pfm := NewPageFrontMatterFromPerson(p)
+func ContentFromPerson(p *data.Person, posts *data.Posts, w io.Writer) {
+	pfm := NewPageFrontMatterFromPerson(p, posts)
 	WritePage(pfm, p.Text, w)
 }
 
@@ -76,13 +84,19 @@ func ContentFromPerson(p *data.Person, w io.Writer) {
 func NewPageFrontMatterFromPost(p *data.Post) *PageFrontMatter {
 	pfm := PageFrontMatter(p.PageFrontMatter)
 	if p.Image == "" {
-		for k := range p.PostPics {
+		for k, pp := range p.PostPics {
 			p.Image = fmt.Sprintf("img/post/%s", k)
+			p.ImageSource = pp
 			break
 		}
 	}
+	pfm.Draft = true
+	if p.Status == "fertig" {
+		pfm.Draft = false
+	}
 	pfm.ImageCard = p.Image
 	pfm.ImageMedium = p.Image
+	pfm.ImageSource = p.ImageSource
 	return &pfm
 }
 

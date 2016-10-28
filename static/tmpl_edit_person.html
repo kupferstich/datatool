@@ -1,7 +1,7 @@
 <div id="app" class="ui container">
    <h1>Edit - {{person.FullName}}</h1>
     <div class="ui grid">
-       <div class="seven wide column">
+       <div class="seven wide column"> 
         <form class="ui form">
         <div class="field">
            <b>ID:</b> {{person.personID}}<br>
@@ -13,6 +13,23 @@
             <option v-for="s in status" value="{{s}}">{{s}}</option>
             </select>
        </div>
+<div class="ui styled accordion">
+<div class="title"><i class="icon dropdown"></i>Blog Daten</div>
+<div class="content">
+
+        <div class="field" v-for="el in blogForm">
+        <label>{{el[0]}}:</label>
+        <div class="ui left icon input">
+            <input v-model="person[el[1]]" type="text" class="datetime">
+            <i class="calendar icon"></i>
+        </div>
+        </div>
+        <div v-on:click="setBlogMetaToNow" class="ui icon  button">           
+        <i class="calendar icon"></i> Setze Datum und Zeit auf jetzt
+        </div>
+</div>
+    <div class="title active"><i class="icon dropdown"></i>Künstler Daten</div>
+<div class="content active">   
          
 <div class="fields">
         <div class="field">
@@ -59,7 +76,8 @@
             <input v-model.number="person.GND" type="number">
         </div>
 </div>
-        
+</div>
+</div>   
         
         </form>
         <br>
