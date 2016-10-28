@@ -129,6 +129,12 @@
 <div class="eight wide column">
     Textvorschau:<br>
     <div class="ui segment">
+        <b>Beschreibung:</b>
+        <div v-html="post.description | marked"></div>
+    </div>
+    
+    <div class="ui segment">
+        <b>Text:</b>
         <div v-html="post.content | marked"></div>
     </div>
     <div v-for="pic in post.postpics">
