@@ -93,6 +93,7 @@ func ExportArtistData(p *data.Person, picRoot, exportRootPath string) {
 	if err != nil {
 		log.Println(err)
 	}
+	os.MkdirAll(filepath.Dir(dataPath), 0777)
 	err = ioutil.WriteFile(dataPath, b, 0777)
 	if err != nil {
 		log.Println(err)

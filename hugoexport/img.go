@@ -71,6 +71,7 @@ func ExportImageData(p data.Picture, exportRootPath string) {
 		JSONArtworkSubfolder,
 		fmt.Sprintf("%s.json", p.ID),
 	)
+	os.MkdirAll(filepath.Dir(dataPath), 0777)
 	b, err := json.MarshalIndent(p, "", "  ")
 	if err != nil {
 		log.Println(err)
