@@ -85,4 +85,4 @@ const (
 var PostPicSize = Size{350, 350}
 
 // PostPicResizeType defines the ResizeType for all the blog pics.
-var PostPicResizeType = ResizeFit
+var PostPicResizeType = ResizeThumbnail

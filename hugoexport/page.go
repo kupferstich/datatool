@@ -85,7 +85,7 @@ func NewPageFrontMatterFromPost(p *data.Post) *PageFrontMatter {
 	pfm := PageFrontMatter(p.PageFrontMatter)
 	if p.Image == "" {
 		for k, pp := range p.PostPics {
-			p.Image = fmt.Sprintf("img/post/%s", k)
+			p.Image = fmt.Sprintf("img/post/%s/%s", p.ID, k)
 			p.ImageSource = pp
 			break
 		}
