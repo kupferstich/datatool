@@ -54,10 +54,10 @@ func ExportImage(picPath string, p data.Picture, exportRootPath string) {
 		}
 		// Just openPic when needed
 		img := openPic(picPath)
-		var rType = ResizeFit
-		if key == "thumb" || key == "square" {
+		rType := ResizeFit
+		/*if key == "thumb" || key == "square" {
 			rType = ResizeThumbnail
-		}
+		}*/
 		resizePic(img, size, dstPath, rType)
 	}
 

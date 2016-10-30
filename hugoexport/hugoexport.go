@@ -51,7 +51,7 @@ var ImgArtworkSrcFilename = "00000001.jpg"
 // ImgAlwaysResize is an option that defines if an existing file is changed
 // or not. If the value is true all pcitures will be resized. That makes the
 // export much longer.
-var ImgAlwaysResize = false
+var ImgAlwaysResize = true
 
 // ResizeSizes is for the sizes which will be created
 // thumb will be resized with the thumbnail method. So it will be
