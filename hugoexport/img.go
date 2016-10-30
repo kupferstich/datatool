@@ -24,6 +24,9 @@ func ImgArtwork(picRootFolder, postsRootFolder, exportRootPath string) {
 	posts.Load()
 	sort.Sort(data.ByPostDate(posts.Posts))
 	for _, p := range pics {
+		if p.Status != "fertig" && ImgExportDraft == false {
+			continue
+		}
 		picPath := filepath.Join(
 			picRootFolder,
 			p.ID,

@@ -53,6 +53,10 @@ var ImgArtworkSrcFilename = "00000001.jpg"
 // export much longer.
 var ImgAlwaysResize = true
 
+// ImgExportDraft is an option that just ready pictures are going to be
+// exported. If false just pictures with Status "fertig" are used.
+var ImgExportDraft = false
+
 // ResizeSizes is for the sizes which will be created
 // thumb will be resized with the thumbnail method. So it will be
 // croped to the given size.
@@ -62,7 +66,7 @@ var ResizeSizes = map[string]Size{
 	"medium": {500, 400},
 	"small":  {300, 300},
 	"thumb":  {100, 100},
-	"square": {350, 290},
+	"square": {350, 400},
 }
 
 // AreaMaxSize is the size where an area should fit into.
