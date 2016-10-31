@@ -65,7 +65,7 @@ Vue.component('grid', {
 //////////////////
 var types = {
     "pictures":{
-        "columns":['ID','Title','Topic','YearIssued','Status'],
+        "columns":['ID','Title','Topic','YearIssued','BlogDate','Status'],
         "defaultData": {
             ID:null,
             Title:null,
@@ -78,7 +78,7 @@ var types = {
         }
     },
     "persons":{
-        "columns":['personID','FullName','GND','Status'],
+        "columns":['personID','FullName','GND','BlogDate','Status'],
         "defaultData": {
             ID:null,
             Title:null,

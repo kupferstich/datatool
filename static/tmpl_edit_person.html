@@ -20,7 +20,7 @@
         <div class="field" v-for="el in blogForm">
         <label>{{el[0]}}:</label>
         <div class="ui left icon input">
-            <input v-model="person[el[1]]" type="text" class="datetime">
+            <input v-model="person[el[1]]" type="text" class="datetime" id="{{el[1]}}">
             <i class="calendar icon"></i>
         </div>
         </div>

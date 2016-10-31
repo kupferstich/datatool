@@ -6,7 +6,7 @@ app = new Vue({
     person: {
         personID:null,
         masterID:0,
-        GND:0,
+        GND:'',
         Title:null,
         Text:"",
         FullName:null,
@@ -52,7 +52,17 @@ app = new Vue({
       }
   },
   ready: function() {
-    this.getData()
+    this.getData();
+    var cleave1 = new Cleave('#BlogDate',{
+          delimiters: ["-","-","T",":",":","Z"],
+          blocks: [4,2,2,2,2,2,0],
+          uppercase: true
+        });
+    var cleave2 = new Cleave('#PublishDate',{
+          delimiters: ["-","-","T",":",":","Z"],
+          blocks: [4,2,2,2,2,2,0],
+          uppercase: true
+        });
     
 },
 methods: {
@@ -159,10 +169,6 @@ filters: {
     .ready(function() {
         $('.ui.accordion')
         .accordion();
-        var cleave = new Cleave('.datetime',{
-          delimiters: ["-","-","T",":",":","Z"],
-          blocks: [4,2,2,2,2,2,0],
-          uppercase: true
-        });
+        
     })
   ;

@@ -25,14 +25,23 @@ app = new Vue({
         ["Bild","image"]
     ],
     formMeta:[
-        ["Post Datum", "date"],
+        ["Post Datum", "date"], 
         ["Veröffentlichung am", "publishdate"]
     ],
     
   },
   ready: function() {
-    this.getData()
-    
+    this.getData();
+    var cleave1 = new Cleave('#date',{
+          delimiters: ["-","-","T",":",":","Z"],
+          blocks: [4,2,2,2,2,2,0],
+          uppercase: true
+        });
+    var cleave2 = new Cleave('#publishdate',{
+          delimiters: ["-","-","T",":",":","Z"],
+          blocks: [4,2,2,2,2,2,0],
+          uppercase: true
+        });
 },
 watch: {
        /*post: function(val,oldVal){          
@@ -156,10 +165,6 @@ filters: {
     .ready(function() {
         $('.ui.accordion')
         .accordion();
-        var cleave = new Cleave('.datetime',{
-          delimiters: ["-","-","T",":",":","Z"],
-          blocks: [4,2,2,2,2,2,0],
-          uppercase: true
-        });
+        
     })
   ;

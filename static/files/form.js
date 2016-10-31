@@ -59,7 +59,17 @@ app = new Vue({
    
   },
   ready: function() {
-    this.getData()
+    this.getData();
+    var cleave1 = new Cleave('#BlogDate',{
+          delimiters: ["-","-","T",":",":","Z"],
+          blocks: [4,2,2,2,2,2,0],
+          uppercase: true
+        });
+    var cleave2 = new Cleave('#PublishDate',{
+          delimiters: ["-","-","T",":",":","Z"],
+          blocks: [4,2,2,2,2,2,0],
+          uppercase: true
+        });
     
 },
 watch:{
@@ -229,10 +239,6 @@ fabric.Image.fromURL(app.picSrc, function(oImg) {
     .ready(function() {
         $('.ui.accordion')
         .accordion();
-        var cleave = new Cleave('.datetime',{
-          delimiters: ["-","-","T",":",":","Z"],
-          blocks: [4,2,2,2,2,2,0],
-          uppercase: true
-        });
+        
     })
   ;
