@@ -1,161 +1,161 @@
 <div id="app" class="ui container">
-   <h1>Edit - {{person.FullName}}</h1>
+    <h1>Edit - {{person.FullName}}</h1>
     <div class="ui grid">
-       <div class="seven wide column"> 
-        <form class="ui form">
-        <div class="field">
-           <b>ID:</b> {{person.personID}}<br>
-           <b>Name:</b> {{person.FullName}}
-        </div>
-         <div class="field">
-           <b>Status:</b> 
-           <select v-model="person.Status">
+        <div class="seven wide column">
+            <form class="ui form">
+                <div class="field">
+                    <b>ID:</b> {{person.personID}}<br>
+                    <b>Name:</b> {{person.FullName}}
+                </div>
+                <div class="field">
+                    <b>Status:</b>
+                    <select v-model="person.Status">
             <option v-for="s in status" value="{{s}}">{{s}}</option>
             </select>
-       </div>
-<div class="ui styled accordion">
-<div class="title"><i class="icon dropdown"></i>Blog Daten</div>
-<div class="content">
+                </div>
+                <div class="ui styled accordion">
+                    <div class="title"><i class="icon dropdown"></i>Blog Daten</div>
+                    <div class="content">
 
-        <div class="field" v-for="el in blogForm">
-        <label>{{el[0]}}:</label>
-        <div class="ui left icon input">
-            <input v-model="person[el[1]]" type="text" class="datetime" id="{{el[1]}}">
-            <i class="calendar icon"></i>
-        </div>
-        </div>
-        <div v-on:click="setBlogMetaToNow" class="ui icon  button">           
-        <i class="calendar icon"></i> Setze Datum und Zeit auf jetzt
-        </div>
-</div>
-    <div class="title active"><i class="icon dropdown"></i>Künstler Daten</div>
-<div class="content active">   
-         
-<div class="fields">
-        <div class="field">
-            <label>Familienname</label>
-            <input v-model="person.FamilyName" @keyup="setFullName">
-        </div>
+                        <div class="field" v-for="el in blogForm">
+                            <label>{{el[0]}}:</label>
+                            <div class="ui left icon input">
+                                <input v-model="person[el[1]]" type="text" class="datetime" id="{{el[1]}}">
+                                <i class="calendar icon"></i>
+                            </div>
+                        </div>
+                        <div v-on:click="setBlogMetaToNow" class="ui icon  button">
+                            <i class="calendar icon"></i> Setze Datum und Zeit auf jetzt
+                        </div>
+                    </div>
+                    <div class="title active"><i class="icon dropdown"></i>Künstler Daten</div>
+                    <div class="content active">
 
-        <div class="field">
-            <label>Vorname(n)</label>
-            <input v-model="person.GivenName" @keyup="setFullName">
-        </div>
-</div>
-<div class="fields">
-        <div class="field">
-            <label>Geburtsjahr</label>
-            <input v-model="person.YearBirth" type="Number">
-        </div>
+                        <div class="fields">
+                            <div class="field">
+                                <label>Familienname</label>
+                                <input v-model="person.FamilyName" @keyup="setFullName">
+                            </div>
 
-        <div class="field">
-            <label>Sterbejahr</label>
-            <input v-model="person.YearDeath" type="Number">
-        </div>
-</div>
-<div class="fields">
-        <div class="field">
-            <label>Geburtsort</label>
-            <input v-model="person.CityBirth">
-        </div>
+                            <div class="field">
+                                <label>Vorname(n)</label>
+                                <input v-model="person.GivenName" @keyup="setFullName">
+                            </div>
+                        </div>
+                        <div class="fields">
+                            <div class="field">
+                                <label>Geburtsjahr</label>
+                                <input v-model="person.YearBirth" type="Number">
+                            </div>
 
-        <div class="field">
-            <label>Sterbeort</label>
-            <input v-model="person.CityDeath">
-        </div>
-</div>
-<div class="fields">
-        <div class="field">
-            <label>Master:</label>
-            <select v-model.number="person.masterID">
+                            <div class="field">
+                                <label>Sterbejahr</label>
+                                <input v-model="person.YearDeath" type="Number">
+                            </div>
+                        </div>
+                        <div class="fields">
+                            <div class="field">
+                                <label>Geburtsort</label>
+                                <input v-model="person.CityBirth">
+                            </div>
+
+                            <div class="field">
+                                <label>Sterbeort</label>
+                                <input v-model="person.CityDeath">
+                            </div>
+                        </div>
+                        <div class="fields">
+                            <div class="field">
+                                <label>Master:</label>
+                                <select v-model.number="person.masterID">
             <option v-for="p in persons | orderBy 'FullName'" value="{{p.personID}}">{{p.FullName}}({{p.personID}})</option>
             </select>
-        </div>
-        <div class="field">
-            <label>GND</label>
-            <input v-model.number="person.GND" type="number">
-        </div>
-</div>
-</div>
-</div>   
-        
-        </form>
-        <br>
-        <div v-on:click="saveData(true)" class="ui primary button">           
-             Speichern
-        </div>
-        <div v-on:click="saveData(false)" class="ui primary button">           
-             Speichern und weiter bearbeiten
-        </div>
-       
+                            </div>
+                            <div class="field">
+                                <label>GND</label>
+                                <input v-model.number="person.GND" type="number">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-       </div>
-<div class="eight wide column">
-    <form class="ui form">
-        
-        
-        <div class="field">
-            <b>Suche Wikimedia nach</b> 
-            <a href="https://commons.wikimedia.org/wiki/Category:{{person.GivenName}} {{person.FamilyName}}?uselang=de" target="_blank">{{person.GivenName}} {{person.FamilyName}}</a>
-            (<a href="https://de.wikipedia.org/wiki/{{person.GivenName}} {{person.FamilyName}}" target="_blank">Wikipedia</a>)
-            <br><br>
-            <b>Suche Nationalbiliothek nach GND</b> <a href="http://d-nb.info/{{person.GND}}" target="_blank">{{person.GND}}</a>
-        </div>
-        <div class="field">
-            <label>Text</label>
-            <textarea v-model="person.Text"></textarea>
-        </div>
-        <div class="ui relaxed divided list">
-        <div class="item" v-for="l in person.Links">
-            <i class="large remove middle aligned icon" @click="removeLink($index)"></i>
-            <div class="content">
-            <a href="{{l.Url}}" class="header">{{l.Title}}</a>
-            <div class="description">{{l.Url}}</div>
+            </form>
+            <br>
+            <div v-on:click="saveData(true)" class="ui primary button">
+                Speichern
             </div>
-        </div>
-        </div>
-    <div class="ui styled accordion field">
-        <div class="title"><i class="icon dropdown"></i>Neuer Link</div>
-                <div class="content">
+            <div v-on:click="saveData(false)" class="ui primary button">
+                Speichern und weiter bearbeiten
+            </div>
 
-            <div class="field">
-                <label>Url</label>
-                <input v-model="newLink.Url">
-            </div>
-        
-            <div class="field">
-                <label>Titel</label>
-                <input v-model="newLink.Title">
-            </div>
-            <div class="field">
-                <label>&nbsp;</label>
-                <div v-on:click="addLink()" class="ui icon primary button">           
+
+        </div>
+        <div class="eight wide column">
+            <form class="ui form">
+
+
+                <div class="field">
+                    <b>Suche Wikimedia nach</b>
+                    <a href="https://commons.wikimedia.org/wiki/Category:{{person.GivenName}} {{person.FamilyName}}?uselang=de" target="_blank">{{person.GivenName}} {{person.FamilyName}}</a>                    (
+                    <a href="https://de.wikipedia.org/wiki/{{person.GivenName}} {{person.FamilyName}}" target="_blank">Wikipedia</a>)
+                    <br><br>
+                    <b>Suche Nationalbiliothek nach GND</b> <a href="http://d-nb.info/{{person.GND}}" target="_blank">{{person.GND}}</a>
+                </div>
+                <div class="field">
+                    <label>Text</label>
+                    <textarea v-model="person.Text"></textarea>
+                </div>
+                <div class="ui relaxed divided list">
+                    <div class="item" v-for="l in person.Links">
+                        <i class="large remove middle aligned icon" @click="removeLink($index)"></i>
+                        <div class="content">
+                            <a href="{{l.Url}}" class="header">{{l.Title}}</a>
+                            <div class="description">{{l.Url}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui styled accordion field">
+                    <div class="title"><i class="icon dropdown"></i>Neuer Link</div>
+                    <div class="content">
+
+                        <div class="field">
+                            <label>Url</label>
+                            <input v-model="newLink.Url">
+                        </div>
+
+                        <div class="field">
+                            <label>Titel</label>
+                            <input v-model="newLink.Title">
+                        </div>
+                        <div class="field">
+                            <label>&nbsp;</label>
+                            <div v-on:click="addLink()" class="ui icon primary button">
                                 <i class="add circle icon"></i> Hinzufügen
-                                </div>
-            </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-    </div>
 
-    <div class="field ui two cards">
-           <div class="ui card" v-for="val in person.ProfilePics">
-            <div class="image">
-                
-                <img src="{{ppUrls[$index]}}">
-               
-               <!-- <img src="getImgSrc(person.personID,profPic.Value)">-->
-            </div>
-            <div class="content">
-                <div class="description">
-               <input v-model="val.Title" placeholder="Titel">
-                <input v-model="val.Attribution" placeholder="Urheberschaft">
+                <div class="field ui two cards">
+                    <div class="ui card" v-for="val in person.ProfilePics">
+                        <div class="image">
+
+                            <img src="{{ppUrls[$index]}}">
+
+                            <!-- <img src="getImgSrc(person.personID,profPic.Value)">-->
+                        </div>
+                        <div class="content">
+                            <div class="description">
+                                <input v-model="val.Title" placeholder="Titel">
+                                <input v-model="val.Attribution" placeholder="Urheberschaft">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            </div>
+
+
+            </form>
         </div>
-       
-
-    </form>
-</div>
     </div>
 </div>
 <script src="/files/edit_person.js"></script>

@@ -1,6 +1,4 @@
-
-
-  <!-- component template -->
+<!-- component template -->
 <script type="text/x-template" id="grid-template">
   <table class="ui table sortable">
     <thead>
@@ -27,26 +25,24 @@
 <div id="app" class="ui container">
 
 
-    <h1>Overview</h1>
-    
+  <h1>Overview</h1>
 
-<form id="search"><div class="ui icon input">
-  <input placeholder="Search..." type="text" name="query" v-model="searchQuery">
-  <i class="inverted circular search link icon"></i>
-</div>
+
+  <form id="search">
+    <div class="ui icon input">
+      <input placeholder="Search..." type="text" name="query" v-model="searchQuery">
+      <i class="inverted circular search link icon"></i>
+    </div>
   </form>
-  <grid
-    :data="gridData"
-    :columns="gridColumns"
-    :filter-key="searchQuery">
+  <grid :data="gridData" :columns="gridColumns" :filter-key="searchQuery">
   </grid>
 
-  </div>
- <script>
+</div>
+<script>
   $(document)
     .ready(function() {
    
     })
   ;
   </script>
-  <script src="/files/list.js"></script>
+<script src="/files/list.js"></script>

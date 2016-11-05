@@ -1,175 +1,173 @@
-
 <div id="app" class="ui container">
-   <h1>Bearbeiten - {{pic.Title}}</h1>
-   <div class="ui grid">
-       <div class="seven wide column">
-   <form class="ui form">
-       <div class="field">
-           <b>ID:</b> {{pic.ID}}
-       </div>
-       <div class="field">
-           <b>Status:</b> 
-           <select v-model="pic.Status">
+    <h1>Bearbeiten - {{pic.Title}}</h1>
+    <div class="ui grid">
+        <div class="seven wide column">
+            <form class="ui form">
+                <div class="field">
+                    <b>ID:</b> {{pic.ID}}
+                </div>
+                <div class="field">
+                    <b>Status:</b>
+                    <select v-model="pic.Status">
             <option v-for="s in status" value="{{s}}">{{s}}</option>
             </select>
-       </div>
-
-
-
-         <!-- Accordion Definition -->
-        <div class="ui styled accordion">
-            <div class="title"><i class="icon dropdown"></i>Blog Daten</div>
-            <div class="content">
-          
-                <div class="field" v-for="el in blogForm">
-                <label>{{el[0]}}:</label>
-                <div class="ui left icon input">
-                    <input v-model="pic[el[1]]" type="text" class="datetime" id="{{el[1]}}">
-                    <i class="calendar icon"></i>
-                </div>
-                </div>
-                <div v-on:click="setBlogMetaToNow" class="ui icon  button">           
-                <i class="calendar icon"></i> Setze Datum und Zeit auf jetzt
-                </div>
-               
-            
-            </div>
-
-
-            <div class="active title"><i class="icon dropdown"></i>Daten</div>
-            <div class="active content">
-          
-                <div class="field" v-for="el in form">
-                <label>{{el[0]}}:</label>
-                <input type="text" v-model="pic[el[1]]">
                 </div>
 
-                <div class="field">
-                    <label>Tags:</label>
+
+
+                <!-- Accordion Definition -->
+                <div class="ui styled accordion">
+                    <div class="title"><i class="icon dropdown"></i>Blog Daten</div>
+                    <div class="content">
+
+                        <div class="field" v-for="el in blogForm">
+                            <label>{{el[0]}}:</label>
+                            <div class="ui left icon input">
+                                <input v-model="pic[el[1]]" type="text" class="datetime" id="{{el[1]}}">
+                                <i class="calendar icon"></i>
+                            </div>
+                        </div>
+                        <div v-on:click="setBlogMetaToNow" class="ui icon  button">
+                            <i class="calendar icon"></i> Setze Datum und Zeit auf jetzt
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="active title"><i class="icon dropdown"></i>Daten</div>
+                    <div class="active content">
+
+                        <div class="field" v-for="el in form">
+                            <label>{{el[0]}}:</label>
+                            <input type="text" v-model="pic[el[1]]">
+                        </div>
+
+                        <div class="field">
+                            <label>Tags:</label>
                             <div class="ui label" v-for="t in pic.Tags" track-by="$index">
                                 {{t}}
-                            <i class="delete icon" v-on:click="removeTag($index)"></i>
+                                <i class="delete icon" v-on:click="removeTag($index)"></i>
                             </div>
                             <br><br>
-                           
-                                <div class="field">
-                                    <div class="ui right labeled left icon input">
-                                     <i class="tags icon"></i>
-                                     <input placeholder="Tag" type="text" v-model="newTag">
-                                     <a class="ui tag label" v-on:click="addTag()">
+
+                            <div class="field">
+                                <div class="ui right labeled left icon input">
+                                    <i class="tags icon"></i>
+                                    <input placeholder="Tag" type="text" v-model="newTag">
+                                    <a class="ui tag label" v-on:click="addTag()">
                                         Tag hinzufügen
                                      </a>
-                                    </div>
-                       
-                            </div>
-                                    
-                </div>
-            
-            </div>
-        
+                                </div>
 
-            <div class="title"><i class="icon dropdown"></i>K&uuml;nstler</div>
-            <div class="content">
-           
-               <div class="field">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="title"><i class="icon dropdown"></i>K&uuml;nstler</div>
+                    <div class="content">
+
+                        <div class="field">
                             <div class="ui label" v-for="p in pic.Persons" track-by="$index">
                                 {{persons[p].FullName}} ({{p}})
-                            <i class="delete icon" v-on:click="removePerson($index)"></i>
+                                <i class="delete icon" v-on:click="removePerson($index)"></i>
                             </div>
                             <br><br>
                             <div class="two fields">
                                 <div class="field">
-                             <select v-model.number="newPerson">
+                                    <select v-model.number="newPerson">
                             <option v-for="p in persons | orderBy 'FullName'" value="{{p.personID}}">{{p.FullName}}({{p.personID}})</option>
                             </select>
                                 </div>
-                            <div class="field">
-                            <div v-on:click="addPerson()" class="ui icon primary button">           
-                            <i class="add circle icon"></i>
+                                <div class="field">
+                                    <div v-on:click="addPerson()" class="ui icon primary button">
+                                        <i class="add circle icon"></i>
+                                    </div>
+                                </div>
                             </div>
-                            </div>
-                            </div>
-                                    
-                </div>
 
-            </div>
+                        </div>
 
-            <div class="title"><i class="icon dropdown"></i>Text</div>
-            <div class="content">
-            <div class="field">
-                
-                <textarea v-model="pic.Text"></textarea>
-            </div>
-            </div>
+                    </div>
 
-             <div class="title"><i class="icon dropdown"></i>Bereiche</div>
-            <div class="content">
-                <div class="accordion">
-                    
-                    <div  v-for="(aindex,area) in pic.Areas">
-                        <div class="title" style="background-color: {{area.rect.fill}};filter:opacity(50%);">
-                            <i class="icon dropdown"></i>
-                            <span>{{pic.Areas[$index].areaID}}</span></div>
-                        <div class="content">
-                        <div class="fields">
+                    <div class="title"><i class="icon dropdown"></i>Text</div>
+                    <div class="content">
                         <div class="field">
-                            <label>Name:</label>
-                            <input type="text" v-model="pic.Areas[$index].areaID">
-                            </div>
-                            <div class="field">
-                                <label>Color:</label>
-                                <select v-model="area.rect.fill">
-                            <option v-for="c in colors" value="{{c}}">{{c}}</option>
-                            </select>
-                            </div>
-                        </div>
-                        <div class="field">
-                            <textarea v-model="area.Text"></textarea>
-                        </div>
-                        <div class="field">
-                            <div class="ui label" v-for="p in area.Persons">
-                                {{persons[p].FullName}} ({{p}})
-                            <i class="delete icon" v-on:click="removePersonFromArea(aindex,$index)"></i>
-                            </div>                  
-                                    
-                        </div>
-                        <div class="field">
-                            <span v-on:click="removeArea($index)" class="ui negative icon button">
-                            <i  class="remove circle icon"></i>Bereich {{area.areaID}} entfernen
-                            </span></div>
+
+                            <textarea v-model="pic.Text"></textarea>
                         </div>
                     </div>
+
+                    <div class="title"><i class="icon dropdown"></i>Bereiche</div>
+                    <div class="content">
+                        <div class="accordion">
+
+                            <div v-for="(aindex,area) in pic.Areas">
+                                <div class="title" style="background-color: {{area.rect.fill}};filter:opacity(50%);">
+                                    <i class="icon dropdown"></i>
+                                    <span>{{pic.Areas[$index].areaID}}</span></div>
+                                <div class="content">
+                                    <div class="fields">
+                                        <div class="field">
+                                            <label>Name:</label>
+                                            <input type="text" v-model="pic.Areas[$index].areaID">
+                                        </div>
+                                        <div class="field">
+                                            <label>Color:</label>
+                                            <select v-model="area.rect.fill">
+                            <option v-for="c in colors" value="{{c}}">{{c}}</option>
+                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <textarea v-model="area.Text"></textarea>
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui label" v-for="p in area.Persons">
+                                            {{persons[p].FullName}} ({{p}})
+                                            <i class="delete icon" v-on:click="removePersonFromArea(aindex,$index)"></i>
+                                        </div>
+
+                                    </div>
+                                    <div class="field">
+                                        <span v-on:click="removeArea($index)" class="ui negative icon button">
+                            <i  class="remove circle icon"></i>Bereich {{area.areaID}} entfernen
+                            </span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-on:click="addArea" class="ui icon primary button">
+                            <i class="add circle icon"></i>Neuen Bereich hinzufügen
+                        </div>
+                    </div>
+
                 </div>
-                <div v-on:click="addArea" class="ui icon primary button">           
-                <i class="add circle icon"></i>Neuen Bereich hinzufügen
-                </div>
-            </div>
+            </form>
 
-        </div>
-   </form>
+            <br><br>
 
-<br><br>
-
-   <button v-on:click="saveDataRedirect()" class="ui primary button">
+            <button v-on:click="saveDataRedirect()" class="ui primary button">
   Speichern
 </button>
 
- <button v-on:click="saveData()" class="ui primary button">
+            <button v-on:click="saveData()" class="ui primary button">
   Speichern und weiter bearbeiten
 </button>
-       </div>
-       <div class="nine wide column">
+        </div>
+        <div class="nine wide column">
             <div class="ui styled accordion">
                 <div class="title"><i class="icon dropdown"></i>Textvorschau:</div>
                 <div class="content">
                     <div v-for="el in form">
-                        <b>{{el[0]}}</b><br>
-                        {{pic[el[1]]}}
+                        <b>{{el[0]}}</b><br> {{pic[el[1]]}}
                     </div>
-                    <div><b>Textvorschau:</b><br>    </div>
+                    <div><b>Textvorschau:</b><br> </div>
                     <div v-html="pic.Text | marked"></div>
                 </div>
-                
+
                 <div class="active title"><i class="icon dropdown"></i>Bild</div>
                 <div class="active content">
                     <canvas id="picture" width="700" height="700">
@@ -177,12 +175,11 @@
                 </div>
 
             </div>
-           
-       </div>
 
-       </div>
-   </div>
+        </div>
+
+    </div>
+</div>
 </div>
 
 <script src="/files/form.js"></script>
-

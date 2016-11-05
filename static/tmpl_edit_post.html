@@ -1,147 +1,147 @@
 <div id="app" class="ui container">
-   <h1>Edit - {{post.title}}</h1>
+    <h1>Edit - {{post.title}}</h1>
     <div class="ui grid">
-       <div class="eight wide column">
-        <form class="ui form">
-        <div class="field">
-           <b>ID:</b> {{post.id}}
-        </div>
-        <div class="field">
-           <b>Status:</b> 
-           <select v-model="post.status">
+        <div class="eight wide column">
+            <form class="ui form">
+                <div class="field">
+                    <b>ID:</b> {{post.id}}
+                </div>
+                <div class="field">
+                    <b>Status:</b>
+                    <select v-model="post.status">
             <option v-for="s in status" value="{{s}}">{{s}}</option>
             </select>
-       </div>
+                </div>
 
-<div class="ui styled accordion">
-<div class="title"><i class="icon dropdown"></i>Blog Daten</div>
-<div class="content">
-    <div class="field" v-for="el in formMeta">
-        <label>{{el[0]}}:</label>
-        <div class="ui left icon input">
-            <input v-model="post[el[1]]" type="text" class="datetime" id="{{el[1]}}">
-            <i class="calendar icon"></i>
-        </div>
-        </div>
-        <div v-on:click="setBlogMetaToNow" class="ui icon  button">           
-        <i class="calendar icon"></i> Setze Datum und Zeit auf jetzt
-        </div>
-</div>
-<div class="title"><i class="icon dropdown"></i>Kunstwerke / Künstler / Tags</div>
-<div class="content">
-<div class="field">
-    <label>Bilder / Kunstwerke:</label>
-                    <div class="ui label" v-for="p in post.pictures" track-by="$index">
-                        {{pics[p].Title}} ({{p}})
-                    <i class="delete icon" v-on:click="removePicture($index)"></i>
+                <div class="ui styled accordion">
+                    <div class="title"><i class="icon dropdown"></i>Blog Daten</div>
+                    <div class="content">
+                        <div class="field" v-for="el in formMeta">
+                            <label>{{el[0]}}:</label>
+                            <div class="ui left icon input">
+                                <input v-model="post[el[1]]" type="text" class="datetime" id="{{el[1]}}">
+                                <i class="calendar icon"></i>
+                            </div>
+                        </div>
+                        <div v-on:click="setBlogMetaToNow" class="ui icon  button">
+                            <i class="calendar icon"></i> Setze Datum und Zeit auf jetzt
+                        </div>
                     </div>
-                    <br><br>
-                    <div class="two fields">
+                    <div class="title"><i class="icon dropdown"></i>Kunstwerke / Künstler / Tags</div>
+                    <div class="content">
                         <div class="field">
-                        <select v-model.number="newPicture">
+                            <label>Bilder / Kunstwerke:</label>
+                            <div class="ui label" v-for="p in post.pictures" track-by="$index">
+                                {{pics[p].Title}} ({{p}})
+                                <i class="delete icon" v-on:click="removePicture($index)"></i>
+                            </div>
+                            <br><br>
+                            <div class="two fields">
+                                <div class="field">
+                                    <select v-model.number="newPicture">
                     <option v-for="p in pics | orderBy 'Title'" value="{{p.ID}}">{{p.Title}}({{p.ID}})</option>
                     </select>
+                                </div>
+                                <div class="field">
+                                    <div v-on:click="addPicture()" class="ui icon primary button">
+                                        <i class="add circle icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
-                    <div class="field">
-                    <div v-on:click="addPicture()" class="ui icon primary button">           
-                    <i class="add circle icon"></i>
-                    </div>
-                    </div>
-                    </div>
-                                
-</div>
-<div class="field">
-     <label>Künstler:</label>
-                        <div class="ui label" v-for="p in post.artists" track-by="$index">
-                            {{persons[p].FullName}} ({{p}})
-                        <i class="delete icon" v-on:click="removePerson($index)"></i>
-                        </div>
-                        <br><br>
-                        <div class="two fields">
-                            <div class="field">
-                            <select v-model.number="newPerson">
+                        <div class="field">
+                            <label>Künstler:</label>
+                            <div class="ui label" v-for="p in post.artists" track-by="$index">
+                                {{persons[p].FullName}} ({{p}})
+                                <i class="delete icon" v-on:click="removePerson($index)"></i>
+                            </div>
+                            <br><br>
+                            <div class="two fields">
+                                <div class="field">
+                                    <select v-model.number="newPerson">
                         <option v-for="p in persons | orderBy 'FullName'" value="{{p.personID}}">{{p.FullName}}({{p.personID}})</option>
                         </select>
+                                </div>
+                                <div class="field">
+                                    <div v-on:click="addPerson()" class="ui icon primary button">
+                                        <i class="add circle icon"></i>
+                                    </div>
+                                </div>
                             </div>
-                        <div class="field">
-                        <div v-on:click="addPerson()" class="ui icon primary button">           
-                        <i class="add circle icon"></i>
-                        </div>
-                        </div>
-                        </div>
-                                
-</div>
 
-<div class="field">
-        <label>Tags:</label>
-                <div class="ui label" v-for="t in post.tags" track-by="$index">
-                    {{t}}
-                <i class="delete icon" v-on:click="removeTag($index)"></i>
-                </div>
-                <br><br>
-                
-                    <div class="field">
-                        <div class="ui right labeled left icon input">
-                            <i class="tags icon"></i>
-                            <input placeholder="Tag" type="text" v-model="newTag">
-                            <a class="ui tag label" v-on:click="addTag()">
+                        </div>
+
+                        <div class="field">
+                            <label>Tags:</label>
+                            <div class="ui label" v-for="t in post.tags" track-by="$index">
+                                {{t}}
+                                <i class="delete icon" v-on:click="removeTag($index)"></i>
+                            </div>
+                            <br><br>
+
+                            <div class="field">
+                                <div class="ui right labeled left icon input">
+                                    <i class="tags icon"></i>
+                                    <input placeholder="Tag" type="text" v-model="newTag">
+                                    <a class="ui tag label" v-on:click="addTag()">
                             Tag hinzufügen
                             </a>
+                                </div>
+
+                            </div>
+
                         </div>
-            
+                    </div>
+
+
+
+                    <div class="title"><i class="icon dropdown"></i>Daten</div>
+                    <div class="content">
+                        <div class="field" v-for="el in form">
+                            <label>{{el[0]}}:</label>
+                            <div class="ui input">
+                                <input v-model="post[el[1]]" type="text">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="title"><i class="icon dropdown"></i>Text</div>
+                    <div class="content">
+                        <div class="field">
+                            <label>Text</label>
+                            <textarea v-model="post.content"></textarea>
+                        </div>
+                    </div>
                 </div>
-                        
-    </div>
-</div>
 
 
+            </form>
+            <br>
+            <div v-on:click="saveData(true)" class="ui primary button">
+                Speichern
+            </div>
+            <div v-on:click="saveData(false)" class="ui primary button">
+                Speichern und weiter bearbeiten
+            </div>
 
-<div class="title"><i class="icon dropdown"></i>Daten</div>
-<div class="content">
-<div class="field" v-for="el in form">
-    <label>{{el[0]}}:</label>
-    <div class="ui input">
-        <input v-model="post[el[1]]" type="text">
-       
-    </div>
-    </div> 
-</div>     
-<div class="title"><i class="icon dropdown"></i>Text</div>
-<div class="content">
-<div class="field">
-    <label>Text</label>
-    <textarea v-model="post.content"></textarea>
-</div>
-</div>
-</div>
-
-        
-        </form>
-        <br>
-        <div v-on:click="saveData(true)" class="ui primary button">           
-             Speichern
         </div>
-        <div v-on:click="saveData(false)" class="ui primary button">           
-             Speichern und weiter bearbeiten
-        </div>
+        <div class="eight wide column">
+            Textvorschau:<br>
+            <div class="ui segment">
+                <b>Beschreibung:</b>
+                <div v-html="post.description | marked"></div>
+            </div>
 
-       </div>
-<div class="eight wide column">
-    Textvorschau:<br>
-    <div class="ui segment">
-        <b>Beschreibung:</b>
-        <div v-html="post.description | marked"></div>
-    </div>
-    
-    <div class="ui segment">
-        <b>Text:</b>
-        <div v-html="post.content | marked"></div>
-    </div>
-    <div v-for="pic in post.postpics">
-        {{pic.Value}}
-        <img src="{{post.id}}/{{pic.Value}}">
-    </div>
-</div>
+            <div class="ui segment">
+                <b>Text:</b>
+                <div v-html="post.content | marked"></div>
+            </div>
+            <div v-for="pic in post.postpics">
+                {{pic.Value}}
+                <img src="{{post.id}}/{{pic.Value}}">
+            </div>
+        </div>
     </div>
 </div>
 <script src="/files/edit_post.js"></script>

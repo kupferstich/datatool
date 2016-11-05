@@ -64,49 +64,51 @@ Vue.component('grid', {
 
 //////////////////
 var types = {
-    "pictures":{
-        "columns":['ID','Title','Topic','YearIssued','BlogDate','Status'],
-        "defaultData": {
-            ID:null,
-            Title:null,
-            Areas:[{areaID:"",rect:{fill:""},Text:""}]
-        },
-        "url": "/pic/all",
-        "linkBase": "/form/",
-        "dataTrans": function(inData){
-            return inData;
-        }
+  "pictures": {
+    "columns": ['ID', 'Title', 'Topic', 'YearIssued', 'BlogDate', 'Status'],
+    "defaultData": {
+      ID: null,
+      Title: null,
+      Areas: [{ areaID: "", rect: { fill: "" }, Text: "" }]
     },
-    "persons":{
-        "columns":['personID','FullName','GND','BlogDate','Status'],
-        "defaultData": {
-            ID:null,
-            Title:null,
-            Areas:[{areaID:"",rect:{fill:""},Text:""}]
-        },
-        "url": "/person/all",
-        "linkBase": "/edit/person/",
-        "dataTrans": function(inData){
-            return  Object.keys(inData).map(function (key) { 
-                inData[key].ID = key;
-                return inData[key]; });
-        }
-    },
-    "posts":{
-        "columns":['id','title','date','status'],
-        "defaultData": {
-            ID:null,
-            Title:null,
-            Areas:[{areaID:"",rect:{fill:""},Text:""}]
-        },
-        "url": "/post/all",
-        "linkBase": "/edit/post/",
-        "dataTrans": function(inData){
-            return  Object.keys(inData).map(function (key) { 
-                inData[key].ID = key;
-                return inData[key]; });
-        }
+    "url": "/pic/all",
+    "linkBase": "/form/",
+    "dataTrans": function (inData) {
+      return inData;
     }
+  },
+  "persons": {
+    "columns": ['personID', 'FullName', 'GND', 'BlogDate', 'Status'],
+    "defaultData": {
+      ID: null,
+      Title: null,
+      Areas: [{ areaID: "", rect: { fill: "" }, Text: "" }]
+    },
+    "url": "/person/all",
+    "linkBase": "/edit/person/",
+    "dataTrans": function (inData) {
+      return Object.keys(inData).map(function (key) {
+        inData[key].ID = key;
+        return inData[key];
+      });
+    }
+  },
+  "posts": {
+    "columns": ['id', 'title', 'date', 'status'],
+    "defaultData": {
+      ID: null,
+      Title: null,
+      Areas: [{ areaID: "", rect: { fill: "" }, Text: "" }]
+    },
+    "url": "/post/all",
+    "linkBase": "/edit/post/",
+    "dataTrans": function (inData) {
+      return Object.keys(inData).map(function (key) {
+        inData[key].ID = key;
+        return inData[key];
+      });
+    }
+  }
 }
 var type = window.location.href.split("/").pop()
 
@@ -121,66 +123,66 @@ app = new Vue({
     persons: {}
   },
   computed: {
-    
+
   },
-  ready: function() {
+  ready: function () {
     this.getData()
-    
-},
-methods: {
-    getData: function() {
-        $.ajax({
-            context: this,
-            url: types[type]['url'],
-            success: function (result) {
-                var trans = types[type]['dataTrans'] 
-                this.$set("gridData", trans(JSON.parse(result)));
-            }
-        });
-        
+
+  },
+  methods: {
+    getData: function () {
+      $.ajax({
+        context: this,
+        url: types[type]['url'],
+        success: function (result) {
+          var trans = types[type]['dataTrans']
+          this.$set("gridData", trans(JSON.parse(result)));
+        }
+      });
+
     },
-    setPersonsNames: function(){
-        self = this;
-        this.gridData.forEach(
-            function(pic,index){
-                pic.Persons.forEach(
-                    function(person,pindex){
-                        self.gridData[index].PersonsName[pindex] = self.persons[person]
-                    }
-                )
+    setPersonsNames: function () {
+      self = this;
+      this.gridData.forEach(
+        function (pic, index) {
+          pic.Persons.forEach(
+            function (person, pindex) {
+              self.gridData[index].PersonsName[pindex] = self.persons[person]
             }
-        )
+          )
+        }
+      )
     },
-    saveData:function(cb) {
-        $.ajax({
-            type: "POST",
-            url: "/pic/"+this.pid,
-            data: JSON.stringify(this.pic),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            success: function(){
-              cb;
-            }
-        });
+    saveData: function (cb) {
+      $.ajax({
+        type: "POST",
+        url: "/pic/" + this.pid,
+        data: JSON.stringify(this.pic),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function () {
+          cb;
+        }
+      });
     },
-   
-},
-filters: {
-  marked: function(value){
-    if (value === undefined){
-      value = "";
+
+  },
+  filters: {
+    marked: function (value) {
+      if (value === undefined) {
+        value = "";
+      }
+      return marked(value);
     }
-    return marked(value);
   }
-}
 })
 
 
 
-  $(document)
-    .ready(function() {
-        $('.ui.accordion')
-        .accordion()
-;
-    })
+$(document)
+  .ready(function () {
+    $('.ui.accordion')
+      .accordion()
+      ;
+  })
   ;

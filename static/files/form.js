@@ -4,9 +4,9 @@
 
 // Constant values of the canvas size
 cSize = {
-      width: 700,
-      height: 700
-    };
+  width: 700,
+  height: 700
+};
 
 
 app = new Vue({
@@ -15,28 +15,28 @@ app = new Vue({
     canvas: new fabric.Canvas('picture'),
     fabricElements: [],
     pid: window.location.href.split("/").pop(),
-    picSrc: "/img/"+window.location.href.split("/").pop()+"-"+cSize.width+"-"+cSize.height,
+    picSrc: "/img/" + window.location.href.split("/").pop() + "-" + cSize.width + "-" + cSize.height,
     pic: {
-        ID:null,
-        Title:null,
-        Areas:[{areaID:"",rect:{fill:""},Text:"",Status:""}],
-        canvasWidth: cSize.width,
-        canvasHeight: cSize.height
+      ID: null,
+      Title: null,
+      Areas: [{ areaID: "", rect: { fill: "" }, Text: "", Status: "" }],
+      canvasWidth: cSize.width,
+      canvasHeight: cSize.height
     },
     persons: null,
     newPerson: "",
     tags: null,
     newTag: "",
     form: [ //Label, JSON Key
-        ["Titel","Title"],
-        ["Thema","Topic"],
-        ["Jahr der Anfertigung","YearIssued"]
+      ["Titel", "Title"],
+      ["Thema", "Topic"],
+      ["Jahr der Anfertigung", "YearIssued"]
     ],
-    blogForm:[
-        ["Blog Datum", "BlogDate"],
-        ["Veröffentlichung am", "PublishDate"]
+    blogForm: [
+      ["Blog Datum", "BlogDate"],
+      ["Veröffentlichung am", "PublishDate"]
     ],
-    status : [
+    status: [
       "Bild zugeschnitten",
       "Texte werden gepflegt",
       "Texte gepflegt",
@@ -56,117 +56,117 @@ app = new Vue({
     ]
   },
   computed: {
-   
+
   },
-  ready: function() {
+  ready: function () {
     this.getData();
-    var cleave1 = new Cleave('#BlogDate',{
-          delimiters: ["-","-","T",":",":","Z"],
-          blocks: [4,2,2,2,2,2,0],
-          uppercase: true
-        });
-    var cleave2 = new Cleave('#PublishDate',{
-          delimiters: ["-","-","T",":",":","Z"],
-          blocks: [4,2,2,2,2,2,0],
-          uppercase: true
-        });
-    
-},
-watch:{
-  canvas: function(newVal,oldVal){
-    //this.canvas.renderAll();
-    //this.pic = newVal;
-    //this.loadAreas();
-  }
-},
-methods: {
-    getData: function(cb) {
-      this.$http.get("/pic/"+this.pid).then(
-        function(res){
-                var self = this;
+    var cleave1 = new Cleave('#BlogDate', {
+      delimiters: ["-", "-", "T", ":", ":", "Z"],
+      blocks: [4, 2, 2, 2, 2, 2, 0],
+      uppercase: true
+    });
+    var cleave2 = new Cleave('#PublishDate', {
+      delimiters: ["-", "-", "T", ":", ":", "Z"],
+      blocks: [4, 2, 2, 2, 2, 2, 0],
+      uppercase: true
+    });
+
+  },
+  watch: {
+    canvas: function (newVal, oldVal) {
+      //this.canvas.renderAll();
+      //this.pic = newVal;
+      //this.loadAreas();
+    }
+  },
+  methods: {
+    getData: function (cb) {
+      this.$http.get("/pic/" + this.pid).then(
+        function (res) {
+          var self = this;
           this.$set('pic', JSON.parse(res.body));
           this.canvas.clear();
           //self.canvas = new fabric.Canvas('picture');
-          
+
           this.loadAreas();
-          fabric.Image.fromURL(self.picSrc, function(oImg) {
-                  oImg.set('selectable', false);
-                  self.canvas.add(oImg);
-                  self.canvas.sendToBack(oImg);
-                  });
+          fabric.Image.fromURL(self.picSrc, function (oImg) {
+            oImg.set('selectable', false);
+            self.canvas.add(oImg);
+            self.canvas.sendToBack(oImg);
+          });
           this.canvas.renderAll();
         }
       );
       this.$http.get("/person/all").then(
-        function(res){
+        function (res) {
           this.$set('persons', JSON.parse(res.body));
         }
       );
-      
+
     },
-    setBlogMetaToNow: function(){
+    setBlogMetaToNow: function () {
       now = new Date();
       this.pic.BlogDate = now.toJSON();
       this.pic.PublishDate = now.toJSON();
     },
-    saveData:function(cb) {
-      this.$http.post("/pic/"+this.pid,JSON.stringify(this.pic)).then(
-        function(res){
-          
+    saveData: function (cb) {
+      this.$http.post("/pic/" + this.pid, JSON.stringify(this.pic)).then(
+        function (res) {
+
           // getData() have to be called, that the areas inside the canvas
           // and the areas overview has been updated inside the view.
           //this.getData();
-          if ($.isFunction(cb)){
+          if ($.isFunction(cb)) {
             cb();
           }
-         
+
         }
       );
     },
-    saveDataRedirect:function(){
-      this.saveData(function(){
+    saveDataRedirect: function () {
+      this.saveData(function () {
         window.location = "/list/pictures";
       });
     },
-    addPerson:function(target){
-        this.pic.Persons.push(this.newPerson);     
-        this.newPerson = ""; 
+    addPerson: function (target) {
+      this.pic.Persons.push(this.newPerson);
+      this.newPerson = "";
     },
-    removePerson:function(index){
-      this.pic.Persons.splice(index,1)
+    removePerson: function (index) {
+      this.pic.Persons.splice(index, 1)
     },
-    addTag:function(target){
-       if (this.pic.Tags == null){
-         this.pic.Tags = [];
-       }
-        this.pic.Tags.push(this.newTag);  
-        this.newTag = "";    
+    addTag: function (target) {
+      if (this.pic.Tags == null) {
+        this.pic.Tags = [];
+      }
+      this.pic.Tags.push(this.newTag);
+      this.newTag = "";
     },
-    removeTag:function(index){
-      this.pic.Tags.splice(index,1)
+    removeTag: function (index) {
+      this.pic.Tags.splice(index, 1)
     },
-    addArea:function(){
-     
+    addArea: function () {
+
       var area = {
-      "areaID": "Neuer Bereich",
-      "rect": {
-        "type": "rect",
-        "left": 100,
-        "top": 100,
-        "width": 100,
-        "height": 50,
-        "fill": "orange",
-        "opacity": 0.5,
-        "scaleX": 1,
-        "scaleY": 1,
-        "hasRotatingPoint": false
-      },
-      "Shape": "rect",
-      "Coords": "",
-      "Persons": null,
-      "Text": "",
-      "Links": null
-    }
+        "areaID": "Neuer Bereich",
+        "rect": {
+          "type": "rect",
+          "left": 100,
+          "top": 100,
+          "width": 100,
+          "height": 50,
+          "fill": "orange",
+          "opacity": 0.5,
+          "scaleX": 1,
+          "scaleY": 1,
+          "hasRotatingPoint": false
+        },
+        "Shape": "rect",
+        "Coords": "",
+        "Persons": null,
+        "Text": "",
+        "Links": null
+      }
       var i = this.fabricElements.length
       if (this.pic.Areas == null) {
         this.pic.Areas = [];
@@ -177,18 +177,18 @@ methods: {
       this.canvas.add(this.pic.Areas[i].rect);
       this.canvas.renderAll();
       //this.$set('pic',this.pic)
-      this.saveData(function(){
+      this.saveData(function () {
         //window.location.href=window.location.href
         //console.log(this);
         app.getData();
       }
       );
     },
-    loadAreas:function(){
-      for (i in this.pic.Areas){
+    loadAreas: function () {
+      for (i in this.pic.Areas) {
         this.fabricElements[i] = new fabric.Rect(this.pic.Areas[i].rect);
         this.pic.Areas[i].rect = this.fabricElements[i];
-        
+
         //var group = new fabric.Group([this.pic.Areas[i].rect,label]);
         this.canvas.add(this.pic.Areas[i].rect);
         //canvas.add(label);
@@ -197,48 +197,48 @@ methods: {
         this.pic.canvasWidth = cSize.width;
         this.pic.canvasHeight = cSize.height;
       }
-      
+
     },
-    addPersonToArea:function(index){
-      if (this.pic.Areas[index].Persons==null){
+    addPersonToArea: function (index) {
+      if (this.pic.Areas[index].Persons == null) {
         this.pic.Areas[index].Persons = []
       }
-      this.pic.Areas[index].Persons.push(this.newPerson); 
+      this.pic.Areas[index].Persons.push(this.newPerson);
       this.newPerson = "";
     },
-    removePersonFromArea:function(aindex,index){
-      this.pic.Areas[aindex].Persons.splice(index,1);
+    removePersonFromArea: function (aindex, index) {
+      this.pic.Areas[aindex].Persons.splice(index, 1);
     },
-    removeArea:function(index){
+    removeArea: function (index) {
       this.canvas.remove(this.pic.Areas[index].rect)
-      this.pic.Areas.splice(index,1)
-      this.saveData(function(){
-            window.location.href=window.location.href
+      this.pic.Areas.splice(index, 1)
+      this.saveData(function () {
+        window.location.href = window.location.href
       }
       );
     }
-},
-filters: {
-  marked: function(value){
-    if (value === undefined){
-      value = "";
+  },
+  filters: {
+    marked: function (value) {
+      if (value === undefined) {
+        value = "";
+      }
+      return marked(value);
     }
-    return marked(value);
   }
-}
 })
 
-fabric.Image.fromURL(app.picSrc, function(oImg) {
-                  oImg.set('selectable', false);
-                  app.canvas.add(oImg);
-                  app.canvas.sendToBack(oImg);
-                  });
+fabric.Image.fromURL(app.picSrc, function (oImg) {
+  oImg.set('selectable', false);
+  app.canvas.add(oImg);
+  app.canvas.sendToBack(oImg);
+});
 
 
-  $(document)
-    .ready(function() {
-        $('.ui.accordion')
-        .accordion();
-        
-    })
+$(document)
+  .ready(function () {
+    $('.ui.accordion')
+      .accordion();
+
+  })
   ;
