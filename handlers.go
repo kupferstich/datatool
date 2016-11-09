@@ -287,8 +287,6 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	id := vars["id"]
 	target := vars["target"]
 
-	fmt.Fprintln(w, id, target)
-	log.Printf("%v", vars)
 	r.ParseMultipartForm(32 << 20)
 	file, handler, err := r.FormFile("file")
 	if err != nil {
