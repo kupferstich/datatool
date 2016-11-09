@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"image/jpeg"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -279,6 +280,41 @@ func ImgHandler(w http.ResponseWriter, r *http.Request) {
 	t := imaging.Fit(img, maxWidth, maxHeight, imaging.Lanczos)
 	jpeg.Encode(w, t, nil)
 
+}
+
+func UploadHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	target := vars["target"]
+
+	fmt.Fprintln(w, id, target)
+	log.Printf("%v", vars)
+	r.ParseMultipartForm(32 << 20)
+	file, handler, err := r.FormFile("file")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer file.Close()
+
+	var folder string
+	switch target {
+	case "post":
+		folder = Conf.DataFolderPosts
+	case "person":
+		folder = Conf.DataFolderPersons
+	}
+	fp := filepath.Join(
+		folder,
+		id,
+		handler.Filename)
+	f, err := os.OpenFile(fp, os.O_WRONLY|os.O_CREATE, 0666)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer f.Close()
+	io.Copy(f, file)
 }
 
 func ExportHandler(w http.ResponseWriter, r *http.Request) {

@@ -103,6 +103,7 @@ func main() {
 	router.HandleFunc("/img/{id}-{maxWidth}-{maxHeight}", ImgHandler).Methods("GET")
 	router.HandleFunc("/img/person/{id}/{size}/{file}", PersonImgHandler).Methods("GET")
 	router.HandleFunc("/edit/post/{id}/{file}", PostImgHandler).Methods("GET")
+	router.HandleFunc("/upload/{target}/{id}", UploadHandler).Methods("POST")
 	router.HandleFunc("/action/export", ExportHandler).Methods("GET")
 	router.PathPrefix(`/files/`).
 		Handler(http.StripPrefix("/files/", http.FileServer(http.Dir(Conf.FilesFolder))))

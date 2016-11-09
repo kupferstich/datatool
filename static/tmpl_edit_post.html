@@ -113,6 +113,13 @@
                             <textarea v-model="post.content"></textarea>
                         </div>
                     </div>
+                    <div class="title"><i class="icon dropdown"></i>Bilder Upload</div>
+                    <div class="content">
+                        <div class="field">
+                            <label>Upload</label>
+                            <div id="uploader">Bild per Drag & Drop hier einfügen.</div>
+                        </div>
+                    </div>
                 </div>
 
 
@@ -137,6 +144,9 @@
                 <b>Text:</b>
                 <div v-html="post.content | marked"></div>
             </div>
+            <form action="/file-upload" class="dropzone" id="my-awesome-dropzone">
+                            Bild bitte hierher schieben.
+                            </form>
             <div v-for="pic in post.postpics">
                 {{pic.Value}}
                 <img src="{{post.id}}/{{pic.Value}}">

@@ -165,6 +165,6 @@ filters: {
     .ready(function() {
         $('.ui.accordion')
         .accordion();
-        
+        $("div#uploader").dropzone({ url: "/upload/post/"+postID });
     })
   ;
