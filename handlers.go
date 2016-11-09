@@ -297,17 +297,22 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	var folder string
+	var fp string
 	switch target {
 	case "post":
-		folder = Conf.DataFolderPosts
+		fp = filepath.Join(
+			Conf.DataFolderPosts,
+			id,
+			handler.Filename)
 	case "person":
-		folder = Conf.DataFolderPersons
+		p, _ := personDB.GetPerson(id)
+		fp = filepath.Join(
+			filepath.Dir(data.MakePath(p, Conf.DataFolderPersons)),
+			handler.Filename,
+		)
+
 	}
-	fp := filepath.Join(
-		folder,
-		id,
-		handler.Filename)
+
 	f, err := os.OpenFile(fp, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		fmt.Println(err)

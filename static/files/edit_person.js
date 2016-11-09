@@ -169,6 +169,7 @@ $(document)
     .ready(function () {
         $('.ui.accordion')
             .accordion();
+        $("div#uploader").dropzone({ url: "/upload/person/" + personID });
 
     })
     ;
