@@ -47,3 +47,17 @@ func SortPictures(picIDs []string, root string) []string {
 	}
 	return sorted
 }
+
+// GetArtistPictures gets all pictures to one artist
+func GetArtistPictures(personID string, pictures []Picture) []string {
+	var outPic []string
+	//pictures := data.LoadPictures(root)
+	for _, pic := range pictures {
+		for _, pID := range pic.Persons {
+			if pID == personID {
+				outPic = append(outPic, pic.ID)
+			}
+		}
+	}
+	return outPic
+}

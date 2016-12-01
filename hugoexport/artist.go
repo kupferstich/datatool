@@ -15,6 +15,7 @@ import (
 // Artists exports all the artists into the Artist content folder
 func Artists(artistRootFolder, pictureRootFolder, postsRootFolder, exportRootPath string) {
 	artists, err := pdb.Load(artistRootFolder, "")
+	pictures := data.LoadPictures(pictureRootFolder)
 	posts := data.NewPosts(postsRootFolder)
 	posts.Load()
 	if err != nil {
@@ -22,6 +23,7 @@ func Artists(artistRootFolder, pictureRootFolder, postsRootFolder, exportRootPat
 	}
 	for _, artist := range artists.Persons {
 		log.Println(artist.Identify())
+		artist.Pictures = data.GetArtistPictures(artist.GetID(), pictures)
 		ExportArtistProfilePics(&artist, artistRootFolder, exportRootPath)
 		ExportArtistContent(&artist, posts, exportRootPath)
 		ExportArtistData(&artist, pictureRootFolder, exportRootPath)
